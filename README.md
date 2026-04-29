@@ -73,17 +73,21 @@ Automated Python system for monitoring macroeconomic indicators and generating a
 ---
 
 ### 6. VVS Invoice App — Invoice Automation for Plumbing Contractors
-**Personal Project** | [GitHub](https://github.com/LukasGLars/construction_buddy)
+**Personal Project** | [GitHub](https://github.com/LukasGLars/plumbing)
 
-Mobile-friendly web app (Streamlit + Supabase) that automates the full invoicing workflow for small VVS firms — from article catalog search to ROT deduction calculation and invoice generation.
+Mobile-first web app for small VVS sole proprietors to manage customers, jobs, materials, and invoicing — built to be fast and correct for a tired contractor at the end of a long workday.
 
-- Supabase-backed article catalog with full-text search by item number, description, or category
-- Automatic ROT deduction calculation (30% of labor cost including VAT)
-- Real-time invoice builder with line-item management
-- One-click invoice generation and download
-- Swedish UI built for use on-site, not just in the office
+- Full customer management with all ROT fields (personnummer, fastighet, BRF details)
+- Job tracking with status flow: scheduled → in progress → done → invoiced → paid
+- Purchase logging per job with receipt photo extraction via Claude Vision OCR
+- Invoice creation auto-populated from job data
+- Legally accurate ROT-avdrag calculation (30% of labor only, separated from materials)
+- PDF generation meeting all 14 Swedish mandatory invoice fields
+- Email delivery of PDF invoice directly from the app
+- Inline material and service addition — new items saved to catalog immediately
+- Pre-seeded with real company data and benchmark prices from bygghemma.se
 
-**Stack:** Python, Streamlit, Supabase, pandas
+**Stack:** Python, Flask, SQLite, Alpine.js, Tailwind CSS, xhtml2pdf
 
 ---
 
