@@ -47,19 +47,7 @@ Designed and implemented an AI-powered system to automatically handle repetitive
 
 ---
 
-### 4. AI Daily Macro Briefing Automation
-**Personal Project**
-
-Built a GPT-4 powered automation in Pipedream to deliver tailored macroeconomic briefings each morning.
-
-- GPT-4-powered automation in Pipedream
-- Structured daily macro briefing covering AI, energy, crypto, and FX
-- Automated email delivery each weekday morning
-- Scalable template for sentiment triggers and rebalancing alerts
-
----
-
-### 5. Python Macro Economic Signal Dashboard
+### 4. Python Macro Economic Signal Dashboard
 **Personal Project**
 
 Automated Python system for monitoring macroeconomic indicators and generating actionable investment signals. Pulls real-time data from FRED (Federal Reserve Economic Data) to track yield curve dynamics, credit spreads, market volatility, and labor market conditions.
@@ -72,7 +60,7 @@ Automated Python system for monitoring macroeconomic indicators and generating a
 
 ---
 
-### 6. VVS Invoice App — Invoice Automation for Plumbing Contractors
+### 5. VVS Invoice App — Invoice Automation for Plumbing Contractors
 **Personal Project** | [GitHub](https://github.com/LukasGLars/plumbing)
 
 Mobile-first web app for small VVS sole proprietors to manage customers, jobs, materials, and invoicing — built to be fast and correct for a tired contractor at the end of a long workday.
@@ -91,7 +79,7 @@ Mobile-first web app for small VVS sole proprietors to manage customers, jobs, m
 
 ---
 
-### 7. Reactor Core — Thesis Pulse Monitor
+### 6. Reactor Core — Thesis Pulse Monitor
 **Personal Project**
 
 Python-based personal investment tool for monitoring the fundamental thesis behind each portfolio position. Tracks whether the core story for each holding is accelerating, stable, or weakening — not price movements.
