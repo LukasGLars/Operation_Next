@@ -80,18 +80,23 @@ Mobile-first web app for small VVS sole proprietors to manage customers, jobs, m
 ---
 
 ### 6. Reactor Core — Thesis Pulse Monitor
-**Personal Project**
+**Personal Project** | [GitHub](https://github.com/LukasGLars/reactor-core-thesis-pulse)
 
-Python-based personal investment tool for monitoring the fundamental thesis behind each portfolio position. Tracks whether the core story for each holding is accelerating, stable, or weakening — not price movements.
+Automated daily monitoring system for tracking whether the fundamental thesis behind each portfolio position is intact, weakening, or approaching an invalidation threshold. Runs on GitHub Actions every weekday morning and delivers a structured email report with both an AI-generated interpretation and raw data.
 
-- Monitors 8 portfolio positions: Gold, LLY, WMT, Silver, CCJ, VRT, AVGO, JNJ
-- Data sources: FRED (real yields, USD index), Yahoo Finance (commodities), EDGAR XBRL (revenue, capex), Trading Economics (uranium spot)
-- Tracks hyperscaler AI capex (MSFT, GOOGL, AMZN, META) as a key signal for convexity positions
-- Outputs structured thesis pulse signals per position with delta tracking
-- Rules-based framework — separates fundamental signal from market noise
+- Monitors 8 positions across 4 buckets: Hedges (Gold, Silver), Carry (LLY, WMT, JNJ), Cyclical (CCJ), Convexity (VRT, AVGO)
+- FRED: 10Y real yield (DFII10), WTI spot (DCOILWTICO), uranium price (PURANUSDM)
+- Yahoo Finance: equity and commodity prices, 52-week high drawdowns, 1/3/12M momentum
+- EDGAR XBRL: quarterly/annual revenue for all positions; hyperscaler capex (MSFT, GOOGL, AMZN, META) as AI spend proxy
+- IMF IFS / WGC: central bank gold demand — monthly TTM net purchases vs prior year
+- Oil term structure: WTI spot vs 12-month forward as geopolitical supply stress proxy — STRESS / ELEVATED / NORMAL / CONTANGO signal
+- Claude AI (Haiku): interprets pre-computed facts against a structured thesis document; outputs per-bucket assessment with OVERALL intact/flag/review verdict
+- Rules-based invalidation thresholds: real yield >3.0%, DXY >115, uranium <$50/lb, hyperscaler capex <-30% YoY, G/S ratio >90
+- Velocity tracking: bps/week to real yield invalidation, weeks to G/S ratio deploy trigger
+- Deployed on GitHub Actions — runs 09:00 CET weekdays, emails full report on completion
 
-**Stack:** Python, EDGAR XBRL API, FRED API, Yahoo Finance, pandas
+**Stack:** Python, FRED API, EDGAR XBRL API, Yahoo Finance, IMF IFS API, Anthropic Claude API, GitHub Actions, openpyxl, smtplib
 
 ---
 
-*Last updated: April 2026*
+*Last updated: May 2026*
