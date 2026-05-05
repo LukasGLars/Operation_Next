@@ -1,0 +1,30 @@
+name: Operation Next Pipeline
+on:
+  schedule:
+    - cron: '0 6 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  run_pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: python pipeline/search.py
+      - run: python pipeline/updater.py
+      - run: python pipeline/mailer.py
+      - name: Commit updated joblist
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add jobsearch/joblist.md
+          git diff --staged --quiet || git commit -m "Auto-update joblist $(date +%Y-%m-%d)"
+          git push
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      MAIL_FROM: ${{ secrets.MAIL_FROM }}
+      MAIL_TO: ${{ secrets.MAIL_TO }}
+      MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
