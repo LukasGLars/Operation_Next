@@ -79,23 +79,40 @@ Mobile-first web app for small VVS sole proprietors to manage customers, jobs, m
 
 ---
 
-### 6. Reactor Core — Thesis Pulse Monitor
+### 6. Reactor Core — Portfolio Construction & Thesis Pulse Monitor
 **Personal Project** | [GitHub](https://github.com/LukasGLars/reactor-core-thesis-pulse)
 
-Automated daily monitoring system for tracking whether the fundamental thesis behind each portfolio position is intact, weakening, or approaching an invalidation threshold. Runs on GitHub Actions every weekday morning and delivers a structured email report with both an AI-generated interpretation and raw data.
+Two-part project: a rigorous quantitative research process to construct an 8-position portfolio from scratch, followed by an automated daily monitoring system that tracks whether the thesis behind each position remains intact.
+
+**Part 1 — Portfolio Construction**
+
+Portfolio built from a 44-ticker candidate universe across commodities, semiconductors, infrastructure, defensives, and EM. No thesis first — let Sharpe, Calmar, and total return determine what belongs and at what weight.
+
+- Screened 44 liquid USD-denominated tickers across 7 categories down to 8 final positions
+- Mean-variance optimization (SLSQP) with 80 random restarts across 3Y, 5Y, and 10Y windows
+- 6-regime historical analysis: Pre-COVID Bull, COVID Crash, COVID Recovery, Rate Hike/Inflation, AI Bull, Rate Cut
+- Leave-one-out position audit: each holding tested for Sharpe contribution, gold correlation, regime wins, and role coverage
+- Gold cap sensitivity tested at 7 levels (10%–uncapped) across all three windows
+- Gold-only and combined precious metals stress tests (−10% to −50% shocks)
+- Quarterly rolling 3Y optimization to test weight stability over time
+- Out-of-sample validation on 2009–2016 data (optimizer never saw): OOS Sharpe 0.955–1.057
+- DCA simulation in SEK: 1,000,000 kr initial + 6,000 kr/month from 2018, with live FX conversion
+- v2 → v3 versioning with full head-to-head comparison on all metrics
+- **10Y results (fixed weights):** Sharpe 1.85 | Ann. Return 30.1% | Max Drawdown −24.9%
+
+**Part 2 — Live Thesis Pulse Monitor**
+
+Automated daily monitoring against the constructed portfolio. Runs on GitHub Actions every weekday morning and delivers a structured email with AI-generated interpretation and raw data.
 
 - Monitors 8 positions across 4 buckets: Hedges (Gold, Silver), Carry (LLY, WMT, JNJ), Cyclical (CCJ), Convexity (VRT, AVGO)
-- FRED: 10Y real yield (DFII10), WTI spot (DCOILWTICO), uranium price (PURANUSDM)
-- Yahoo Finance: equity and commodity prices, 52-week high drawdowns, 1/3/12M momentum
-- EDGAR XBRL: quarterly/annual revenue for all positions; hyperscaler capex (MSFT, GOOGL, AMZN, META) as AI spend proxy
+- FRED: 10Y real yield, WTI spot, uranium price; Yahoo Finance: prices, 52wH drawdowns, 1/3/12M momentum
+- EDGAR XBRL: quarterly/annual revenue per position; hyperscaler capex (MSFT, GOOGL, AMZN, META) as AI spend proxy
 - IMF IFS / WGC: central bank gold demand — monthly TTM net purchases vs prior year
-- Oil term structure: WTI spot vs 12-month forward as geopolitical supply stress proxy — STRESS / ELEVATED / NORMAL / CONTANGO signal
-- Claude AI (Haiku): interprets pre-computed facts against a structured thesis document; outputs per-bucket assessment with OVERALL intact/flag/review verdict
-- Rules-based invalidation thresholds: real yield >3.0%, DXY >115, uranium <$50/lb, hyperscaler capex <-30% YoY, G/S ratio >90
-- Velocity tracking: bps/week to real yield invalidation, weeks to G/S ratio deploy trigger
-- Deployed on GitHub Actions — runs 09:00 CET weekdays, emails full report on completion
+- Oil term structure: WTI spot vs 12-month forward — STRESS / ELEVATED / NORMAL / CONTANGO signal
+- Claude AI (Haiku): interprets pre-computed facts against thesis document; outputs per-bucket verdict with OVERALL intact/flag/review
+- Rules-based invalidation thresholds with velocity tracking (weeks to breach at current pace)
 
-**Stack:** Python, FRED API, EDGAR XBRL API, Yahoo Finance, IMF IFS API, Anthropic Claude API, GitHub Actions, openpyxl, smtplib
+**Stack:** Python, FRED API, EDGAR XBRL API, Yahoo Finance, IMF IFS API, Anthropic Claude API, GitHub Actions, scipy (SLSQP), pandas, openpyxl, smtplib
 
 ---
 
