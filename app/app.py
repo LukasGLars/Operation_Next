@@ -1,7 +1,7 @@
 """
 app.py — Operation Next document generator
 Run with: python app.py
-Open at: http://localhost:5001
+Open at: http://localhost:5003
 """
 import base64
 import json
@@ -85,6 +85,63 @@ def fetch_job_posting(url: str) -> str:
         return f"Could not fetch job posting: {e}"
 
 
+def _build_doc_content(cv_base: str, job_url: str) -> list:
+    skill_content     = SKILL_PATH.read_text(encoding="utf-8") if SKILL_PATH.exists() else ""
+    job_posting_text  = fetch_job_posting(job_url)
+    cover_letter_text = read_docx_text(LETTER_DOCX) if LETTER_DOCX.exists() else ""
+
+    cv_filename = CV_BASE_FILES.get(cv_base, CV_BASE_FILES["CV_Einride"])
+    cv_path     = CV_DIR / cv_filename
+    if not cv_path.exists():
+        cv_path = CV_DIR / CV_BASE_FILES["CV_Einride"]
+
+    content = [
+        {
+            "type": "document",
+            "source": {"type": "base64", "media_type": "application/pdf",
+                       "data": read_pdf_b64(cv_path)},
+            "title": f"CV Reference ({cv_base})",
+            "cache_control": {"type": "ephemeral"},
+        },
+    ]
+    if PORTFOLIO_PDF.exists():
+        content.append({
+            "type": "document",
+            "source": {"type": "base64", "media_type": "application/pdf",
+                       "data": read_pdf_b64(PORTFOLIO_PDF)},
+            "title": "Portfolio",
+            "cache_control": {"type": "ephemeral"},
+        })
+    content.append({
+        "type": "text",
+        "text": f"""SKILL.md — follow all rules here exactly:
+{skill_content}
+
+Cover letter tone reference (match this tone and length):
+{cover_letter_text}
+
+Job posting URL: {job_url}
+Job posting content:
+{job_posting_text}
+
+Generate a full tailored CV and cover letter for this role.
+Return ONLY a valid JSON object with no other text:
+{{"cv": "full CV in markdown, in Swedish", "cover_letter": "full cover letter in plain text"}}""",
+    })
+    return content
+
+
+def _parse_claude_json(text: str):
+    text = text.strip()
+    if text.startswith("```"):
+        text = re.sub(r"^```(?:json)?\n?", "", text)
+        text = re.sub(r"\n?```$", "", text)
+    match = re.search(r'\{.*\}', text, re.DOTALL)
+    if match:
+        return json.loads(match.group())
+    raise ValueError("No JSON found in response")
+
+
 # ── Routes ─────────────────────────────────────────────────
 
 @app.route("/")
@@ -113,72 +170,54 @@ def generate():
     if not job_url:
         return jsonify({"error": "No job URL provided"}), 400
 
-    skill_content     = SKILL_PATH.read_text(encoding="utf-8") if SKILL_PATH.exists() else ""
-    job_posting_text  = fetch_job_posting(job_url)
-    cover_letter_text = read_docx_text(LETTER_DOCX) if LETTER_DOCX.exists() else ""
-
-    cv_filename = CV_BASE_FILES.get(cv_base, CV_BASE_FILES["CV_Einride"])
-    cv_path     = CV_DIR / cv_filename
-    if not cv_path.exists():
-        cv_path = CV_DIR / CV_BASE_FILES["CV_Einride"]
-
-    content = [
-        {
-            "type": "document",
-            "source": {"type": "base64", "media_type": "application/pdf",
-                       "data": read_pdf_b64(cv_path)},
-            "title": f"CV Reference ({cv_base})",
-            "cache_control": {"type": "ephemeral"},
-        },
-    ]
-
-    if PORTFOLIO_PDF.exists():
-        content.append({
-            "type": "document",
-            "source": {"type": "base64", "media_type": "application/pdf",
-                       "data": read_pdf_b64(PORTFOLIO_PDF)},
-            "title": "Portfolio",
-            "cache_control": {"type": "ephemeral"},
-        })
-
-    content.append({
-        "type": "text",
-        "text": f"""SKILL.md — follow all rules here exactly:
-{skill_content}
-
-Cover letter tone reference (match this tone and length):
-{cover_letter_text}
-
-Job posting URL: {job_url}
-Job posting content:
-{job_posting_text}
-
-Generate a full tailored CV and cover letter for this role.
-Return ONLY a valid JSON object with no other text:
-{{"cv": "full CV in markdown, in Swedish", "cover_letter": "full cover letter in plain text"}}""",
-    })
-
     client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY", ""))
     try:
         response = client.messages.create(
             model="claude-sonnet-4-6",
             max_tokens=4096,
             system="You are Lukas Larsson's job application assistant. Generate a tailored CV and cover letter using the provided reference documents and instructions. Output only valid JSON.",
-            messages=[{"role": "user", "content": content}],
+            messages=[{"role": "user", "content": _build_doc_content(cv_base, job_url)}],
         )
-        text = response.content[0].text.strip()
-        if text.startswith("```"):
-            text = re.sub(r"^```(?:json)?\n?", "", text)
-            text = re.sub(r"\n?```$", "", text)
-        match = re.search(r'\{.*\}', text, re.DOTALL)
-        if match:
-            return jsonify(json.loads(match.group()))
-        return jsonify({"error": "Could not parse response", "raw": text}), 500
+        return jsonify(_parse_claude_json(response.content[0].text))
     except Exception as e:
         logging.error(f"Generation failed: {e}")
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/update", methods=["POST"])
+def update():
+    data        = request.get_json()
+    current_cv  = (data.get("cv") or "").strip()
+    current_cl  = (data.get("cover_letter") or "").strip()
+    instruction = (data.get("instruction") or "").strip()
+
+    if not instruction:
+        return jsonify({"error": "No instruction provided"}), 400
+    if not current_cv and not current_cl:
+        return jsonify({"error": "No existing output to update"}), 400
+
+    client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY", ""))
+    try:
+        response = client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=4096,
+            system="You are editing an existing job application. Apply the user's instruction precisely. Make only the requested changes. Return ONLY a valid JSON object: {\"cv\": \"...\", \"cover_letter\": \"...\"}",
+            messages=[{"role": "user", "content": f"""Current CV:
+{current_cv}
+
+Current cover letter:
+{current_cl}
+
+Instruction: {instruction}
+
+Apply the instruction and return the updated documents as JSON."""}],
+        )
+        return jsonify(_parse_claude_json(response.content[0].text))
+    except Exception as e:
+        logging.error(f"Update failed: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
 if __name__ == "__main__":
-    print("Operation Next starting on http://localhost:5001")
+    print("Operation Next starting on http://localhost:5003")
     app.run(debug=True, port=5003)
