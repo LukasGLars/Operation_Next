@@ -26,6 +26,7 @@ SKILL_PATH    = ROOT / "jobsearch" / "skill" / "SKILL.md"
 CV_DIR        = ROOT / "jobsearch" / "cv"
 PORTFOLIO_PDF = ROOT / "jobsearch" / "portfolio" / "git_Lukas_Portfolio.pdf"
 LETTER_DOCX   = ROOT / "jobsearch" / "letters" / "Lukas_Larsson_Cover_Letter_Einride.docx"
+APPLICATIONS  = ROOT / "jobsearch" / "applications"
 
 CV_BASE_FILES = {
     "CV_Einride":   "Lukas_Larsson_CV_Einride.pdf",
@@ -39,6 +40,28 @@ _HEADERS = ["#", "Företag", "Roll/Typ", "CV-bas", "Status", "Datum", "URL"]
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.ERROR)
+
+
+# ── Application file helpers ───────────────────────────────
+
+def _app_folder(company: str, role: str) -> Path:
+    def slug(s):
+        s = s.lower().strip()
+        s = re.sub(r"[^a-z0-9]", "_", s)
+        s = re.sub(r"_+", "_", s).strip("_")
+        return s
+    role_first = role.split("/")[0].split(" ")[0].strip() if role else ""
+    return APPLICATIONS / (slug(company) + "_" + slug(role_first))
+
+
+def _save_docs(folder: Path, cv: str, cover_letter: str, suffix: str):
+    folder.mkdir(parents=True, exist_ok=True)
+    cv_path = folder / f"cv_{suffix}.md"
+    cl_path = folder / f"cover_letter_{suffix}.md"
+    if not cv_path.exists() or suffix != "original":
+        cv_path.write_text(cv, encoding="utf-8")
+    if not cl_path.exists() or suffix != "original":
+        cl_path.write_text(cover_letter, encoding="utf-8")
 
 
 # ── Joblist read/write ─────────────────────────────────────
@@ -202,6 +225,8 @@ def generate():
     data    = request.get_json()
     job_url = (data.get("url") or "").strip()
     cv_base = (data.get("cv_base") or "CV_Einride").strip()
+    company = (data.get("company") or "").strip()
+    role    = (data.get("role") or "").strip()
     if not job_url:
         return jsonify({"error": "No job URL provided"}), 400
 
@@ -218,9 +243,33 @@ def generate():
             _update_job_row(job_url, {"Status": "Genererat", "Datum": date.today().isoformat()})
         except Exception as e:
             logging.error(f"Status update after generation failed: {e}")
+        if company and role and result.get("cv"):
+            try:
+                folder = _app_folder(company, role)
+                _save_docs(folder, result["cv"], result.get("cover_letter", ""), "original")
+            except Exception as e:
+                logging.error(f"Save original failed: {e}")
         return jsonify(result)
     except Exception as e:
         logging.error(f"Generation failed: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/save", methods=["POST"])
+def save_edited():
+    data         = request.get_json()
+    company      = (data.get("company") or "").strip()
+    role         = (data.get("role") or "").strip()
+    cv           = (data.get("cv") or "").strip()
+    cover_letter = (data.get("cover_letter") or "").strip()
+    if not company or not role:
+        return jsonify({"error": "company and role required"}), 400
+    try:
+        folder = _app_folder(company, role)
+        _save_docs(folder, cv, cover_letter, "edited")
+        return jsonify({"ok": True, "folder": str(folder.relative_to(ROOT))})
+    except Exception as e:
+        logging.error(f"Save edited failed: {e}")
         return jsonify({"error": str(e)}), 500
 
 
