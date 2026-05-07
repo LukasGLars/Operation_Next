@@ -84,7 +84,7 @@ def _call_claude_search(skill_content, known_urls):
 Use the candidate profile below to find relevant new job postings.
 Search in both Swedish and English.
 Return exactly up to 5 new roles not already in the known URL list.
-For each role return: company, role title, direct application URL, role_type.
+For each role return: company, role title, direct application URL, role_type, cv_base, location, status (always "Identifierad"), date_added (today's date in YYYY-MM-DD).
 
 CANDIDATE PROFILE:
 {profile_block}
@@ -93,7 +93,7 @@ URLS ALREADY IN JOBLIST — SKIP THESE:
 {skip_block}
 
 Respond with ONLY a JSON array:
-[{{"company": "...", "role": "...", "url": "...", "role_type": "..."}}]"""
+[{"company": "...", "role": "...", "url": "...", "role_type": "...", "cv_base": "...", "location": "...", "status": "Identifierad", "date_added": "YYYY-MM-DD"}]"""
 
     response = client.messages.create(
         model="claude-sonnet-4-20250514",
