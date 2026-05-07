@@ -143,6 +143,8 @@
 <script>
   var JOB_URL   = {{ url | tojson }};
   var CV_BASE   = {{ cv_base | tojson }};
+  var COMPANY   = {{ company | tojson }};
+  var ROLE      = {{ role | tojson }};
   var STORE_KEY = "next_out_" + JOB_URL.slice(-40);
 
   var origCv = "", origCl = "";
@@ -180,15 +182,17 @@
   function saveField(which) {
     var stored = {};
     try { stored = JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); } catch (e) {}
-    if (which === "cv") {
-      stored.cv = document.getElementById("cv-output").value;
-    } else {
-      stored.cover_letter = document.getElementById("cl-output").value;
-    }
+    stored.cv           = document.getElementById("cv-output").value;
+    stored.cover_letter = document.getElementById("cl-output").value;
     stored.orig_cv = origCv;
     stored.orig_cl = origCl;
     localStorage.setItem(STORE_KEY, JSON.stringify(stored));
     updateRevertButtons();
+    fetch("/save", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ company: COMPANY, role: ROLE, cv: stored.cv, cover_letter: stored.cover_letter }),
+    }).catch(function(e) { console.warn("Save to disk failed:", e); });
   }
 
   function revertCv() {
@@ -220,7 +224,7 @@
     fetch("/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url: JOB_URL, cv_base: CV_BASE }),
+      body: JSON.stringify({ url: JOB_URL, cv_base: CV_BASE, company: COMPANY, role: ROLE }),
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {
