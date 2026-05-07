@@ -179,7 +179,7 @@ def update_joblist():
             "#":        str(len(rows) + 1),
             "Företag":  job.get("company", ""),
             "Roll/Typ": job.get("role", ""),
-            "CV-bas":   cv_base_for_role(job.get("role_type", "")),
+            "CV-bas":   job.get("cv_base") or cv_base_for_role(job.get("role_type", "")),
             "Status":   "Identifierad",
             "Datum":    TODAY,
             "URL":      url,
