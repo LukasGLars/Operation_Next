@@ -35,33 +35,80 @@ CV_BASE_FILES = {
     "CV":           "Lukas_Larsson_CV.pdf",
 }
 
+_HEADERS = ["#", "Företag", "Roll/Typ", "CV-bas", "Status", "Datum", "URL"]
+
 app = Flask(__name__)
 logging.basicConfig(level=logging.ERROR)
 
 
-# ── Helpers ────────────────────────────────────────────────
+# ── Joblist read/write ─────────────────────────────────────
+
+def _parse_joblist_raw():
+    if not JOBLIST_PATH.exists():
+        return [], []
+    with open(JOBLIST_PATH, encoding="utf-8") as f:
+        lines = f.read().splitlines()
+    table_start = next((i for i, l in enumerate(lines) if l.strip().startswith("|")), None)
+    if table_start is None:
+        return lines, []
+    preamble = lines[:table_start]
+    header = None
+    rows = []
+    for line in lines[table_start:]:
+        s = line.strip()
+        if not s.startswith("|"):
+            continue
+        cells = [c.strip() for c in s.strip("|").split("|")]
+        if not cells:
+            continue
+        if cells[0] == "#":
+            header = cells
+            continue
+        if all(re.match(r"^-+$", c) for c in cells if c):
+            continue
+        if header:
+            rows.append({header[i]: cells[i] if i < len(cells) else "" for i in range(len(header))})
+    return preamble, rows
+
+
+def _write_joblist_raw(preamble, rows):
+    today = date.today().isoformat()
+    sep = "|" + "|".join("---" for _ in _HEADERS) + "|"
+    table_lines = ["| " + " | ".join(_HEADERS) + " |", sep]
+    for row in rows:
+        cells = [
+            row.get("#", ""), row.get("Företag", ""), row.get("Roll/Typ", ""),
+            row.get("CV-bas", ""), row.get("Status", ""),
+            row.get("Datum", today), row.get("URL", ""),
+        ]
+        table_lines.append("| " + " | ".join(cells) + " |")
+    output = "\n".join(preamble) + "\n\n" + "\n".join(table_lines) + "\n"
+    with open(JOBLIST_PATH, "w", encoding="utf-8") as f:
+        f.write(output)
+
+
+def _update_job_row(url: str, updates: dict):
+    preamble, rows = _parse_joblist_raw()
+    for row in rows:
+        if row.get("URL", "").strip() == url:
+            row.update(updates)
+            break
+    _write_joblist_raw(preamble, rows)
+
+
+def _delete_job_row(url: str):
+    preamble, rows = _parse_joblist_raw()
+    rows = [r for r in rows if r.get("URL", "").strip() != url]
+    for i, row in enumerate(rows, 1):
+        row["#"] = str(i)
+    _write_joblist_raw(preamble, rows)
+
+
+# ── Document generation helpers ────────────────────────────
 
 def parse_joblist():
-    if not JOBLIST_PATH.exists():
-        return []
-    jobs = []
-    header = None
-    with open(JOBLIST_PATH, encoding="utf-8") as f:
-        for line in f:
-            s = line.strip()
-            if not s.startswith("|"):
-                continue
-            cells = [c.strip() for c in s.strip("|").split("|")]
-            if not cells:
-                continue
-            if cells[0] == "#":
-                header = cells
-                continue
-            if all(re.match(r"^-+$", c) for c in cells if c):
-                continue
-            if header:
-                jobs.append({header[i]: cells[i] if i < len(cells) else "" for i in range(len(header))})
-    return jobs
+    _, rows = _parse_joblist_raw()
+    return rows
 
 
 def read_pdf_b64(path: Path) -> str:
@@ -95,39 +142,29 @@ def _build_doc_content(cv_base: str, job_url: str) -> list:
     if not cv_path.exists():
         cv_path = CV_DIR / CV_BASE_FILES["CV_Einride"]
 
-    content = [
-        {
-            "type": "document",
-            "source": {"type": "base64", "media_type": "application/pdf",
-                       "data": read_pdf_b64(cv_path)},
-            "title": f"CV Reference ({cv_base})",
-            "cache_control": {"type": "ephemeral"},
-        },
-    ]
+    content = [{
+        "type": "document",
+        "source": {"type": "base64", "media_type": "application/pdf", "data": read_pdf_b64(cv_path)},
+        "title": f"CV Reference ({cv_base})",
+        "cache_control": {"type": "ephemeral"},
+    }]
     if PORTFOLIO_PDF.exists():
         content.append({
             "type": "document",
-            "source": {"type": "base64", "media_type": "application/pdf",
-                       "data": read_pdf_b64(PORTFOLIO_PDF)},
+            "source": {"type": "base64", "media_type": "application/pdf", "data": read_pdf_b64(PORTFOLIO_PDF)},
             "title": "Portfolio",
             "cache_control": {"type": "ephemeral"},
         })
-    content.append({
-        "type": "text",
-        "text": f"""SKILL.md — follow all rules here exactly:
-{skill_content}
-
-Cover letter tone reference (match this tone and length):
-{cover_letter_text}
-
-Job posting URL: {job_url}
-Job posting content:
-{job_posting_text}
-
-Generate a full tailored CV and cover letter for this role.
-Return ONLY a valid JSON object with no other text:
-{{"cv": "full CV in markdown, in Swedish", "cover_letter": "full cover letter in plain text"}}""",
-    })
+    prompt = (
+        "SKILL.md — follow all rules here exactly:\n" + skill_content +
+        "\n\nCover letter tone reference (match this tone and length):\n" + cover_letter_text +
+        "\n\nJob posting URL: " + job_url +
+        "\nJob posting content:\n" + job_posting_text +
+        '\n\nGenerate a full tailored CV and cover letter for this role.\n'
+        'Return ONLY a valid JSON object with no other text:\n'
+        '{"cv": "full CV in markdown, in Swedish", "cover_letter": "full cover letter in plain text"}'
+    )
+    content.append({"type": "text", "text": prompt})
     return content
 
 
@@ -146,8 +183,7 @@ def _parse_claude_json(text: str):
 
 @app.route("/")
 def index():
-    jobs = parse_joblist()
-    return render_template("index.html", jobs=jobs)
+    return render_template("index.html", jobs=parse_joblist())
 
 
 @app.route("/generate", methods=["GET"])
@@ -166,7 +202,6 @@ def generate():
     data    = request.get_json()
     job_url = (data.get("url") or "").strip()
     cv_base = (data.get("cv_base") or "CV_Einride").strip()
-
     if not job_url:
         return jsonify({"error": "No job URL provided"}), 400
 
@@ -178,43 +213,43 @@ def generate():
             system="You are Lukas Larsson's job application assistant. Generate a tailored CV and cover letter using the provided reference documents and instructions. Output only valid JSON.",
             messages=[{"role": "user", "content": _build_doc_content(cv_base, job_url)}],
         )
-        return jsonify(_parse_claude_json(response.content[0].text))
+        result = _parse_claude_json(response.content[0].text)
+        try:
+            _update_job_row(job_url, {"Status": "Genererat", "Datum": date.today().isoformat()})
+        except Exception as e:
+            logging.error(f"Status update after generation failed: {e}")
+        return jsonify(result)
     except Exception as e:
         logging.error(f"Generation failed: {e}")
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/update", methods=["POST"])
-def update():
-    data        = request.get_json()
-    current_cv  = (data.get("cv") or "").strip()
-    current_cl  = (data.get("cover_letter") or "").strip()
-    instruction = (data.get("instruction") or "").strip()
-
-    if not instruction:
-        return jsonify({"error": "No instruction provided"}), 400
-    if not current_cv and not current_cl:
-        return jsonify({"error": "No existing output to update"}), 400
-
-    client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY", ""))
+@app.route("/status", methods=["POST"])
+def update_status():
+    data   = request.get_json()
+    url    = (data.get("url") or "").strip()
+    status = (data.get("status") or "").strip()
+    if not url or not status:
+        return jsonify({"error": "url and status required"}), 400
     try:
-        response = client.messages.create(
-            model="claude-sonnet-4-6",
-            max_tokens=4096,
-            system="You are editing an existing job application. Apply the user's instruction precisely. Make only the requested changes. Return ONLY a valid JSON object: {\"cv\": \"...\", \"cover_letter\": \"...\"}",
-            messages=[{"role": "user", "content": f"""Current CV:
-{current_cv}
-
-Current cover letter:
-{current_cl}
-
-Instruction: {instruction}
-
-Apply the instruction and return the updated documents as JSON."""}],
-        )
-        return jsonify(_parse_claude_json(response.content[0].text))
+        _update_job_row(url, {"Status": status, "Datum": date.today().isoformat()})
+        return jsonify({"ok": True})
     except Exception as e:
-        logging.error(f"Update failed: {e}")
+        logging.error(f"Status update failed: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/delete", methods=["POST"])
+def delete_job():
+    data = request.get_json()
+    url  = (data.get("url") or "").strip()
+    if not url:
+        return jsonify({"error": "url required"}), 400
+    try:
+        _delete_job_row(url)
+        return jsonify({"ok": True})
+    except Exception as e:
+        logging.error(f"Delete failed: {e}")
         return jsonify({"error": str(e)}), 500
 
 
