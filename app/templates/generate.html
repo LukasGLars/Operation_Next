@@ -9,19 +9,15 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
            background: #f4f5f7; color: #1a1a2e; min-height: 100vh; }
-
     header { background: #1a1a2e; color: white; padding: 16px 32px;
              display: flex; align-items: center; gap: 20px; }
     .back-btn { color: white; text-decoration: none; opacity: 0.6;
                 font-size: 14px; transition: opacity 0.15s; }
     .back-btn:hover { opacity: 1; }
     header h1 { font-size: 20px; font-weight: 600; }
-
     .container { max-width: 1100px; margin: 32px auto; padding: 0 16px; }
-
     .card { background: white; border-radius: 10px; padding: 24px;
             box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 20px; }
-
     .job-meta { display: flex; gap: 24px; flex-wrap: wrap; align-items: center; }
     .meta-item { display: flex; flex-direction: column; gap: 2px; }
     .meta-label { font-size: 11px; font-weight: 700; text-transform: uppercase;
@@ -31,27 +27,26 @@
     .meta-url:hover { text-decoration: underline; }
     .cv-badge { display: inline-block; padding: 2px 8px; border-radius: 10px;
                 font-size: 12px; font-weight: 600; background: #e0e7ff; color: #3730a3; }
-
-    .btn-primary { padding: 10px 32px; background: #1a1a2e; color: white;
+    .action-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .btn-primary { padding: 10px 28px; background: #1a1a2e; color: white;
                    border: none; border-radius: 6px; font-size: 14px; font-weight: 500;
                    cursor: pointer; transition: opacity 0.15s; }
     .btn-primary:hover { opacity: 0.85; }
     .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-
-    #loading { display: none; align-items: center; gap: 12px; padding: 4px 0; }
+    .btn-secondary { padding: 9px 20px; background: white; color: #1a1a2e;
+                     border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;
+                     font-weight: 500; cursor: pointer; transition: all 0.15s; }
+    .btn-secondary:hover { border-color: #1a1a2e; }
+    #loading { display: none; align-items: center; gap: 12px; }
     .spinner { width: 18px; height: 18px; border: 2px solid #e5e7eb;
                border-top-color: #2563eb; border-radius: 50%;
                animation: spin 0.7s linear infinite; flex-shrink: 0; }
     @keyframes spin { to { transform: rotate(360deg); } }
     #loading p { color: #6b7280; font-size: 14px; }
-
     .error-box { background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px;
-                 padding: 12px 16px; color: #991b1b; font-size: 14px; display: none;
-                 margin-top: 12px; }
-
+                 padding: 12px 16px; color: #991b1b; font-size: 14px; display: none; }
     .output-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     @media (max-width: 700px) { .output-grid { grid-template-columns: 1fr; } }
-
     .output-card { background: white; border-radius: 10px;
                    box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; }
     .output-header { display: flex; justify-content: space-between; align-items: center;
@@ -62,7 +57,6 @@
                 border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer;
                 transition: all 0.15s; color: #374151; }
     .btn-copy:hover { background: #1a1a2e; color: white; border-color: #1a1a2e; }
-
     .output-body { padding: 20px; font-size: 14px; line-height: 1.7;
                    white-space: pre-wrap; max-height: 70vh; overflow-y: auto; }
     .output-body.markdown { white-space: normal; }
@@ -73,22 +67,38 @@
     .output-body li { margin-bottom: 4px; }
     .output-body p { margin-bottom: 10px; }
     .output-body strong { font-weight: 600; }
+    .instruction-card { background: white; border-radius: 10px; padding: 24px;
+                        box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .instruction-card label { display: block; font-size: 13px; font-weight: 600;
+                               color: #555; margin-bottom: 8px; }
+    .instruction-card textarea { width: 100%; padding: 10px 14px; border: 1px solid #d1d5db;
+                                  border-radius: 6px; font-size: 14px; font-family: inherit;
+                                  resize: vertical; min-height: 80px; outline: none;
+                                  transition: border 0.15s; }
+    .instruction-card textarea:focus { border-color: #2563eb; }
+    .instruction-row { display: flex; gap: 10px; margin-top: 12px; align-items: center; flex-wrap: wrap; }
+    #update-loading { display: none; align-items: center; gap: 8px; }
+    #update-loading .spinner { width: 16px; height: 16px; }
+    #update-loading p { font-size: 13px; color: #6b7280; }
+    .btn-revert { padding: 9px 18px; background: white; color: #6b7280;
+                  border: 1px solid #e5e7eb; border-radius: 6px; font-size: 13px;
+                  cursor: pointer; transition: all 0.15s; display: none; }
+    .btn-revert:hover { color: #1a1a2e; border-color: #9ca3af; }
   </style>
 </head>
 <body>
 
 <header>
-  <a class="back-btn" href="/">← Tillbaka</a>
-  <h1>Operation Next — Generera dokument</h1>
+  <a class="back-btn" href="/">&#8592; Tillbaka</a>
+  <h1>Operation Next &#8212; Generera dokument</h1>
 </header>
 
 <div class="container">
 
-  <!-- Job details -->
   <div class="card">
     <div class="job-meta">
       <div class="meta-item">
-        <span class="meta-label">Företag</span>
+        <span class="meta-label">F&#246;retag</span>
         <span class="meta-value">{{ company }}</span>
       </div>
       <div class="meta-item">
@@ -107,93 +117,167 @@
       {% endif %}
       <div class="meta-item">
         <span class="meta-label">Annons</span>
-        <a class="meta-url" href="{{ url }}" target="_blank">Öppna ↗</a>
+        <a class="meta-url" href="{{ url }}" target="_blank">&#214;ppna &#8599;</a>
       </div>
     </div>
   </div>
 
-  <!-- Generate action -->
-  <div class="card" style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
-    <button class="btn-primary" id="generate-btn" onclick="generate()">Generera CV + Personligt brev</button>
-    <div id="loading">
-      <div class="spinner"></div>
-      <p>Claude läser annons, CV-bas och portfolio...</p>
+  <div class="card">
+    <div class="action-row">
+      <button class="btn-primary" id="generate-btn" onclick="generate()">Generera CV + Personligt brev</button>
+      <button class="btn-secondary" id="regenerate-btn" onclick="regenerate()" style="display:none">Generera om</button>
+      <div id="loading">
+        <div class="spinner"></div>
+        <p>Claude l&#228;ser annons, CV-bas och portfolio...</p>
+      </div>
     </div>
-    <div class="error-box" id="error-box"></div>
+    <div class="error-box" id="error-box" style="margin-top:12px"></div>
   </div>
 
-  <!-- Output -->
-  <div class="output-grid" id="output-section" style="display:none;">
+  <div class="output-grid" id="output-section" style="display:none">
     <div class="output-card">
       <div class="output-header">
-        <span class="output-title">CV — Svenska</span>
-        <button class="btn-copy" onclick="copyText('cv-output', this)">Kopiera</button>
+        <span class="output-title">CV &#8212; Svenska</span>
+        <button class="btn-copy" onclick="copyText('cv', this)">Kopiera</button>
       </div>
       <div class="output-body markdown" id="cv-output"></div>
     </div>
     <div class="output-card">
       <div class="output-header">
         <span class="output-title">Personligt brev</span>
-        <button class="btn-copy" onclick="copyText('cl-output', this)">Kopiera</button>
+        <button class="btn-copy" onclick="copyText('cl', this)">Kopiera</button>
       </div>
       <div class="output-body" id="cl-output"></div>
+    </div>
+  </div>
+
+  <div class="instruction-card" id="instruction-section" style="display:none">
+    <label for="instruction">Instruktion till Claude</label>
+    <textarea id="instruction" placeholder="T.ex. kortare personligt brev, mer om Valeryd-erfarenheten, byt till engelska..."></textarea>
+    <div class="instruction-row">
+      <button class="btn-primary" onclick="updateDocs()">Uppdatera</button>
+      <button class="btn-revert" id="revert-btn" onclick="revert()">&#197;terst&#228;ll original</button>
+      <div id="update-loading">
+        <div class="spinner"></div>
+        <p>Uppdaterar...</p>
+      </div>
+      <div class="error-box" id="update-error" style="margin-top:0"></div>
     </div>
   </div>
 
 </div>
 
 <script>
-  let rawCv = "";
-  let rawCl = "";
+  var JOB_URL   = {{ url | tojson }};
+  var CV_BASE   = {{ cv_base | tojson }};
+  var STORE_KEY = "next_out_" + JOB_URL.slice(-40);
 
-  async function generate() {
-    const btn = document.getElementById("generate-btn");
-    btn.disabled = true;
-    document.getElementById("loading").style.display = "flex";
-    document.getElementById("error-box").style.display = "none";
-    document.getElementById("output-section").style.display = "none";
+  var rawCv = "", rawCl = "";
+  var origCv = "", origCl = "";
 
+  (function () {
     try {
-      const res = await fetch("/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: "{{ url }}", cv_base: "{{ cv_base }}" }),
-      });
-      const data = await res.json();
-
-      if (data.error) {
-        showError(data.error + (data.raw ? "\n\n" + data.raw : ""));
-        return;
+      var stored = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
+      if (stored && stored.cv) {
+        rawCv = origCv = stored.cv;
+        rawCl = origCl = stored.cover_letter || "";
+        renderOutput();
       }
+    } catch (e) {}
+  })();
 
-      rawCv = data.cv || "";
-      rawCl = data.cover_letter || "";
-
-      document.getElementById("cv-output").innerHTML = marked.parse(rawCv);
-      document.getElementById("cl-output").textContent = rawCl;
-      document.getElementById("output-section").style.display = "grid";
-
-    } catch (e) {
-      showError("Något gick fel: " + e.message);
-    } finally {
-      btn.disabled = false;
-      document.getElementById("loading").style.display = "none";
-    }
+  function renderOutput() {
+    document.getElementById("cv-output").innerHTML = marked.parse(rawCv);
+    document.getElementById("cl-output").textContent = rawCl;
+    document.getElementById("output-section").style.display = "grid";
+    document.getElementById("instruction-section").style.display = "block";
+    document.getElementById("regenerate-btn").style.display = "inline-block";
+    document.getElementById("generate-btn").style.display = "none";
+    document.getElementById("revert-btn").style.display =
+      (rawCv !== origCv || rawCl !== origCl) ? "inline-block" : "none";
   }
 
-  function copyText(elId, btn) {
-    const text = elId === "cv-output" ? rawCv : rawCl;
-    navigator.clipboard.writeText(text).then(() => {
-      const orig = btn.textContent;
+  function generate() {
+    setGenerating(true);
+    hideError("error-box");
+    fetch("/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: JOB_URL, cv_base: CV_BASE }),
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.error) { showError("error-box", data.error); return; }
+      rawCv = origCv = data.cv || "";
+      rawCl = origCl = data.cover_letter || "";
+      localStorage.setItem(STORE_KEY, JSON.stringify({ cv: rawCv, cover_letter: rawCl }));
+      renderOutput();
+    })
+    .catch(function(e) { showError("error-box", "Fel: " + e.message); })
+    .finally(function() { setGenerating(false); });
+  }
+
+  function regenerate() {
+    localStorage.removeItem(STORE_KEY);
+    document.getElementById("output-section").style.display = "none";
+    document.getElementById("instruction-section").style.display = "none";
+    document.getElementById("generate-btn").style.display = "inline-block";
+    document.getElementById("regenerate-btn").style.display = "none";
+    generate();
+  }
+
+  function updateDocs() {
+    var instruction = document.getElementById("instruction").value.trim();
+    if (!instruction) return;
+    setUpdating(true);
+    hideError("update-error");
+    fetch("/update", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cv: rawCv, cover_letter: rawCl, instruction: instruction }),
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.error) { showError("update-error", data.error); return; }
+      rawCv = data.cv || rawCv;
+      rawCl = data.cover_letter || rawCl;
+      document.getElementById("instruction").value = "";
+      renderOutput();
+    })
+    .catch(function(e) { showError("update-error", "Fel: " + e.message); })
+    .finally(function() { setUpdating(false); });
+  }
+
+  function revert() {
+    rawCv = origCv;
+    rawCl = origCl;
+    document.getElementById("instruction").value = "";
+    renderOutput();
+  }
+
+  function copyText(which, btn) {
+    var text = which === "cv" ? rawCv : rawCl;
+    navigator.clipboard.writeText(text).then(function() {
+      var orig = btn.textContent;
       btn.textContent = "Kopierat!";
-      setTimeout(() => btn.textContent = orig, 1800);
+      setTimeout(function() { btn.textContent = orig; }, 1800);
     });
   }
 
-  function showError(msg) {
-    const el = document.getElementById("error-box");
+  function setGenerating(on) {
+    document.getElementById("generate-btn").disabled = on;
+    document.getElementById("loading").style.display = on ? "flex" : "none";
+  }
+  function setUpdating(on) {
+    document.getElementById("update-loading").style.display = on ? "flex" : "none";
+  }
+  function showError(id, msg) {
+    var el = document.getElementById(id);
     el.textContent = msg;
     el.style.display = "block";
+  }
+  function hideError(id) {
+    document.getElementById(id).style.display = "none";
   }
 </script>
 
