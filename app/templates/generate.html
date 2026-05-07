@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Generate — Operation Next</title>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -48,42 +47,22 @@
     .output-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     @media (max-width: 700px) { .output-grid { grid-template-columns: 1fr; } }
     .output-card { background: white; border-radius: 10px;
-                   box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; }
+                   box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; display: flex; flex-direction: column; }
     .output-header { display: flex; justify-content: space-between; align-items: center;
-                     padding: 16px 20px; border-bottom: 1px solid #e5e7eb; background: #f8f9fb; }
+                     padding: 14px 20px; border-bottom: 1px solid #e5e7eb; background: #f8f9fb;
+                     gap: 8px; flex-wrap: wrap; }
     .output-title { font-size: 13px; font-weight: 700; text-transform: uppercase;
                     letter-spacing: 0.05em; color: #555; }
-    .btn-copy { padding: 5px 14px; background: white; border: 1px solid #d1d5db;
-                border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer;
-                transition: all 0.15s; color: #374151; }
-    .btn-copy:hover { background: #1a1a2e; color: white; border-color: #1a1a2e; }
-    .output-body { padding: 20px; font-size: 14px; line-height: 1.7;
-                   white-space: pre-wrap; max-height: 70vh; overflow-y: auto; }
-    .output-body.markdown { white-space: normal; }
-    .output-body h1, .output-body h2, .output-body h3 {
-      margin: 16px 0 8px; font-size: 15px; color: #1a1a2e; }
-    .output-body h1 { font-size: 18px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; }
-    .output-body ul, .output-body ol { padding-left: 20px; margin: 8px 0; }
-    .output-body li { margin-bottom: 4px; }
-    .output-body p { margin-bottom: 10px; }
-    .output-body strong { font-weight: 600; }
-    .instruction-card { background: white; border-radius: 10px; padding: 24px;
-                        box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
-    .instruction-card label { display: block; font-size: 13px; font-weight: 600;
-                               color: #555; margin-bottom: 8px; }
-    .instruction-card textarea { width: 100%; padding: 10px 14px; border: 1px solid #d1d5db;
-                                  border-radius: 6px; font-size: 14px; font-family: inherit;
-                                  resize: vertical; min-height: 80px; outline: none;
-                                  transition: border 0.15s; }
-    .instruction-card textarea:focus { border-color: #2563eb; }
-    .instruction-row { display: flex; gap: 10px; margin-top: 12px; align-items: center; flex-wrap: wrap; }
-    #update-loading { display: none; align-items: center; gap: 8px; }
-    #update-loading .spinner { width: 16px; height: 16px; }
-    #update-loading p { font-size: 13px; color: #6b7280; }
-    .btn-revert { padding: 9px 18px; background: white; color: #6b7280;
-                  border: 1px solid #e5e7eb; border-radius: 6px; font-size: 13px;
-                  cursor: pointer; transition: all 0.15s; display: none; }
-    .btn-revert:hover { color: #1a1a2e; border-color: #9ca3af; }
+    .header-btns { display: flex; gap: 8px; }
+    .btn-sm { padding: 5px 14px; background: white; border: 1px solid #d1d5db;
+              border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer;
+              transition: all 0.15s; color: #374151; }
+    .btn-sm:hover { background: #1a1a2e; color: white; border-color: #1a1a2e; }
+    .btn-sm.revert { color: #6b7280; border-color: #e5e7eb; display: none; }
+    .btn-sm.revert:hover { background: #1a1a2e; color: white; border-color: #1a1a2e; }
+    .output-body { width: 100%; flex: 1; padding: 20px; font-size: 14px; line-height: 1.7;
+                   border: none; outline: none; resize: vertical; min-height: 400px;
+                   font-family: inherit; color: #1a1a2e; background: white; }
   </style>
 </head>
 <body>
@@ -138,30 +117,24 @@
     <div class="output-card">
       <div class="output-header">
         <span class="output-title">CV &#8212; Svenska</span>
-        <button class="btn-copy" onclick="copyText('cv', this)">Kopiera</button>
+        <div class="header-btns">
+          <button class="btn-sm revert" id="revert-cv" onclick="revertCv()">&#197;terst&#228;ll</button>
+          <button class="btn-sm" onclick="saveField('cv')">Spara</button>
+          <button class="btn-sm" onclick="copyField('cv', this)">Kopiera</button>
+        </div>
       </div>
-      <div class="output-body markdown" id="cv-output"></div>
+      <textarea class="output-body" id="cv-output" spellcheck="false"></textarea>
     </div>
     <div class="output-card">
       <div class="output-header">
         <span class="output-title">Personligt brev</span>
-        <button class="btn-copy" onclick="copyText('cl', this)">Kopiera</button>
+        <div class="header-btns">
+          <button class="btn-sm revert" id="revert-cl" onclick="revertCl()">&#197;terst&#228;ll</button>
+          <button class="btn-sm" onclick="saveField('cl')">Spara</button>
+          <button class="btn-sm" onclick="copyField('cl', this)">Kopiera</button>
+        </div>
       </div>
-      <div class="output-body" id="cl-output"></div>
-    </div>
-  </div>
-
-  <div class="instruction-card" id="instruction-section" style="display:none">
-    <label for="instruction">Instruktion till Claude</label>
-    <textarea id="instruction" placeholder="T.ex. kortare personligt brev, mer om Valeryd-erfarenheten, byt till engelska..."></textarea>
-    <div class="instruction-row">
-      <button class="btn-primary" onclick="updateDocs()">Uppdatera</button>
-      <button class="btn-revert" id="revert-btn" onclick="revert()">&#197;terst&#228;ll original</button>
-      <div id="update-loading">
-        <div class="spinner"></div>
-        <p>Uppdaterar...</p>
-      </div>
-      <div class="error-box" id="update-error" style="margin-top:0"></div>
+      <textarea class="output-body" id="cl-output" spellcheck="false"></textarea>
     </div>
   </div>
 
@@ -172,91 +145,66 @@
   var CV_BASE   = {{ cv_base | tojson }};
   var STORE_KEY = "next_out_" + JOB_URL.slice(-40);
 
-  var rawCv = "", rawCl = "";
   var origCv = "", origCl = "";
 
   (function () {
     try {
       var stored = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
       if (stored && stored.cv) {
-        rawCv = origCv = stored.cv;
-        rawCl = origCl = stored.cover_letter || "";
-        renderOutput();
+        origCv = stored.orig_cv || stored.cv;
+        origCl = stored.orig_cl || stored.cover_letter || "";
+        document.getElementById("cv-output").value = stored.cv;
+        document.getElementById("cl-output").value = stored.cover_letter || "";
+        showOutput();
       }
     } catch (e) {}
   })();
 
-  function renderOutput() {
-    document.getElementById("cv-output").innerHTML = marked.parse(rawCv);
-    document.getElementById("cl-output").textContent = rawCl;
+  function showOutput() {
     document.getElementById("output-section").style.display = "grid";
-    document.getElementById("instruction-section").style.display = "block";
     document.getElementById("regenerate-btn").style.display = "inline-block";
     document.getElementById("generate-btn").style.display = "none";
-    document.getElementById("revert-btn").style.display =
-      (rawCv !== origCv || rawCl !== origCl) ? "inline-block" : "none";
+    updateRevertButtons();
   }
 
-  function generate() {
-    setGenerating(true);
-    hideError("error-box");
-    fetch("/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url: JOB_URL, cv_base: CV_BASE }),
-    })
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-      if (data.error) { showError("error-box", data.error); return; }
-      rawCv = origCv = data.cv || "";
-      rawCl = origCl = data.cover_letter || "";
-      localStorage.setItem(STORE_KEY, JSON.stringify({ cv: rawCv, cover_letter: rawCl }));
-      renderOutput();
-    })
-    .catch(function(e) { showError("error-box", "Fel: " + e.message); })
-    .finally(function() { setGenerating(false); });
+  function updateRevertButtons() {
+    var cv = document.getElementById("cv-output").value;
+    var cl = document.getElementById("cl-output").value;
+    document.getElementById("revert-cv").style.display = (cv !== origCv) ? "inline-block" : "none";
+    document.getElementById("revert-cl").style.display = (cl !== origCl) ? "inline-block" : "none";
   }
 
-  function regenerate() {
-    localStorage.removeItem(STORE_KEY);
-    document.getElementById("output-section").style.display = "none";
-    document.getElementById("instruction-section").style.display = "none";
-    document.getElementById("generate-btn").style.display = "inline-block";
-    document.getElementById("regenerate-btn").style.display = "none";
-    generate();
+  document.getElementById("cv-output").addEventListener("input", updateRevertButtons);
+  document.getElementById("cl-output").addEventListener("input", updateRevertButtons);
+
+  function saveField(which) {
+    var stored = {};
+    try { stored = JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); } catch (e) {}
+    if (which === "cv") {
+      stored.cv = document.getElementById("cv-output").value;
+    } else {
+      stored.cover_letter = document.getElementById("cl-output").value;
+    }
+    stored.orig_cv = origCv;
+    stored.orig_cl = origCl;
+    localStorage.setItem(STORE_KEY, JSON.stringify(stored));
+    updateRevertButtons();
   }
 
-  function updateDocs() {
-    var instruction = document.getElementById("instruction").value.trim();
-    if (!instruction) return;
-    setUpdating(true);
-    hideError("update-error");
-    fetch("/update", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cv: rawCv, cover_letter: rawCl, instruction: instruction }),
-    })
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-      if (data.error) { showError("update-error", data.error); return; }
-      rawCv = data.cv || rawCv;
-      rawCl = data.cover_letter || rawCl;
-      document.getElementById("instruction").value = "";
-      renderOutput();
-    })
-    .catch(function(e) { showError("update-error", "Fel: " + e.message); })
-    .finally(function() { setUpdating(false); });
+  function revertCv() {
+    document.getElementById("cv-output").value = origCv;
+    updateRevertButtons();
   }
 
-  function revert() {
-    rawCv = origCv;
-    rawCl = origCl;
-    document.getElementById("instruction").value = "";
-    renderOutput();
+  function revertCl() {
+    document.getElementById("cl-output").value = origCl;
+    updateRevertButtons();
   }
 
-  function copyText(which, btn) {
-    var text = which === "cv" ? rawCv : rawCl;
+  function copyField(which, btn) {
+    var text = which === "cv"
+      ? document.getElementById("cv-output").value
+      : document.getElementById("cl-output").value;
     navigator.clipboard.writeText(text).then(function() {
       var orig = btn.textContent;
       btn.textContent = "Kopierat!";
@@ -264,20 +212,48 @@
     });
   }
 
-  function setGenerating(on) {
-    document.getElementById("generate-btn").disabled = on;
-    document.getElementById("loading").style.display = on ? "flex" : "none";
+  function generate() {
+    document.getElementById("generate-btn").disabled = true;
+    document.getElementById("loading").style.display = "flex";
+    document.getElementById("error-box").style.display = "none";
+
+    fetch("/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: JOB_URL, cv_base: CV_BASE }),
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.error) {
+        document.getElementById("error-box").textContent = data.error;
+        document.getElementById("error-box").style.display = "block";
+        return;
+      }
+      origCv = data.cv || "";
+      origCl = data.cover_letter || "";
+      document.getElementById("cv-output").value = origCv;
+      document.getElementById("cl-output").value = origCl;
+      localStorage.setItem(STORE_KEY, JSON.stringify({
+        cv: origCv, cover_letter: origCl, orig_cv: origCv, orig_cl: origCl
+      }));
+      showOutput();
+    })
+    .catch(function(e) {
+      document.getElementById("error-box").textContent = "Fel: " + e.message;
+      document.getElementById("error-box").style.display = "block";
+    })
+    .finally(function() {
+      document.getElementById("generate-btn").disabled = false;
+      document.getElementById("loading").style.display = "none";
+    });
   }
-  function setUpdating(on) {
-    document.getElementById("update-loading").style.display = on ? "flex" : "none";
-  }
-  function showError(id, msg) {
-    var el = document.getElementById(id);
-    el.textContent = msg;
-    el.style.display = "block";
-  }
-  function hideError(id) {
-    document.getElementById(id).style.display = "none";
+
+  function regenerate() {
+    localStorage.removeItem(STORE_KEY);
+    document.getElementById("output-section").style.display = "none";
+    document.getElementById("generate-btn").style.display = "inline-block";
+    document.getElementById("regenerate-btn").style.display = "none";
+    generate();
   }
 </script>
 
