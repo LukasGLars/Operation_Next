@@ -1,10 +1,201 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <title>Generate — Operation Next</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate — Operation Next</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+           background: #f4f5f7; color: #1a1a2e; min-height: 100vh; }
+
+    header { background: #1a1a2e; color: white; padding: 16px 32px;
+             display: flex; align-items: center; gap: 20px; }
+    .back-btn { color: white; text-decoration: none; opacity: 0.6;
+                font-size: 14px; transition: opacity 0.15s; }
+    .back-btn:hover { opacity: 1; }
+    header h1 { font-size: 20px; font-weight: 600; }
+
+    .container { max-width: 1100px; margin: 32px auto; padding: 0 16px; }
+
+    .card { background: white; border-radius: 10px; padding: 24px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 20px; }
+
+    .job-meta { display: flex; gap: 24px; flex-wrap: wrap; align-items: center; }
+    .meta-item { display: flex; flex-direction: column; gap: 2px; }
+    .meta-label { font-size: 11px; font-weight: 700; text-transform: uppercase;
+                  letter-spacing: 0.05em; color: #9ca3af; }
+    .meta-value { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+    .meta-url { font-size: 13px; color: #2563eb; text-decoration: none; }
+    .meta-url:hover { text-decoration: underline; }
+    .cv-badge { display: inline-block; padding: 2px 8px; border-radius: 10px;
+                font-size: 12px; font-weight: 600; background: #e0e7ff; color: #3730a3; }
+
+    .btn-primary { padding: 10px 32px; background: #1a1a2e; color: white;
+                   border: none; border-radius: 6px; font-size: 14px; font-weight: 500;
+                   cursor: pointer; transition: opacity 0.15s; }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    #loading { display: none; align-items: center; gap: 12px; padding: 4px 0; }
+    .spinner { width: 18px; height: 18px; border: 2px solid #e5e7eb;
+               border-top-color: #2563eb; border-radius: 50%;
+               animation: spin 0.7s linear infinite; flex-shrink: 0; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loading p { color: #6b7280; font-size: 14px; }
+
+    .error-box { background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px;
+                 padding: 12px 16px; color: #991b1b; font-size: 14px; display: none;
+                 margin-top: 12px; }
+
+    .output-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 700px) { .output-grid { grid-template-columns: 1fr; } }
+
+    .output-card { background: white; border-radius: 10px;
+                   box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; }
+    .output-header { display: flex; justify-content: space-between; align-items: center;
+                     padding: 16px 20px; border-bottom: 1px solid #e5e7eb; background: #f8f9fb; }
+    .output-title { font-size: 13px; font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.05em; color: #555; }
+    .btn-copy { padding: 5px 14px; background: white; border: 1px solid #d1d5db;
+                border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer;
+                transition: all 0.15s; color: #374151; }
+    .btn-copy:hover { background: #1a1a2e; color: white; border-color: #1a1a2e; }
+
+    .output-body { padding: 20px; font-size: 14px; line-height: 1.7;
+                   white-space: pre-wrap; max-height: 70vh; overflow-y: auto; }
+    .output-body.markdown { white-space: normal; }
+    .output-body h1, .output-body h2, .output-body h3 {
+      margin: 16px 0 8px; font-size: 15px; color: #1a1a2e; }
+    .output-body h1 { font-size: 18px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; }
+    .output-body ul, .output-body ol { padding-left: 20px; margin: 8px 0; }
+    .output-body li { margin-bottom: 4px; }
+    .output-body p { margin-bottom: 10px; }
+    .output-body strong { font-weight: 600; }
+  </style>
 </head>
 <body>
-    <!-- CV and cover letter generation view -->
+
+<header>
+  <a class="back-btn" href="/">← Tillbaka</a>
+  <h1>Operation Next — Generera dokument</h1>
+</header>
+
+<div class="container">
+
+  <!-- Job details -->
+  <div class="card">
+    <div class="job-meta">
+      <div class="meta-item">
+        <span class="meta-label">Företag</span>
+        <span class="meta-value">{{ company }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Roll</span>
+        <span class="meta-value">{{ role }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">CV-bas</span>
+        <span class="cv-badge">{{ cv_base }}</span>
+      </div>
+      {% if location %}
+      <div class="meta-item">
+        <span class="meta-label">Plats</span>
+        <span class="meta-value">{{ location }}</span>
+      </div>
+      {% endif %}
+      <div class="meta-item">
+        <span class="meta-label">Annons</span>
+        <a class="meta-url" href="{{ url }}" target="_blank">Öppna ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Generate action -->
+  <div class="card" style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+    <button class="btn-primary" id="generate-btn" onclick="generate()">Generera CV + Personligt brev</button>
+    <div id="loading">
+      <div class="spinner"></div>
+      <p>Claude läser annons, CV-bas och portfolio...</p>
+    </div>
+    <div class="error-box" id="error-box"></div>
+  </div>
+
+  <!-- Output -->
+  <div class="output-grid" id="output-section" style="display:none;">
+    <div class="output-card">
+      <div class="output-header">
+        <span class="output-title">CV — Svenska</span>
+        <button class="btn-copy" onclick="copyText('cv-output', this)">Kopiera</button>
+      </div>
+      <div class="output-body markdown" id="cv-output"></div>
+    </div>
+    <div class="output-card">
+      <div class="output-header">
+        <span class="output-title">Personligt brev</span>
+        <button class="btn-copy" onclick="copyText('cl-output', this)">Kopiera</button>
+      </div>
+      <div class="output-body" id="cl-output"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let rawCv = "";
+  let rawCl = "";
+
+  async function generate() {
+    const btn = document.getElementById("generate-btn");
+    btn.disabled = true;
+    document.getElementById("loading").style.display = "flex";
+    document.getElementById("error-box").style.display = "none";
+    document.getElementById("output-section").style.display = "none";
+
+    try {
+      const res = await fetch("/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: "{{ url }}", cv_base: "{{ cv_base }}" }),
+      });
+      const data = await res.json();
+
+      if (data.error) {
+        showError(data.error + (data.raw ? "\n\n" + data.raw : ""));
+        return;
+      }
+
+      rawCv = data.cv || "";
+      rawCl = data.cover_letter || "";
+
+      document.getElementById("cv-output").innerHTML = marked.parse(rawCv);
+      document.getElementById("cl-output").textContent = rawCl;
+      document.getElementById("output-section").style.display = "grid";
+
+    } catch (e) {
+      showError("Något gick fel: " + e.message);
+    } finally {
+      btn.disabled = false;
+      document.getElementById("loading").style.display = "none";
+    }
+  }
+
+  function copyText(elId, btn) {
+    const text = elId === "cv-output" ? rawCv : rawCl;
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = "Kopierat!";
+      setTimeout(() => btn.textContent = orig, 1800);
+    });
+  }
+
+  function showError(msg) {
+    const el = document.getElementById("error-box");
+    el.textContent = msg;
+    el.style.display = "block";
+  }
+</script>
+
 </body>
 </html>
