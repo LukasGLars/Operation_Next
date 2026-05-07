@@ -4,6 +4,7 @@ import re
 import logging
 from datetime import datetime, date, timedelta
 from pathlib import Path
+from urllib.parse import urlparse
 
 ROOT         = Path(__file__).parent.parent
 JOBLIST_PATH = ROOT / "jobsearch" / "joblist.md"
@@ -19,7 +20,6 @@ logging.basicConfig(
 
 TODAY = date.today().isoformat()
 
-# Default role → CV base mapping (extend via SKILL.md when populated)
 ROLE_CV_MAP = {
     "business analyst":      "CV_Einride",
     "data analyst":          "CV_Einride",
@@ -38,6 +38,13 @@ ROLE_CV_MAP = {
     "saas":                  "CV_Einride",
 }
 
+_GENERIC_TERMINALS = {
+    "jobs", "karriar", "karriär", "career", "careers",
+    "lediga-tjanster", "lediga-tjänster", "lediga-jobb",
+    "open-positions", "openings", "vacancies", "vacancy",
+    "join-us", "work-with-us", "jobba-hos-oss",
+}
+
 
 # ── Markdown table parser / writer ─────────────────────────
 
@@ -45,8 +52,16 @@ HEADERS_WITHOUT_DATUM = ["#", "Företag", "Roll/Typ", "CV-bas", "Status", "URL"]
 HEADERS_WITH_DATUM    = ["#", "Företag", "Roll/Typ", "CV-bas", "Status", "Datum", "URL"]
 
 
+def _is_generic_careers_url(url: str) -> bool:
+    try:
+        path = urlparse(url).path.rstrip("/")
+        last_segment = path.split("/")[-1].lower()
+        return last_segment in _GENERIC_TERMINALS
+    except Exception:
+        return False
+
+
 def parse_table(lines):
-    """Return list of row dicts from markdown table lines."""
     rows = []
     header_line = None
     has_datum = False
@@ -58,15 +73,12 @@ def parse_table(lines):
         cells = [c.strip() for c in stripped.strip("|").split("|")]
         if not cells:
             continue
-        # Detect header row
         if cells[0].strip() == "#":
             header_line = cells
             has_datum = "Datum" in cells
             continue
-        # Skip separator
         if all(re.match(r'^-+$', c.strip()) for c in cells if c.strip()):
             continue
-        # Data row
         if not header_line:
             continue
         row = {}
@@ -86,7 +98,6 @@ def cv_base_for_role(role_type):
 
 
 def write_table(rows):
-    """Render rows back to markdown table string."""
     headers = HEADERS_WITH_DATUM
     sep = "|" + "|".join("---" for _ in headers) + "|"
     header_row = "| " + " | ".join(headers) + " |"
@@ -111,7 +122,6 @@ def write_table(rows):
 def update_joblist():
     print(f"[{datetime.now().isoformat()}] updater.py starting")
 
-    # Load results.json
     if not RESULTS_PATH.exists():
         print("  No results.json found — exiting cleanly")
         return
@@ -130,7 +140,6 @@ def update_joblist():
         print("  Nothing to update")
         return
 
-    # Load joblist.md
     try:
         with open(JOBLIST_PATH, encoding="utf-8") as f:
             content = f.read()
@@ -140,7 +149,6 @@ def update_joblist():
 
     lines = content.splitlines()
 
-    # Split into preamble and table
     table_start = next((i for i, l in enumerate(lines) if l.strip().startswith("|")), None)
     if table_start is None:
         logging.error("No table found in joblist.md")
@@ -151,16 +159,13 @@ def update_joblist():
 
     rows, has_datum = parse_table(table_lines)
 
-    # Add Datum column to existing rows if missing
     if not has_datum:
         print("  Adding Datum column to existing rows")
         for row in rows:
             row["Datum"] = TODAY
 
-    # Build URL lookup
     url_index = {row["URL"].strip(): i for i, row in enumerate(rows)}
 
-    # Handle closed jobs
     for job in closed_jobs:
         url = job.get("url", "").strip()
         if url in url_index:
@@ -168,7 +173,6 @@ def update_joblist():
             rows[url_index[url]]["Datum"]  = TODAY
             print(f"  CLOSED: {job.get('company')} → status set to Stängd")
 
-    # Handle new jobs — no duplicates
     known_urls = {row["URL"].strip() for row in rows}
     for job in new_jobs:
         url = job.get("url", "").strip()
@@ -187,8 +191,10 @@ def update_joblist():
         rows.append(new_row)
         known_urls.add(url)
         print(f"  ADDED: {new_row['Företag']} — {new_row['Roll/Typ']}")
+        if _is_generic_careers_url(url):
+            logging.error(f"WARNING: generic careers URL for {new_row['Företag']}: {url}")
+            print(f"  WARNING: URL looks like a careers page, not a specific posting — {url}")
 
-    # Clean up Stängd rows older than 30 days
     cutoff = (date.today() - timedelta(days=30)).isoformat()
     before = len(rows)
     rows = [
@@ -200,11 +206,9 @@ def update_joblist():
     if removed:
         print(f"  Pruned {removed} stale Stängd row(s)")
 
-    # Re-number
     for i, row in enumerate(rows, 1):
         row["#"] = str(i)
 
-    # Write back
     try:
         table_md = write_table(rows)
         output = "\n".join(preamble) + "\n\n" + table_md + "\n"
