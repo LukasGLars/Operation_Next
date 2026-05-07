@@ -239,3 +239,17 @@ Return results.json in this exact structure:
 - Concrete results over vague claims.
 - Never sound AI-generated.
 - Keep the tone close to /jobsearch/letters/Cover_Letter_Einride.pdf.
+### CV adaptation rules
+- Job titles must reflect what is accurate and role-relevant, not what sounds impressive
+- Project details must be selected based on what the recipient cares about, not what is technically interesting
+- Remove details that do not add value for the specific role or reader
+
+### Language rules
+- Never use directly translated verbs that sound unnatural in Swedish, such as "förflyttar", "transformerar", or "förändrar hur X fungerar"
+- When referencing a company's work, describe concretely what they do rather than using abstract impact language
+- Example: instead of "ett företag som förändrar hur energisystemet fungerar", write "CheckWatts arbete med virtuella kraftverk och smart energistyrning"
+
+### Reference example — approved output:
+- Approved CV: /jobsearch/applications/checkwatt_csm/cv_edited.md
+- Approved cover letter: /jobsearch/applications/checkwatt_csm/cover_letter_edited.md
+- These are real approved outputs after human review — use as quality reference
