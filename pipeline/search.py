@@ -192,7 +192,6 @@ def search_new_jobs():
         except Exception as e:
             logging.error(f"Validation failed for {url}: {e}")
 
-    new_jobs = new_jobs[:5]
 
     # Save results
     results = {
