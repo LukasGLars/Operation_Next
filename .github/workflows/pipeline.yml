@@ -1,6 +1,8 @@
 name: Operation Next Pipeline
 on:
-  workflow_dispatch:
+    schedule:
+      - cron: '0 5 * * 1-5'
+    workflow_dispatch:
 
 jobs:
   run_pipeline:
