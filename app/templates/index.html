@@ -1,10 +1,165 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <title>Operation Next</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operation Next</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+           background: #f4f5f7; color: #1a1a2e; min-height: 100vh; }
+
+    header { background: #1a1a2e; color: white; padding: 16px 32px;
+             display: flex; align-items: center; justify-content: space-between; }
+    header h1 { font-size: 20px; font-weight: 600; }
+    header span { font-size: 13px; opacity: 0.5; }
+
+    .container { max-width: 1000px; margin: 32px auto; padding: 0 16px; }
+
+    .filters { display: flex; gap: 8px; margin-bottom: 20px; }
+    .filter-btn { padding: 6px 16px; border: 1px solid #d1d5db; border-radius: 20px;
+                  background: white; font-size: 13px; cursor: pointer; transition: all 0.15s; }
+    .filter-btn.active { background: #1a1a2e; color: white; border-color: #1a1a2e; }
+    .filter-btn .count { opacity: 0.6; margin-left: 4px; font-size: 11px; }
+
+    .card { background: white; border-radius: 10px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th { text-align: left; padding: 12px 16px; background: #f8f9fb;
+         font-size: 11px; font-weight: 700; text-transform: uppercase;
+         letter-spacing: 0.05em; color: #888; border-bottom: 2px solid #e5e7eb; }
+    td { padding: 14px 16px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr.job-row { cursor: pointer; transition: background 0.1s; }
+    tr.job-row:hover td { background: #f4f7ff; }
+
+    .company { font-weight: 600; color: #1a1a2e; }
+    .role { color: #444; font-size: 13px; }
+    .cv-badge { display: inline-block; padding: 2px 8px; border-radius: 10px;
+                font-size: 11px; font-weight: 600; background: #e0e7ff; color: #3730a3; }
+    .status-badge { display: inline-block; padding: 3px 10px; border-radius: 10px;
+                    font-size: 12px; font-weight: 500; }
+    .status-identifierad { background: #dbeafe; color: #1d4ed8; }
+    .status-ansökt       { background: #dcfce7; color: #15803d; }
+    .status-stängd       { background: #f3f4f6; color: #9ca3af; }
+    .status-other        { background: #fef3c7; color: #92400e; }
+    .url-link { color: #6b7280; font-size: 12px; text-decoration: none; }
+    .url-link:hover { color: #2563eb; }
+    .datum { font-size: 12px; color: #9ca3af; }
+
+    .empty { text-align: center; padding: 60px; color: #9ca3af; font-size: 14px; }
+  </style>
 </head>
 <body>
-    <!-- Job list view -->
+
+<header>
+  <div>
+    <h1>Operation Next</h1>
+    <span>Job tracker — click a row to generate documents</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="filters" id="filters"></div>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Företag</th>
+          <th>Roll/Typ</th>
+          <th>CV-bas</th>
+          <th>Status</th>
+          <th>Datum</th>
+          <th>URL</th>
+        </tr>
+      </thead>
+      <tbody id="job-table">
+        {% for job in jobs %}
+        <tr class="job-row"
+            data-status="{{ job.get('Status','') | lower }}"
+            data-company="{{ job.get('Företag','') }}"
+            data-role="{{ job.get('Roll/Typ','') }}"
+            data-cvbase="{{ job.get('CV-bas','CV_Einride') }}"
+            data-url="{{ job.get('URL','') }}"
+            data-location="">
+          <td class="datum">{{ job.get('#','') }}</td>
+          <td>
+            <div class="company">{{ job.get('Företag','') }}</div>
+          </td>
+          <td class="role">{{ job.get('Roll/Typ','') }}</td>
+          <td><span class="cv-badge">{{ job.get('CV-bas','') }}</span></td>
+          <td>
+            {% set st = job.get('Status','') | lower %}
+            {% if 'identifierad' in st %}
+              <span class="status-badge status-identifierad">Identifierad</span>
+            {% elif 'ansökt' in st or 'ansokt' in st %}
+              <span class="status-badge status-ansökt">{{ job.get('Status','') }}</span>
+            {% elif 'stängd' in st %}
+              <span class="status-badge status-stängd">Stängd</span>
+            {% else %}
+              <span class="status-badge status-other">{{ job.get('Status','') }}</span>
+            {% endif %}
+          </td>
+          <td class="datum">{{ job.get('Datum','') }}</td>
+          <td>
+            <a class="url-link" href="{{ job.get('URL','') }}" target="_blank"
+               onclick="event.stopPropagation()">↗</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="empty">No jobs found in joblist.md</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+  const rows = Array.from(document.querySelectorAll("tr.job-row"));
+
+  const statuses = ["alla", ...new Set(rows.map(r => r.dataset.status).filter(Boolean))];
+  const counts   = {};
+  rows.forEach(r => {
+    const s = r.dataset.status || "okänd";
+    counts[s] = (counts[s] || 0) + 1;
+    counts["alla"] = (counts["alla"] || 0) + 1;
+  });
+
+  const filtersEl = document.getElementById("filters");
+  statuses.forEach(s => {
+    const btn = document.createElement("button");
+    btn.className = "filter-btn" + (s === "alla" ? " active" : "");
+    btn.dataset.filter = s;
+    btn.innerHTML = s.charAt(0).toUpperCase() + s.slice(1) +
+      `<span class="count">${counts[s] || 0}</span>`;
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      rows.forEach(r => {
+        r.style.display = (s === "alla" || r.dataset.status === s) ? "" : "none";
+      });
+    });
+    filtersEl.appendChild(btn);
+  });
+
+  rows.forEach(r => {
+    r.addEventListener("click", () => {
+      const p = new URLSearchParams({
+        company:  r.dataset.company,
+        role:     r.dataset.role,
+        cv_base:  r.dataset.cvbase,
+        url:      r.dataset.url,
+        location: r.dataset.location,
+      });
+      window.location.href = "/generate?" + p.toString();
+    });
+  });
+</script>
+
 </body>
 </html>
