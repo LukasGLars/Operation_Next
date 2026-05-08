@@ -280,15 +280,11 @@ def search_new_jobs():
         # Quality validation via URL_VALIDATION_SKILL
         verdict, reason = validate_url_quality(url, val_skill)
         if verdict == "valid":
-            print(f"  NEW (valid): {candidate.get('company')} — {candidate.get('role')}")
-            new_jobs.append(candidate)
-        elif verdict == "uncertain":
-            print(f"  NEW (uncertain — verifiera manuellt): {candidate.get('company')} — {candidate.get('role')}")
-            candidate["location"] = "verifiera manuellt"
+            print(f"  NEW: {candidate.get('company')} — {candidate.get('role')}")
             new_jobs.append(candidate)
         else:
-            logging.error(f"URL rejected by quality check ({reason}): {url}")
-            print(f"  SKIP (invalid — {reason[:60]}): {url}")
+            logging.error(f"URL rejected [{verdict}] ({reason}): {url}")
+            print(f"  SKIP ({verdict} — {reason[:60]}): {url}")
 
     # Save results
     results = {
