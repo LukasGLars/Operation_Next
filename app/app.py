@@ -207,6 +207,7 @@ def _parse_claude_json(text: str):
 
 @app.route("/")
 def index():
+    subprocess.run(["git", "-C", str(ROOT), "pull"], capture_output=True)
     return render_template("index.html", jobs=parse_joblist())
 
 
