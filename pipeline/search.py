@@ -100,39 +100,51 @@ def fetch_page_text(url):
         return ""
 
 
-def validate_url_quality(url, validation_skill):
-    """Call Claude with URL_VALIDATION_SKILL to assess page quality."""
-    if not validation_skill:
-        return "uncertain", "validation skill not loaded"
+def batch_validate_urls(candidates, validation_skill):
+    """Validate all candidate URLs in a single Claude call. Returns dict url -> (verdict, reason)."""
+    if not validation_skill or not candidates:
+        return {c.get("url", ""): ("uncertain", "no skill or no candidates") for c in candidates}
 
-    page_text = fetch_page_text(url)
-    if not page_text:
-        return "uncertain", "could not fetch page content"
+    entries = []
+    for c in candidates:
+        url = c.get("url", "").strip()
+        if not url:
+            continue
+        page_text = fetch_page_text(url)
+        entries.append({"url": url, "content": page_text or "(could not fetch)"})
+
+    if not entries:
+        return {}
+
+    items = "\n\n".join(
+        f"--- URL {i+1} ---\nURL: {e['url']}\nPage content:\n{e['content'][:2000]}"
+        for i, e in enumerate(entries)
+    )
+
+    prompt = (
+        f"Validate each of the following {len(entries)} URLs against the skill rules.\n\n"
+        f"{items}\n\n"
+        "Return a JSON array with one object per URL in the same order:\n"
+        '[{"url": "...", "verdict": "valid|invalid|uncertain", "reason": "..."}]'
+    )
 
     client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY", ""))
     try:
         response = client.messages.create(
             model="claude-sonnet-4-6",
-            max_tokens=512,
+            max_tokens=1024,
             system=validation_skill,
-            messages=[{
-                "role": "user",
-                "content": (
-                    f"Validate this URL: {url}\n\n"
-                    f"Page content (truncated):\n{page_text}\n\n"
-                    "Return only the JSON verdict."
-                ),
-            }],
+            messages=[{"role": "user", "content": prompt}],
         )
         text = response.content[0].text.strip()
         if text.startswith("```"):
             text = re.sub(r"^```(?:json)?\n?", "", text)
             text = re.sub(r"\n?```$", "", text)
-        result = json.loads(text)
-        return result.get("verdict", "uncertain"), result.get("reason", "")
+        results = json.loads(re.search(r'\[.*\]', text, re.DOTALL).group())
+        return {r["url"]: (r.get("verdict", "uncertain"), r.get("reason", "")) for r in results}
     except Exception as e:
-        logging.error(f"URL quality validation failed for {url}: {e}")
-        return "uncertain", str(e)[:80]
+        logging.error(f"Batch URL validation failed: {e}")
+        return {e["url"]: ("uncertain", str(e)[:80]) for e in entries}
 
 
 # ── Claude web search ──────────────────────────────────────
@@ -252,8 +264,8 @@ def search_new_jobs():
         logging.error(f"Claude search failed: {e}")
         print(f"  ERROR: Claude search failed: {e}")
 
-    # Validate candidates
-    new_jobs = []
+    # Stage 1 — filter by domain blocklist and HTTP reachability
+    reachable = []
     for candidate in raw_candidates:
         url = candidate.get("url", "").strip()
         if not url:
@@ -261,14 +273,10 @@ def search_new_jobs():
         if url in known_urls:
             print(f"  SKIP (known): {url}")
             continue
-
-        # Block known aggregator domains immediately
         if _is_blocked_domain(url):
             logging.error(f"BLOCKED (aggregator domain): {url}")
             print(f"  SKIP (aggregator): {url}")
             continue
-
-        # HTTP reachability check
         try:
             if not validate_url(url):
                 print(f"  SKIP (bad URL): {url}")
@@ -276,15 +284,22 @@ def search_new_jobs():
         except Exception as e:
             logging.error(f"Validation failed for {url}: {e}")
             continue
+        reachable.append(candidate)
 
-        # Quality validation via URL_VALIDATION_SKILL
-        verdict, reason = validate_url_quality(url, val_skill)
-        if verdict == "valid":
-            print(f"  NEW: {candidate.get('company')} — {candidate.get('role')}")
-            new_jobs.append(candidate)
-        else:
-            logging.error(f"URL rejected [{verdict}] ({reason}): {url}")
-            print(f"  SKIP ({verdict} — {reason[:60]}): {url}")
+    # Stage 2 — single batched quality validation call
+    new_jobs = []
+    if reachable:
+        print(f"  Validating {len(reachable)} reachable URL(s) in one call...")
+        verdicts = batch_validate_urls(reachable, val_skill)
+        for candidate in reachable:
+            url = candidate.get("url", "").strip()
+            verdict, reason = verdicts.get(url, ("uncertain", "not in response"))
+            if verdict == "valid":
+                print(f"  NEW: {candidate.get('company')} — {candidate.get('role')}")
+                new_jobs.append(candidate)
+            else:
+                logging.error(f"URL rejected [{verdict}] ({reason}): {url}")
+                print(f"  SKIP ({verdict} — {reason[:60]}): {url}")
 
     # Save results
     results = {
