@@ -96,7 +96,7 @@ Respond with ONLY a JSON array:
 [{"company": "...", "role": "...", "url": "...", "role_type": "...", "cv_base": "...", "location": "...", "status": "Identifierad", "date_added": "YYYY-MM-DD"}]"""
 
     response = client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model="claude-sonnet-4-6",
         max_tokens=2000,
         system=system,
         tools=[{
