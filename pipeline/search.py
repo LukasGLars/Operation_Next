@@ -7,17 +7,24 @@ import logging
 from datetime import datetime
 from pathlib import Path
 
-ROOT          = Path(__file__).parent.parent
-JOBLIST_PATH  = ROOT / "jobsearch" / "joblist.md"
-SKILL_PATH    = ROOT / "jobsearch" / "skill" / "SKILL.md"
-RESULTS_PATH  = Path(__file__).parent / "results.json"
-ERROR_LOG     = Path(__file__).parent / "error.log"
+ROOT               = Path(__file__).parent.parent
+JOBLIST_PATH       = ROOT / "jobsearch" / "joblist.md"
+SKILL_PATH         = ROOT / "jobsearch" / "skill" / "SKILL.md"
+VALIDATION_SKILL   = ROOT / "jobsearch" / "skill" / "URL_VALIDATION_SKILL.md"
+RESULTS_PATH       = Path(__file__).parent / "results.json"
+ERROR_LOG          = Path(__file__).parent / "error.log"
 
 logging.basicConfig(
     filename=ERROR_LOG,
     level=logging.ERROR,
     format="%(asctime)s %(levelname)s %(message)s",
 )
+
+BLOCKED_DOMAINS = {
+    "ledigajobb.se", "jobbland.se", "indeed.com", "monster.se",
+    "jobbet.se", "platsbanken.arbetsformedlingen.se", "reed.co.uk",
+    "totaljobs.com", "cv-biblioteket.se",
+}
 
 
 # ── Loaders ────────────────────────────────────────────────
@@ -39,12 +46,7 @@ def load_joblist():
                 url     = m.group(5).strip()
                 if company.lower() in ("företag", "---"):
                     continue
-                jobs.append({
-                    "company": company,
-                    "role":    role,
-                    "status":  status,
-                    "url":     url,
-                })
+                jobs.append({"company": company, "role": role, "status": status, "url": url})
     return jobs
 
 
@@ -55,17 +57,82 @@ def load_skill():
         return f.read()
 
 
-# ── URL validation ─────────────────────────────────────────
+def load_validation_skill():
+    if not VALIDATION_SKILL.exists():
+        return ""
+    with open(VALIDATION_SKILL, encoding="utf-8") as f:
+        return f.read()
+
+
+# ── URL helpers ────────────────────────────────────────────
+
+def _is_blocked_domain(url):
+    try:
+        from urllib.parse import urlparse
+        host = urlparse(url).netloc.lower().lstrip("www.")
+        return any(host == d or host.endswith("." + d) for d in BLOCKED_DOMAINS)
+    except Exception:
+        return False
+
 
 def validate_url(url):
     if not url or url in ("—", ""):
         return None
     try:
-        r = requests.get(url, timeout=10, allow_redirects=True)
+        r = requests.get(url, timeout=10, allow_redirects=True,
+                         headers={"User-Agent": "Mozilla/5.0"})
         return r.status_code == 200
     except Exception as e:
         logging.error(f"validate_url({url}): {e}")
         return None
+
+
+def fetch_page_text(url):
+    try:
+        from bs4 import BeautifulSoup
+        r = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
+        soup = BeautifulSoup(r.text, "html.parser")
+        for tag in soup(["script", "style", "nav", "footer", "header"]):
+            tag.decompose()
+        return soup.get_text(separator="\n", strip=True)[:4000]
+    except Exception as e:
+        logging.error(f"fetch_page_text({url}): {e}")
+        return ""
+
+
+def validate_url_quality(url, validation_skill):
+    """Call Claude with URL_VALIDATION_SKILL to assess page quality."""
+    if not validation_skill:
+        return "uncertain", "validation skill not loaded"
+
+    page_text = fetch_page_text(url)
+    if not page_text:
+        return "uncertain", "could not fetch page content"
+
+    client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY", ""))
+    try:
+        response = client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=512,
+            system=validation_skill,
+            messages=[{
+                "role": "user",
+                "content": (
+                    f"Validate this URL: {url}\n\n"
+                    f"Page content (truncated):\n{page_text}\n\n"
+                    "Return only the JSON verdict."
+                ),
+            }],
+        )
+        text = response.content[0].text.strip()
+        if text.startswith("```"):
+            text = re.sub(r"^```(?:json)?\n?", "", text)
+            text = re.sub(r"\n?```$", "", text)
+        result = json.loads(text)
+        return result.get("verdict", "uncertain"), result.get("reason", "")
+    except Exception as e:
+        logging.error(f"URL quality validation failed for {url}: {e}")
+        return "uncertain", str(e)[:80]
 
 
 # ── Claude web search ──────────────────────────────────────
@@ -73,18 +140,26 @@ def validate_url(url):
 def _call_claude_search(skill_content, known_urls):
     client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY", ""))
 
-    skip_block = "\n".join(known_urls) if known_urls else "(none)"
+    skip_block    = "\n".join(known_urls) if known_urls else "(none)"
     profile_block = skill_content.strip() or (
         "No skill profile loaded — search broadly for: "
-        "Business Analyst, Management Consultant, Technical Sales, "
-        "Product Manager roles in Sweden."
+        "Business Analyst, Technical Sales, Product Manager roles in Sweden."
     )
 
     system = f"""You are a job search assistant for a candidate based in Sweden.
 Use the candidate profile below to find relevant new job postings.
 Search in both Swedish and English.
-Return exactly up to 5 new roles not already in the known URL list.
-For each role return: company, role title, direct application URL, role_type, cv_base, location, status (always "Identifierad"), date_added (today's date in YYYY-MM-DD).
+Return up to 5 new roles not already in the known URL list.
+
+URL QUALITY RULES — CRITICAL:
+- Only return URLs pointing to a single specific job posting page.
+- The URL must contain a unique job ID or slug identifying exactly one role.
+- Prefer employer career pages on Teamtailor, Jobylon, Greenhouse, or similar ATS platforms.
+- Never return aggregator sites: ledigajobb.se, jobbland.se, indeed.com, monster.se, jobbet.se
+- Never return category pages, search result pages, or listing hubs.
+- Good example: collaborate.checkwatt.se/jobs/4669704-customer-success-manager
+- Bad example: ledigajobb.se/jobb/business-analyst-goteborg
+- Bad example: biner.se/en/career (general careers page)
 
 CANDIDATE PROFILE:
 {profile_block}
@@ -108,7 +183,9 @@ Respond with ONLY a JSON array:
             "role": "user",
             "content": (
                 "Search for the 5 most relevant new job postings in Sweden "
-                "matching my profile. Prioritise roles posted in the last 2 weeks."
+                "matching my profile. Prioritise roles posted in the last 2 weeks. "
+                "Only return direct links to individual job posting pages — "
+                "never aggregator listings or category pages."
             ),
         }],
     )
@@ -130,17 +207,18 @@ def search_new_jobs():
     print(f"[{datetime.now().isoformat()}] search.py starting")
 
     try:
-        jobs = load_joblist()
+        jobs          = load_joblist()
         skill_content = load_skill()
-        print(f"  Loaded {len(jobs)} jobs | SKILL.md: {'loaded' if skill_content.strip() else 'empty'}")
+        val_skill     = load_validation_skill()
+        print(f"  Loaded {len(jobs)} jobs | SKILL.md: {'loaded' if skill_content.strip() else 'empty'} | validation skill: {'loaded' if val_skill.strip() else 'missing'}")
     except Exception as e:
         logging.error(f"Context load failed: {e}")
         raise
 
-    # Validate known URLs
+    # Check known URLs
     closed_jobs = []
     known_urls  = []
-    active_statuses = {"identifierad", "spontanansökan", "spontanansokan"}
+    active_statuses = {"identifierad", "spontanansökan", "spontanansokan", "genererat"}
 
     for job in jobs:
         url = job["url"]
@@ -174,7 +252,7 @@ def search_new_jobs():
         logging.error(f"Claude search failed: {e}")
         print(f"  ERROR: Claude search failed: {e}")
 
-    # Validate new results
+    # Validate candidates
     new_jobs = []
     for candidate in raw_candidates:
         url = candidate.get("url", "").strip()
@@ -183,20 +261,39 @@ def search_new_jobs():
         if url in known_urls:
             print(f"  SKIP (known): {url}")
             continue
+
+        # Block known aggregator domains immediately
+        if _is_blocked_domain(url):
+            logging.error(f"BLOCKED (aggregator domain): {url}")
+            print(f"  SKIP (aggregator): {url}")
+            continue
+
+        # HTTP reachability check
         try:
-            if validate_url(url):
-                print(f"  NEW: {candidate.get('company')} — {candidate.get('role')}")
-                new_jobs.append(candidate)
-            else:
+            if not validate_url(url):
                 print(f"  SKIP (bad URL): {url}")
+                continue
         except Exception as e:
             logging.error(f"Validation failed for {url}: {e}")
+            continue
 
+        # Quality validation via URL_VALIDATION_SKILL
+        verdict, reason = validate_url_quality(url, val_skill)
+        if verdict == "valid":
+            print(f"  NEW (valid): {candidate.get('company')} — {candidate.get('role')}")
+            new_jobs.append(candidate)
+        elif verdict == "uncertain":
+            print(f"  NEW (uncertain — verifiera manuellt): {candidate.get('company')} — {candidate.get('role')}")
+            candidate["location"] = "verifiera manuellt"
+            new_jobs.append(candidate)
+        else:
+            logging.error(f"URL rejected by quality check ({reason}): {url}")
+            print(f"  SKIP (invalid — {reason[:60]}): {url}")
 
     # Save results
     results = {
-        "timestamp":  datetime.now().isoformat(),
-        "new_jobs":   new_jobs,
+        "timestamp":   datetime.now().isoformat(),
+        "new_jobs":    new_jobs,
         "closed_jobs": closed_jobs,
     }
     try:
