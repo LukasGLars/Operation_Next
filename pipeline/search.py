@@ -87,11 +87,54 @@ def validate_url(url):
         return None
 
 
+def _extract_jsonld_job(soup):
+    """Extract job content from JSON-LD structured data (Teamtailor, Jobylon, Greenhouse etc.)."""
+    from bs4 import BeautifulSoup as _BS
+    for script in soup.find_all("script", type="application/ld+json"):
+        try:
+            data = json.loads(script.string or "")
+            if isinstance(data, list):
+                data = next((x for x in data if isinstance(x, dict) and x.get("@type") in ("JobPosting", "Job")), None)
+            if isinstance(data, dict) and "@graph" in data:
+                data = next((x for x in data["@graph"] if isinstance(x, dict) and x.get("@type") in ("JobPosting", "Job")), data)
+            if not isinstance(data, dict) or data.get("@type") not in ("JobPosting", "Job"):
+                continue
+            parts = []
+            if data.get("title"):
+                parts.append(f"Title: {data['title']}")
+            org = data.get("hiringOrganization")
+            if org:
+                parts.append(f"Company: {org.get('name', org) if isinstance(org, dict) else org}")
+            loc = data.get("jobLocation")
+            if loc:
+                if isinstance(loc, list):
+                    loc = loc[0]
+                if isinstance(loc, dict):
+                    addr = loc.get("address", {})
+                    city = addr.get("addressLocality", "") if isinstance(addr, dict) else str(addr)
+                    parts.append(f"Location: {city}")
+            for field in ["description", "qualifications", "responsibilities", "skills"]:
+                val = data.get(field)
+                if val and isinstance(val, str):
+                    clean = _BS(val, "html.parser").get_text(separator="\n", strip=True)
+                    parts.append(f"{field.capitalize()}:\n{clean[:2000]}")
+            if data.get("datePosted"):
+                parts.append(f"Posted: {data['datePosted']}")
+            if parts:
+                return "\n\n".join(parts)
+        except Exception:
+            continue
+    return None
+
+
 def fetch_page_text(url):
     try:
         from bs4 import BeautifulSoup
         r = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
         soup = BeautifulSoup(r.text, "html.parser")
+        jsonld = _extract_jsonld_job(soup)
+        if jsonld:
+            return jsonld[:4000]
         for tag in soup(["script", "style", "nav", "footer", "header"]):
             tag.decompose()
         return soup.get_text(separator="\n", strip=True)[:4000]
