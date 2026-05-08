@@ -172,7 +172,7 @@ def search_new_jobs():
         print(f"  Claude returned {len(raw_candidates)} candidates")
     except Exception as e:
         logging.error(f"Claude search failed: {e}")
-        print(f"  ERROR: Claude search failed — see error.log")
+        print(f"  ERROR: Claude search failed: {e}")
 
     # Validate new results
     new_jobs = []
