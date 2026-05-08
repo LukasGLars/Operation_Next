@@ -140,11 +140,14 @@ def batch_validate_urls(candidates, validation_skill):
         if text.startswith("```"):
             text = re.sub(r"^```(?:json)?\n?", "", text)
             text = re.sub(r"\n?```$", "", text)
-        results = json.loads(re.search(r'\[.*\]', text, re.DOTALL).group())
+        match = re.search(r'\[.*\]', text, re.DOTALL)
+        if not match:
+            raise ValueError(f"No JSON array in response: {text[:200]}")
+        results = json.loads(match.group())
         return {r["url"]: (r.get("verdict", "uncertain"), r.get("reason", "")) for r in results}
-    except Exception as e:
-        logging.error(f"Batch URL validation failed: {e}")
-        return {e["url"]: ("uncertain", str(e)[:80]) for e in entries}
+    except Exception as exc:
+        logging.error(f"Batch URL validation failed: {exc}")
+        return {entry["url"]: ("uncertain", f"validation error: {str(exc)[:60]}") for entry in entries}
 
 
 # ── Claude web search ──────────────────────────────────────
