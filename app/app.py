@@ -118,6 +118,7 @@ def _update_job_row(url: str, updates: dict):
             row.update(updates)
             break
     _write_joblist_raw(preamble, rows)
+    _push_joblist()
 
 
 def _delete_job_row(url: str):
@@ -126,6 +127,18 @@ def _delete_job_row(url: str):
     for i, row in enumerate(rows, 1):
         row["#"] = str(i)
     _write_joblist_raw(preamble, rows)
+    _push_joblist()
+
+
+def _push_joblist():
+    try:
+        subprocess.run(["git", "-C", str(ROOT), "add", "jobsearch/joblist.md"], check=True, capture_output=True)
+        result = subprocess.run(["git", "-C", str(ROOT), "diff", "--staged", "--quiet"], capture_output=True)
+        if result.returncode != 0:
+            subprocess.run(["git", "-C", str(ROOT), "commit", "-m", "App: update joblist.md"], check=True, capture_output=True)
+            subprocess.run(["git", "-C", str(ROOT), "push"], check=True, capture_output=True)
+    except Exception as e:
+        logging.error(f"_push_joblist failed: {e}")
 
 
 # ── Document generation helpers ────────────────────────────
