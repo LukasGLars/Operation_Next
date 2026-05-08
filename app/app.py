@@ -132,10 +132,10 @@ def _delete_job_row(url: str):
 
 def _push_joblist():
     try:
-        subprocess.run(["git", "-C", str(ROOT), "add", "jobsearch/joblist.md"], check=True, capture_output=True)
+        subprocess.run(["git", "-C", str(ROOT), "add", "jobsearch/"], check=True, capture_output=True)
         result = subprocess.run(["git", "-C", str(ROOT), "diff", "--staged", "--quiet"], capture_output=True)
         if result.returncode != 0:
-            subprocess.run(["git", "-C", str(ROOT), "commit", "-m", "App: update joblist.md"], check=True, capture_output=True)
+            subprocess.run(["git", "-C", str(ROOT), "commit", "-m", "App: update jobsearch/"], check=True, capture_output=True)
             subprocess.run(["git", "-C", str(ROOT), "push"], check=True, capture_output=True)
     except Exception as e:
         logging.error(f"_push_joblist failed: {e}")
@@ -218,9 +218,14 @@ def _parse_claude_json(text: str):
 
 # ── Routes ─────────────────────────────────────────────────
 
+@app.before_request
+def auto_pull():
+    if request.method == "GET":
+        subprocess.run(["git", "-C", str(ROOT), "pull"], capture_output=True)
+
+
 @app.route("/")
 def index():
-    subprocess.run(["git", "-C", str(ROOT), "pull"], capture_output=True)
     return render_template("index.html", jobs=parse_joblist())
 
 
