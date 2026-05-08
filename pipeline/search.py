@@ -93,7 +93,7 @@ URLS ALREADY IN JOBLIST — SKIP THESE:
 {skip_block}
 
 Respond with ONLY a JSON array:
-[{"company": "...", "role": "...", "url": "...", "role_type": "...", "cv_base": "...", "location": "...", "status": "Identifierad", "date_added": "YYYY-MM-DD"}]"""
+[{{"company": "...", "role": "...", "url": "...", "role_type": "...", "cv_base": "...", "location": "...", "status": "Identifierad", "date_added": "YYYY-MM-DD"}}]"""
 
     response = client.messages.create(
         model="claude-sonnet-4-6",
