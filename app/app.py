@@ -3,6 +3,7 @@ app.py — Operation Next document generator
 Run with: python app.py
 Open at: http://localhost:5003
 """
+import subprocess
 import base64
 import json
 import logging
