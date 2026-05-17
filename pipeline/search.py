@@ -4,7 +4,8 @@ import json
 import os
 import re
 import logging
-from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeout
+from datetime import datetime, date
 from pathlib import Path
 
 ROOT               = Path(__file__).parent.parent
@@ -26,27 +27,75 @@ BLOCKED_DOMAINS = {
     "totaljobs.com", "cv-biblioteket.se",
 }
 
+# Active statuses — partial match so "Ansökt 2026-05-02" is caught by "ansökt"
+ACTIVE_STATUS_TOKENS = {"identifierad", "spontanansökan", "spontanansokan", "genererat", "ansökt"}
+
+# Search queries split into two thematic passes
+QUERIES_PASS1 = [
+    "business analyst Göteborg",
+    "teknisk säljare hybrid Sverige",
+    "affärsutvecklare scale-up Göteborg",
+    "implementation consultant Sverige",
+    "sales engineer Göteborg",
+    "customer success manager Sverige",
+    "product specialist Göteborg",
+    "business analyst Gothenburg",
+    "solutions engineer Sweden hybrid",
+    "implementation manager Sweden",
+    "technical sales Gothenburg",
+    "customer success manager Sweden",
+]
+
+QUERIES_PASS2 = [
+    "entreprenadingenjör Göteborg",
+    "kalkylingenjör bygg hybrid",
+    "projekteringsingenjör anläggning Sverige",
+    "inköpare bygg Sverige",
+    "procurement engineer Sverige",
+    "civil engineer Gothenburg hybrid",
+    "construction project engineer Sweden",
+    "quantity surveyor Sweden",
+]
+
+SEARCH_TIMEOUT_SECS = 300
+
 
 # ── Loaders ────────────────────────────────────────────────
 
 def load_joblist():
+    """Parse joblist.md table. Handles both 6-column (no Datum) and 7-column (with Datum) tables."""
     jobs = []
     if not JOBLIST_PATH.exists():
         return jobs
     with open(JOBLIST_PATH, encoding="utf-8") as f:
-        for line in f:
-            m = re.match(
-                r'\|\s*\d+\s*\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|',
-                line
-            )
-            if m:
-                company = m.group(1).strip()
-                role    = m.group(2).strip()
-                status  = m.group(4).strip()
-                url     = m.group(5).strip()
-                if company.lower() in ("företag", "---"):
-                    continue
-                jobs.append({"company": company, "role": role, "status": status, "url": url})
+        lines = f.readlines()
+
+    header_cols = None
+    for line in lines:
+        stripped = line.strip()
+        if not stripped.startswith("|"):
+            continue
+        cells = [c.strip() for c in stripped.strip("|").split("|")]
+        # Header row
+        if cells and cells[0] == "#":
+            header_cols = [c.lower() for c in cells]
+            continue
+        # Separator row
+        if header_cols and all(re.match(r"^-+$", c) for c in cells if c):
+            continue
+        if not header_cols:
+            continue
+        try:
+            idx = {h: i for i, h in enumerate(header_cols)}
+            company = cells[idx["företag"]]   if "företag"  in idx and idx["företag"]  < len(cells) else ""
+            role    = cells[idx["roll/typ"]]   if "roll/typ" in idx and idx["roll/typ"] < len(cells) else ""
+            status  = cells[idx["status"]]     if "status"   in idx and idx["status"]   < len(cells) else ""
+            url     = cells[idx["url"]]        if "url"      in idx and idx["url"]      < len(cells) else ""
+        except Exception:
+            continue
+        if company.lower() in ("företag", "---", ""):
+            continue
+        jobs.append({"company": company, "role": role, "status": status, "url": url})
     return jobs
 
 
@@ -75,8 +124,15 @@ def _is_blocked_domain(url):
         return False
 
 
+def _is_active_status(status_str):
+    s = status_str.lower()
+    return any(token in s for token in ACTIVE_STATUS_TOKENS)
+
+
 def validate_url(url):
     if not url or url in ("—", ""):
+        return None
+    if not url.startswith("http"):
         return None
     try:
         r = requests.get(url, timeout=10, allow_redirects=True,
@@ -88,7 +144,7 @@ def validate_url(url):
 
 
 def _extract_jsonld_job(soup):
-    """Extract job content from JSON-LD structured data (Teamtailor, Jobylon, Greenhouse etc.)."""
+    """Extract job content from JSON-LD structured data."""
     from bs4 import BeautifulSoup as _BS
     for script in soup.find_all("script", type="application/ld+json"):
         try:
@@ -175,7 +231,7 @@ def batch_validate_urls(candidates, validation_skill):
     try:
         response = client.messages.create(
             model="claude-sonnet-4-6",
-            max_tokens=1024,
+            max_tokens=2048,
             system=validation_skill,
             messages=[{"role": "user", "content": prompt}],
         )
@@ -195,7 +251,8 @@ def batch_validate_urls(candidates, validation_skill):
 
 # ── Claude web search ──────────────────────────────────────
 
-def _call_claude_search(skill_content, known_urls):
+def _call_claude_search(skill_content, known_urls, queries, pass_label):
+    """One search pass. Uses explicit query list and no arbitrary result cap."""
     client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY", ""))
 
     skip_block    = "\n".join(known_urls) if known_urls else "(none)"
@@ -203,50 +260,62 @@ def _call_claude_search(skill_content, known_urls):
         "No skill profile loaded — search broadly for: "
         "Business Analyst, Technical Sales, Product Manager roles in Sweden."
     )
+    queries_block = "\n".join(f"- {q}" for q in queries)
+    today         = date.today().isoformat()
 
-    system = f"""You are a job search assistant for a candidate based in Sweden.
-Use the candidate profile below to find relevant new job postings.
-Search in both Swedish and English.
-Return up to 5 new roles not already in the known URL list.
+    system = f"""You are a job search assistant for a candidate based in Sweden (commute from Alingsås).
+Find all relevant new job postings matching the candidate profile.
+Return every qualifying role found — no upper limit on results.
 
 URL QUALITY RULES — CRITICAL:
 - Only return URLs pointing to a single specific job posting page.
 - The URL must contain a unique job ID or slug identifying exactly one role.
-- Prefer employer career pages on Teamtailor, Jobylon, Greenhouse, or similar ATS platforms.
+- Prefer employer career pages on Teamtailor, Jobylon, Greenhouse, Workable, or similar ATS platforms.
 - Never return aggregator sites: ledigajobb.se, jobbland.se, indeed.com, monster.se, jobbet.se
 - Never return category pages, search result pages, or listing hubs.
 - Good example: collaborate.checkwatt.se/jobs/4669704-customer-success-manager
 - Bad example: ledigajobb.se/jobb/business-analyst-goteborg
-- Bad example: biner.se/en/career (general careers page)
+- Bad example: company.com/career (general careers page)
 
 CANDIDATE PROFILE:
 {profile_block}
 
-URLS ALREADY IN JOBLIST — SKIP THESE:
+URLS ALREADY IN JOBLIST — NEVER RETURN THESE:
 {skip_block}
 
-Respond with ONLY a JSON array:
-[{{"company": "...", "role": "...", "url": "...", "role_type": "...", "cv_base": "...", "location": "...", "status": "Identifierad", "date_added": "YYYY-MM-DD"}}]"""
+Respond with ONLY a JSON array (empty array if no qualifying roles found):
+[{{"company": "...", "role": "...", "url": "...", "role_type": "...", "cv_base": "...", "location": "...", "status": "Identifierad", "date_added": "{today}"}}]"""
 
-    response = client.messages.create(
-        model="claude-sonnet-4-6",
-        max_tokens=2000,
-        system=system,
-        tools=[{
-            "type": "web_search_20250305",
-            "name": "web_search",
-            "max_uses": 10,
-        }],
-        messages=[{
-            "role": "user",
-            "content": (
-                "Search for the 5 most relevant new job postings in Sweden "
-                "matching my profile. Prioritise roles posted in the last 2 weeks. "
-                "Only return direct links to individual job posting pages — "
-                "never aggregator listings or category pages."
-            ),
-        }],
+    user_msg = (
+        f"Run the following {len(queries)} search queries and return all qualifying job postings found. "
+        f"Prioritise roles posted in the last 3 weeks. "
+        f"Only return direct links to individual job posting pages.\n\n"
+        f"Search queries to run ({pass_label}):\n{queries_block}\n\n"
+        f"For each query, search and collect results. "
+        f"After all searches, return every qualifying role as a JSON array."
     )
+
+    def _do_call():
+        return client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=4096,
+            system=system,
+            tools=[{
+                "type": "web_search_20250305",
+                "name": "web_search",
+                "max_uses": 15,
+            }],
+            messages=[{"role": "user", "content": user_msg}],
+        )
+
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        future = executor.submit(_do_call)
+        try:
+            response = future.result(timeout=SEARCH_TIMEOUT_SECS)
+        except FuturesTimeout:
+            logging.error(f"Claude search timed out after {SEARCH_TIMEOUT_SECS}s ({pass_label})")
+            print(f"  TIMEOUT: Claude search ({pass_label}) exceeded {SEARCH_TIMEOUT_SECS}s")
+            return []
 
     text = ""
     for block in response.content:
@@ -255,7 +324,10 @@ Respond with ONLY a JSON array:
 
     match = re.search(r'\[.*?\]', text, re.DOTALL)
     if match:
-        return json.loads(match.group())
+        try:
+            return json.loads(match.group())
+        except json.JSONDecodeError as e:
+            logging.error(f"JSON parse failed ({pass_label}): {e} — raw: {text[:300]}")
     return []
 
 
@@ -273,16 +345,15 @@ def search_new_jobs():
         logging.error(f"Context load failed: {e}")
         raise
 
-    # Check known URLs
+    # Check known URLs — active jobs only, with partial status match
     closed_jobs = []
     known_urls  = []
-    active_statuses = {"identifierad", "spontanansökan", "spontanansokan", "genererat"}
 
     for job in jobs:
         url = job["url"]
-        if url and url != "—":
+        if url and url != "—" and url.startswith("http"):
             known_urls.append(url)
-        if job["status"].lower() in active_statuses:
+        if _is_active_status(job["status"]):
             try:
                 result = validate_url(url)
                 if result is False:
@@ -298,21 +369,34 @@ def search_new_jobs():
             except Exception as e:
                 logging.error(f"URL check failed for {job['company']}: {e}")
 
-    print(f"  Closed: {len(closed_jobs)}")
+    print(f"  Closed: {len(closed_jobs)} | Known URLs: {len(known_urls)}")
 
-    # Search for new roles
-    print("  Calling Claude web search...")
-    raw_candidates = []
-    try:
-        raw_candidates = _call_claude_search(skill_content, known_urls)
-        print(f"  Claude returned {len(raw_candidates)} candidates")
-    except Exception as e:
-        logging.error(f"Claude search failed: {e}")
-        print(f"  ERROR: Claude search failed: {e}")
+    # Two-pass web search
+    raw_candidates: list = []
 
-    # Stage 1 — filter by domain blocklist and HTTP reachability
+    for pass_label, queries in [("BA/Tech/Sales", QUERIES_PASS1), ("Construction/Civil", QUERIES_PASS2)]:
+        print(f"  Calling Claude web search — {pass_label} ({len(queries)} queries)...")
+        try:
+            results = _call_claude_search(skill_content, known_urls, queries, pass_label)
+            print(f"  Pass '{pass_label}' returned {len(results)} candidates")
+            raw_candidates.extend(results)
+        except Exception as e:
+            logging.error(f"Claude search failed ({pass_label}): {e}")
+            print(f"  ERROR: Claude search failed ({pass_label}): {e}")
+
+    # Deduplicate across passes by URL
+    seen_urls: set = set()
+    deduped: list  = []
+    for c in raw_candidates:
+        url = c.get("url", "").strip()
+        if url and url not in seen_urls:
+            seen_urls.add(url)
+            deduped.append(c)
+    print(f"  Total candidates after dedup: {len(deduped)}")
+
+    # Stage 1 — domain blocklist + HTTP reachability
     reachable = []
-    for candidate in raw_candidates:
+    for candidate in deduped:
         url = candidate.get("url", "").strip()
         if not url:
             continue
@@ -332,7 +416,7 @@ def search_new_jobs():
             continue
         reachable.append(candidate)
 
-    # Stage 2 — single batched quality validation call
+    # Stage 2 — batched quality validation
     new_jobs = []
     if reachable:
         print(f"  Validating {len(reachable)} reachable URL(s) in one call...")
