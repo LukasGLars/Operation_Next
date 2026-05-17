@@ -60,12 +60,25 @@ Reject if any of the following are true:
 - The page contains any of these phrases or close equivalents:
   - "This position is no longer active"
   - "This job is no longer available"
+  - "This job is no longer accepting applications"
   - "This position has been filled"
   - "This ad has expired"
+  - "No longer accepting applications"
+  - "Applications are closed"
+  - "Applications closed"
+  - "Position filled"
+  - "Role has been filled"
   - "Denna tjänst är inte längre aktiv"
   - "Tjänsten är tillsatt"
   - "Annonsen har utgått"
-  - Any message indicating the role has closed or been removed.
+  - "Ansökan är stängd"
+  - "Ansökan stängd"
+  - "Vi tar inte längre emot ansökningar"
+  - "Rekryteringen är avslutad"
+  - "Tjänsten är stängd"
+  - "See open jobs" as the primary call-to-action (indicates the specific posting is gone)
+  - Any message indicating the role has closed, been filled, or been removed.
+- The posting date is explicitly stated and is more than 5 weeks ago.
 
 ## Canonicality rules
 Prefer the canonical page for the job posting.

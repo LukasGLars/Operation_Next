@@ -32,6 +32,7 @@ BLOCKED_DOMAINS = {
     "jobbsafari.se", "careerjet.se", "careerjet.com",
     "jooble.org", "adzuna.se", "adzuna.com",
     "arbetsformedlingen.se",
+    "platsportalen.se",
 }
 
 # Generic path endings that indicate a listing/hub page, not a specific posting
@@ -216,17 +217,33 @@ def _url_looks_specific(url):
 
 
 def validate_url(url):
+    """Returns (status_ok, final_url).
+    status_ok: True=200, False=non-200, None=error/skip.
+    final_url: URL after all redirects (may differ from input).
+    """
     if not url or url in ("—", ""):
-        return None
+        return None, url
     if not url.startswith("http"):
-        return None
+        return None, url
     try:
         r = requests.get(url, timeout=10, allow_redirects=True,
                          headers={"User-Agent": "Mozilla/5.0"})
-        return r.status_code == 200
+        return r.status_code == 200, r.url
     except Exception as e:
         logging.error(f"validate_url({url}): {e}")
-        return None
+        return None, url
+
+
+def _redirect_to_hub(original_url, final_url):
+    """True if redirect lost the job ID — likely bounced to a generic listing page."""
+    if not final_url or final_url == original_url:
+        return False
+    from urllib.parse import urlparse
+    orig_path  = urlparse(original_url).path
+    final_path = urlparse(final_url).path
+    orig_has_id  = bool(re.search(r'\d{4,}', orig_path))
+    final_has_id = bool(re.search(r'\d{4,}', final_path))
+    return orig_has_id and not final_has_id
 
 
 def _extract_jsonld_job(soup):
@@ -482,8 +499,8 @@ def search_new_jobs():
             known_urls.append(url)
         if _is_active_status(job["status"]):
             try:
-                result = validate_url(url)
-                if result is False:
+                ok, final_url = validate_url(url)
+                if ok is False:
                     print(f"  CLOSED: {job['company']} — {url}")
                     closed_jobs.append({
                         "company": job["company"],
@@ -491,7 +508,7 @@ def search_new_jobs():
                         "url":     url,
                         "reason":  "non-200 response",
                     })
-                elif result is True:
+                elif ok is True:
                     print(f"  ACTIVE: {job['company']}")
             except Exception as e:
                 logging.error(f"URL check failed for {job['company']}: {e}")
@@ -547,9 +564,15 @@ def search_new_jobs():
             print(f"  SKIP (generic URL — no job ID): {url}")
             continue
         try:
-            if not validate_url(url):
+            ok, final_url = validate_url(url)
+            if not ok:
                 print(f"  SKIP (bad URL): {url}")
                 continue
+            if _redirect_to_hub(url, final_url):
+                logging.error(f"SKIP (redirect to hub): {url} → {final_url}")
+                print(f"  SKIP (redirect to hub): {url}")
+                continue
+            candidate["url"] = final_url
         except Exception as e:
             logging.error(f"Validation failed for {url}: {e}")
             continue
