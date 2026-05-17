@@ -137,6 +137,37 @@ def load_skill():
         return f.read()
 
 
+def extract_search_profile(skill_content):
+    """Return only the sections of SKILL.md needed for job searching.
+    Drops CV rules, cover letter rules, key results library etc. — reduces
+    tokens per search call from ~5000 to ~1000.
+    """
+    if not skill_content:
+        return skill_content
+    KEEP = {"role filters", "location rules", "cv base selection"}
+    lines = skill_content.splitlines()
+    sections: dict = {}
+    current_key = None
+    current_lines: list = []
+    for line in lines:
+        h2 = re.match(r'^##\s+(.+)', line)
+        if h2:
+            if current_key is not None:
+                sections[current_key] = current_lines
+            current_key = h2.group(1).strip().lower()
+            current_lines = [line]
+        elif current_key is not None:
+            current_lines.append(line)
+    if current_key is not None:
+        sections[current_key] = current_lines
+    result = []
+    for key, sec_lines in sections.items():
+        if any(k in key for k in KEEP):
+            result.extend(sec_lines)
+            result.append("")
+    return "\n".join(result) if result else skill_content
+
+
 def load_validation_skill():
     if not VALIDATION_SKILL.exists():
         return ""
@@ -318,7 +349,7 @@ def _call_claude_search(skill_content, known_urls, queries, pass_label):
     client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY", ""))
 
     skip_block    = "\n".join(known_urls) if known_urls else "(none)"
-    profile_block = skill_content.strip() or (
+    profile_block = extract_search_profile(skill_content).strip() or (
         "No skill profile loaded — search broadly for: "
         "Business Analyst, Technical Sales, Product Manager roles in Sweden."
     )
@@ -391,14 +422,27 @@ Respond with ONLY a JSON array (empty array if no qualifying roles found):
             messages=[{"role": "user", "content": user_msg}],
         )
 
-    with ThreadPoolExecutor(max_workers=1) as executor:
-        future = executor.submit(_do_call)
-        try:
-            response = future.result(timeout=SEARCH_TIMEOUT_SECS)
-        except FuturesTimeout:
-            logging.error(f"Claude search timed out after {SEARCH_TIMEOUT_SECS}s ({pass_label})")
-            print(f"  TIMEOUT: Claude search ({pass_label}) exceeded {SEARCH_TIMEOUT_SECS}s")
-            return []
+    response = None
+    for attempt in range(1, 4):
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            future = executor.submit(_do_call)
+            try:
+                response = future.result(timeout=SEARCH_TIMEOUT_SECS)
+                break
+            except FuturesTimeout:
+                logging.error(f"Claude search timed out after {SEARCH_TIMEOUT_SECS}s ({pass_label})")
+                print(f"  TIMEOUT: Claude search ({pass_label}) exceeded {SEARCH_TIMEOUT_SECS}s")
+                return []
+            except Exception as exc:
+                if "429" in str(exc) and attempt < 3:
+                    wait = 65
+                    print(f"  429 rate limit on search ({pass_label}) — waiting {wait}s (attempt {attempt}/3)")
+                    time.sleep(wait)
+                else:
+                    raise
+
+    if response is None:
+        return []
 
     text = ""
     for block in response.content:
@@ -457,11 +501,15 @@ def search_new_jobs():
     # Two-pass web search
     raw_candidates: list = []
 
-    for pass_label, queries in [
+    passes = [
         ("BA/Tech/Sales",      QUERIES_PASS1),
         ("Construction/Civil", QUERIES_PASS2),
         ("ATS-targeted",       QUERIES_PASS3),
-    ]:
+    ]
+    for i, (pass_label, queries) in enumerate(passes):
+        if i > 0:
+            print(f"  Waiting 65s before next pass (rate limit buffer)...")
+            time.sleep(65)
         print(f"  Calling Claude web search — {pass_label} ({len(queries)} queries)...")
         try:
             results = _call_claude_search(skill_content, known_urls, queries, pass_label)
