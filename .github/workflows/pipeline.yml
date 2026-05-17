@@ -1,7 +1,11 @@
 name: Operation Next Pipeline
 on:
   schedule:
-    - cron: '0 5 * * 1-5'
+    - cron: '0 5 * * 3,5'   # Wednesday and Friday 07:00 CET
+  push:
+    paths:
+      - 'jobsearch/skill/SKILL.md'
+      - 'jobsearch/skill/URL_VALIDATION_SKILL.md'
   workflow_dispatch:
 
 permissions:
