@@ -417,7 +417,7 @@ Respond with ONLY a JSON array (empty array if no qualifying roles found):
             tools=[{
                 "type": "web_search_20250305",
                 "name": "web_search",
-                "max_uses": 15,
+                "max_uses": 8,
             }],
             messages=[{"role": "user", "content": user_msg}],
         )
@@ -435,7 +435,7 @@ Respond with ONLY a JSON array (empty array if no qualifying roles found):
                 return []
             except Exception as exc:
                 if "429" in str(exc) and attempt < 3:
-                    wait = 65
+                    wait = 90
                     print(f"  429 rate limit on search ({pass_label}) — waiting {wait}s (attempt {attempt}/3)")
                     time.sleep(wait)
                 else:
@@ -508,8 +508,8 @@ def search_new_jobs():
     ]
     for i, (pass_label, queries) in enumerate(passes):
         if i > 0:
-            print(f"  Waiting 65s before next pass (rate limit buffer)...")
-            time.sleep(65)
+            print(f"  Waiting 90s before next pass (rate limit buffer)...")
+            time.sleep(90)
         print(f"  Calling Claude web search — {pass_label} ({len(queries)} queries)...")
         try:
             results = _call_claude_search(skill_content, known_urls, queries, pass_label)
