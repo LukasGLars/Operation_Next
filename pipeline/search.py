@@ -4,6 +4,7 @@ import json
 import os
 import re
 import logging
+import time
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeout
 from datetime import datetime, date
 from pathlib import Path
@@ -22,9 +23,23 @@ logging.basicConfig(
 )
 
 BLOCKED_DOMAINS = {
+    # Aggregators and job boards — never direct postings
     "ledigajobb.se", "jobbland.se", "indeed.com", "monster.se",
     "jobbet.se", "platsbanken.arbetsformedlingen.se", "reed.co.uk",
     "totaljobs.com", "cv-biblioteket.se",
+    "linkedin.com", "glassdoor.com", "glassdoor.se",
+    "stepstone.se", "stepstone.de",
+    "jobbsafari.se", "careerjet.se", "careerjet.com",
+    "jooble.org", "adzuna.se", "adzuna.com",
+    "arbetsformedlingen.se",
+}
+
+# Generic path endings that indicate a listing/hub page, not a specific posting
+_GENERIC_PATH_ENDS = {
+    "career", "careers", "jobs", "jobb", "jobb-vi-soker", "jobb-vi-söker",
+    "lediga-tjanster", "lediga-tjänster", "lediga-jobb", "open-positions",
+    "openings", "vacancies", "vacancy", "join-us", "work-with-us",
+    "jobba-hos-oss", "vi-soker", "vi-söker", "work-here", "jobba-har",
 }
 
 # Active statuses — partial match so "Ansökt 2026-05-02" is caught by "ansökt"
@@ -55,6 +70,22 @@ QUERIES_PASS2 = [
     "civil engineer Gothenburg hybrid",
     "construction project engineer Sweden",
     "quantity surveyor Sweden",
+]
+
+# ATS-targeted pass — site: searches return only direct employer postings with numeric IDs
+QUERIES_PASS3 = [
+    'site:teamtailor.com "business analyst" Göteborg',
+    'site:teamtailor.com "customer success" Sverige',
+    'site:teamtailor.com "sales engineer" Sverige',
+    'site:teamtailor.com "affärsutvecklare" Sverige',
+    'site:teamtailor.com "implementation" Sverige',
+    'site:teamtailor.com "teknisk säljare" Sverige',
+    'site:teamtailor.com "entreprenadingenjör" Sverige',
+    'site:teamtailor.com "kalkylingenjör" Sverige',
+    'site:jobylon.com "business analyst" Sverige',
+    'site:jobylon.com "customer success" Sverige',
+    'site:greenhouse.io "business analyst" Sweden',
+    'site:lever.co "business analyst" Sweden',
 ]
 
 SEARCH_TIMEOUT_SECS = 300
@@ -127,6 +158,30 @@ def _is_blocked_domain(url):
 def _is_active_status(status_str):
     s = status_str.lower()
     return any(token in s for token in ACTIVE_STATUS_TOKENS)
+
+
+def _url_looks_specific(url):
+    """Return True if URL appears to point to one specific job posting.
+    Valid posting URLs almost always have a numeric job ID or a long unique slug.
+    """
+    try:
+        from urllib.parse import urlparse
+        path = urlparse(url).path.rstrip("/")
+        segments = [s for s in path.split("/") if s]
+        if not segments:
+            return False
+        last = segments[-1].lower()
+        if last in _GENERIC_PATH_ENDS:
+            return False
+        # Numeric job ID anywhere in path (e.g. /jobs/4669704-csm, /jobs/6909181)
+        if any(re.search(r'\d{4,}', seg) for seg in segments):
+            return True
+        # Long unique slug (e.g. /jobs/customer-success-manager-till-checkwatt)
+        if len(last) > 25:
+            return True
+        return False
+    except Exception:
+        return False
 
 
 def validate_url(url):
@@ -228,25 +283,32 @@ def batch_validate_urls(candidates, validation_skill):
     )
 
     client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY", ""))
-    try:
-        response = client.messages.create(
-            model="claude-sonnet-4-6",
-            max_tokens=2048,
-            system=validation_skill,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        text = response.content[0].text.strip()
-        if text.startswith("```"):
-            text = re.sub(r"^```(?:json)?\n?", "", text)
-            text = re.sub(r"\n?```$", "", text)
-        match = re.search(r'\[.*\]', text, re.DOTALL)
-        if not match:
-            raise ValueError(f"No JSON array in response: {text[:200]}")
-        results = json.loads(match.group())
-        return {r["url"]: (r.get("verdict", "uncertain"), r.get("reason", "")) for r in results}
-    except Exception as exc:
-        logging.error(f"Batch URL validation failed: {exc}")
-        return {entry["url"]: ("uncertain", f"validation error: {str(exc)[:60]}") for entry in entries}
+    for attempt in range(1, 4):
+        try:
+            response = client.messages.create(
+                model="claude-sonnet-4-6",
+                max_tokens=2048,
+                system=validation_skill,
+                messages=[{"role": "user", "content": prompt}],
+            )
+            text = response.content[0].text.strip()
+            if text.startswith("```"):
+                text = re.sub(r"^```(?:json)?\n?", "", text)
+                text = re.sub(r"\n?```$", "", text)
+            match = re.search(r'\[.*\]', text, re.DOTALL)
+            if not match:
+                raise ValueError(f"No JSON array in response: {text[:200]}")
+            results = json.loads(match.group())
+            return {r["url"]: (r.get("verdict", "uncertain"), r.get("reason", "")) for r in results}
+        except Exception as exc:
+            is_429 = "429" in str(exc)
+            if is_429 and attempt < 3:
+                wait = 15 * attempt
+                print(f"  429 rate limit — retrying batch validation in {wait}s (attempt {attempt}/3)")
+                time.sleep(wait)
+            else:
+                logging.error(f"Batch URL validation failed (attempt {attempt}): {exc}")
+                return {entry["url"]: ("uncertain", f"validation error: {str(exc)[:60]}") for entry in entries}
 
 
 # ── Claude web search ──────────────────────────────────────
@@ -268,14 +330,35 @@ Find all relevant new job postings matching the candidate profile.
 Return every qualifying role found — no upper limit on results.
 
 URL QUALITY RULES — CRITICAL:
-- Only return URLs pointing to a single specific job posting page.
-- The URL must contain a unique job ID or slug identifying exactly one role.
-- Prefer employer career pages on Teamtailor, Jobylon, Greenhouse, Workable, or similar ATS platforms.
-- Never return aggregator sites: ledigajobb.se, jobbland.se, indeed.com, monster.se, jobbet.se
-- Never return category pages, search result pages, or listing hubs.
-- Good example: collaborate.checkwatt.se/jobs/4669704-customer-success-manager
-- Bad example: ledigajobb.se/jobb/business-analyst-goteborg
-- Bad example: company.com/career (general careers page)
+A valid posting URL almost always contains a numeric job ID (4+ digits) or a long
+unique slug in the path. If the URL does not have one, it is almost certainly a
+listing page or aggregator — do not return it.
+
+Prefer ATS-hosted employer career pages:
+  Teamtailor, Jobylon, Greenhouse, Workable, Lever, BambooHR, SmartRecruiters, Taleo
+
+NEVER return these domains (hard block):
+  ledigajobb.se, jobbland.se, indeed.com, monster.se, jobbet.se,
+  linkedin.com, glassdoor.com, stepstone.se, jobbsafari.se, careerjet.se,
+  arbetsformedlingen.se, jooble.org, adzuna.se
+
+NEVER return pages that are:
+  /career  /careers  /jobs  (root-level — no ID)  /lediga-jobb  /open-positions
+  Search result pages.  Category or hub pages.  Any page listing multiple roles.
+
+VALID URL examples — these all have numeric IDs or long unique slugs:
+  collaborate.checkwatt.se/jobs/4669704-customer-success-manager      ← numeric ID
+  emp.jobylon.com/jobs/354499-einride-senior-business-analyst          ← numeric ID
+  careersweden.knowit.se/jobs/6909181                                  ← numeric ID
+  boards.greenhouse.io/acmecorp/jobs/7894321                           ← numeric ID
+  jobs.lever.co/company/abc12345-role-title-stockholm                  ← unique slug
+
+INVALID URL examples — reject these:
+  ledigajobb.se/jobb/business-analyst-goteborg    ← aggregator
+  company.com/career                               ← generic page, no ID
+  company.com/en/careers/open-positions            ← listing hub, no ID
+  linkedin.com/jobs/view/123456789                 ← aggregator
+  biner.se/en/career                               ← generic page, no ID
 
 CANDIDATE PROFILE:
 {profile_block}
@@ -374,7 +457,11 @@ def search_new_jobs():
     # Two-pass web search
     raw_candidates: list = []
 
-    for pass_label, queries in [("BA/Tech/Sales", QUERIES_PASS1), ("Construction/Civil", QUERIES_PASS2)]:
+    for pass_label, queries in [
+        ("BA/Tech/Sales",      QUERIES_PASS1),
+        ("Construction/Civil", QUERIES_PASS2),
+        ("ATS-targeted",       QUERIES_PASS3),
+    ]:
         print(f"  Calling Claude web search — {pass_label} ({len(queries)} queries)...")
         try:
             results = _call_claude_search(skill_content, known_urls, queries, pass_label)
@@ -406,6 +493,10 @@ def search_new_jobs():
         if _is_blocked_domain(url):
             logging.error(f"BLOCKED (aggregator domain): {url}")
             print(f"  SKIP (aggregator): {url}")
+            continue
+        if not _url_looks_specific(url):
+            logging.error(f"SKIP (no job ID or unique slug): {url}")
+            print(f"  SKIP (generic URL — no job ID): {url}")
             continue
         try:
             if not validate_url(url):
