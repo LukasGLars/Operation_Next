@@ -1,11 +1,11 @@
 name: Operation Next Pipeline
 on:
   schedule:
-    - cron: '0 5 * * 3,5'   # Wednesday and Friday 07:00 CET
+    - cron: "0 5 * * 3,5"   # Wednesday and Friday 07:00 CET
   push:
     paths:
-      - 'jobsearch/skill/SKILL.md'
-      - 'jobsearch/skill/URL_VALIDATION_SKILL.md'
+      - "jobsearch/skill/SKILL.md"
+      - "jobsearch/skill/URL_VALIDATION_SKILL.md"
   workflow_dispatch:
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
       - run: pip install -r requirements.txt
       - run: python pipeline/search.py
       - run: python pipeline/updater.py
@@ -29,6 +29,7 @@ jobs:
           git config user.name "GitHub Actions"
           git add jobsearch/joblist.md
           git diff --staged --quiet || git commit -m "Auto-update joblist $(date +%Y-%m-%d)"
+          git pull --rebase
           git push
     env:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
