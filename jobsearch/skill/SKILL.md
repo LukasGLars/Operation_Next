@@ -138,12 +138,13 @@ Always choose 2–3 results that best fit the role.
 - VVS Invoice App: full-stack web app for plumbing contractors, including ROT deduction, PDF generation, Claude Vision OCR, automatic benchmark price lookup, and self-hosted deployment.
 - Valeryd technical sales: full-cycle B2B account management across Nordic distributors and e-commerce partners in automotive aftermarket.
 - Valeryd procurement: supplier sourcing across Europe and Asia, aligned with pricing strategy and product positioning.
+- Valeryd Toolkit: internal Flask app with three AI tools (PDF order extraction via Claude Vision, axle matching, semantic KB search over 7,500 entries using TF-IDF + Claude Haiku rerank + Sonnet synthesis) — built and deployed to the sales team.
 
 ### Selection logic
 - BA / analyst roles: use the data model and Python pipeline.
-- Implementation / solutions roles: use BHG rollout, AI email engine, and VVS Invoice App.
+- Implementation / solutions roles: use BHG rollout, Valeryd Toolkit, and VVS Invoice App.
 - Technical sales roles: use Spirax Sarco, Valeryd technical sales, and BHG rollout.
-- Automation / AI roles: use AI email engine, Reactor Core, and VVS Invoice App.
+- Automation / AI roles: use AI email engine, Valeryd Toolkit, and Reactor Core.
 - Procurement / supply chain roles: use Valeryd procurement and BHG rollout.
 
 ## Cover Letter Rules
