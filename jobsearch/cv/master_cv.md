@@ -27,12 +27,13 @@ Engineer with a strong analytical and commercial profile. I work best when I get
 
 ## Professional Experience
 
-### MedTech Startup — Co-founder & Business Development
+### MedTech Compliance Platform — Co-founder & Business Development
 *2025 – Present*
 
-- Co-developing a SaaS platform that automates MedTech regulatory compliance (MDR/IVDR)
-- Translating complex regulatory requirements into defined, marketable product features that reduce client costs and time-to-market
-- Developing go-to-market strategy based on structured market analysis and early customer dialogue
+- Co-founding an AI-enabled compliance platform for medical device companies under EU MDR
+- Integrates with a company's QMS to reduce manual documentation, automate competence verification, and detect compliance gaps before audits
+- Positioned as a compliance assurance layer — selling on audit risk and cost of non-conformities, not efficiency alone
+- Working with Tomas Gustafsson (PExa / Micropos Medical) through GoCo Health Innovation City for early customer validation in the Nordic MedTech ecosystem
 
 ---
 
@@ -96,8 +97,8 @@ Two-part project: quantitative portfolio construction from a 44-ticker universe 
 Mobile-first web app for plumbing contractors. Full customer, job, and invoice management with ROT deduction calculations, PDF generation meeting all 14 Swedish mandatory invoice fields, Claude Vision OCR for receipt extraction, and automatic price benchmarking. Self-hosted on Linux.
 *Stack: Python, Flask, SQLite, Alpine.js, Tailwind CSS, xhtml2pdf*
 
-**MedTech RegTech Platform (Side Project, 2025–Present)**
-Co-developing a SaaS platform automating regulatory compliance for MedTech companies under MDR/IVDR. Translates legislation into product features that reduce time-to-market and compliance costs.
+**MedTech Compliance Platform (Co-founder, 2025–Present)**
+Co-founding an AI-enabled compliance platform for medical device companies under EU MDR. Integrates with a company's QMS to reduce manual documentation, automate competence verification, and detect compliance gaps before audits. Positioned as a compliance assurance layer — selling on audit risk and cost of non-conformities. Working with Tomas Gustafsson (PExa / Micropos Medical) through GoCo Health Innovation City for early customer validation in the Nordic MedTech ecosystem.
 
 ---
 
