@@ -116,4 +116,32 @@ Automated daily monitoring against the constructed portfolio. Runs on GitHub Act
 
 ---
 
-*Last updated: May 2026*
+### 7. Valeryd Toolkit — Internal AI Tools for Sales & Back-Office
+**Valeryd AB**
+
+Internal web app built for the Valeryd sales and back-office team. Used daily by 5 people. Reduced manual order entry from 3–10 minutes to under one minute, and distributed specialist knowledge that previously sat with one or two people across the entire team.
+
+- **Process Order** — upload a PDF purchase order, Claude Vision extracts article lines ready to paste into NAV. Handles both digital and scanned PDFs via server-side text extraction with vision fallback
+- **Generate Axle** — enter trailer dimensions and weight, returns the correct matching axle from the article catalogue. A technically complex task that previously required specialist knowledge is now executable by the full team via a 4-stage fallback matching algorithm
+- **Ask Valeryd** — ~7,500 entries built from resolved customer cases across email history, support tickets, and crosslists. Institutional knowledge that previously lived with experienced team members is instantly queryable by anyone in the department. TF-IDF retrieval → Claude Haiku rerank → Claude Sonnet synthesis
+
+*Internal tool — no public repository.*
+
+**Stack:** Python, Flask, Claude API (Vision + Haiku + Sonnet), scikit-learn, vanilla JS
+
+---
+
+### 8. MedTech Compliance Platform — AI-Enabled MDR Compliance for Medical Device Companies
+**Personal Project / Co-founder**
+
+Co-founding an AI-enabled compliance platform for medical device companies under EU MDR. The platform integrates with a company's QMS to reduce manual documentation, automate competence verification, and detect compliance gaps before audits.
+
+Positioned as a compliance assurance layer — selling on audit risk and cost of non-conformities, not efficiency alone. Go-to-market targets Heads of Quality and QA-RA Managers at MedTech firms navigating MDR transition.
+
+Based in Gothenburg. Working with Tomas Gustafsson (PExa / Micropos Medical) and embedded in GoCo Health Innovation City for early customer validation and pilot partnerships in the Nordic MedTech ecosystem.
+
+*In active development.*
+
+---
+
+*Last updated: June 2026*
