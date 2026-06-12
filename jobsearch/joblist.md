@@ -4,6 +4,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|
 | 1 | Einride | Business Analyst | CV_Einride | Ansökt 2026-05-02 | 2026-05-08 | https://emp.jobylon.com/jobs/354499-einride-senior-business-analyst/ |
@@ -15,3 +16,4 @@
 | 7 | Svevia | Kalkylingenjör – Stora projekt | CV_BYGG | Stängd | 2026-06-03 | https://jobb.svevia.se/jobs/7615860-kalkylingenjor-stora-projekt |
 | 8 | Oak Consulting / Byggnor Närke | Entreprenadingenjör | CV_BYGG | Identifierad | 2026-05-20 | https://oakconsulting.teamtailor.com/jobs/7682192-byggnor-narke-ab-soker-entreprenadingenjor |
 | 9 | Victoriahem | Affärsutvecklare – Fastighets-IT | CV | Identifierad | 2026-06-03 | https://victoriahem.teamtailor.com/jobs/7621512-affarsutvecklare-med-kompetens-inom-fastighets-it |
+| 10 | Centio (uppdrag Trafikverket) | Projektingenjör Väg | CV_BYGG | Identifierad | 2026-06-12 | https://centio.teamtailor.com/jobs/7879189-projektingenjor-vag |
