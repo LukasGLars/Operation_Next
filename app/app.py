@@ -22,10 +22,11 @@ load_dotenv(Path(__file__).parent.parent / ".env")
 
 ROOT          = Path(__file__).parent.parent
 JOBLIST_PATH  = ROOT / "jobsearch" / "joblist.md"
-SKILL_PATH    = ROOT / "jobsearch" / "skill" / "generation_skill.md"
-LETTER_DOCX   = ROOT / "jobsearch" / "letters" / "Lukas_Larsson_Cover_Letter_Einride.docx"
-APPLICATIONS  = ROOT / "jobsearch" / "applications"
-MASTER_CV     = ROOT / "jobsearch" / "cv" / "master_cv.md"
+SKILL_PATH       = ROOT / "jobsearch" / "skill" / "generation_skill.md"
+LETTER_DOCX      = ROOT / "jobsearch" / "letters" / "Lukas_Larsson_Cover_Letter_Einride.docx"
+APPLICATIONS     = ROOT / "jobsearch" / "applications"
+MASTER_CV        = ROOT / "jobsearch" / "cv" / "master_cv.md"
+SALES_PHILOSOPHY = ROOT / "jobsearch" / "sales_philosophy.md"
 
 _HEADERS = ["#", "Företag", "Roll/Typ", "CV-bas", "Status", "Datum", "URL"]
 
@@ -198,14 +199,16 @@ def fetch_job_posting(url: str) -> str:
 
 
 def _build_doc_content(cv_base: str, job_url: str) -> list:
-    skill_content     = SKILL_PATH.read_text(encoding="utf-8") if SKILL_PATH.exists() else ""
-    master_cv_text    = MASTER_CV.read_text(encoding="utf-8") if MASTER_CV.exists() else ""
-    job_posting_text  = fetch_job_posting(job_url)
-    cover_letter_text = read_docx_text(LETTER_DOCX) if LETTER_DOCX.exists() else ""
+    skill_content      = SKILL_PATH.read_text(encoding="utf-8") if SKILL_PATH.exists() else ""
+    master_cv_text     = MASTER_CV.read_text(encoding="utf-8") if MASTER_CV.exists() else ""
+    sales_phil_text    = SALES_PHILOSOPHY.read_text(encoding="utf-8") if SALES_PHILOSOPHY.exists() else ""
+    job_posting_text   = fetch_job_posting(job_url)
+    cover_letter_text  = read_docx_text(LETTER_DOCX) if LETTER_DOCX.exists() else ""
 
     prompt = (
-        "SKILL.md — follow all rules here exactly:\n" + skill_content +
+        "Generation instructions — follow all rules here exactly:\n" + skill_content +
         "\n\nMaster CV — complete work history and all projects. Select and tailor from this:\n" + master_cv_text +
+        "\n\nSales philosophy — use paragraph from this for technical sales cover letters (para 3):\n" + sales_phil_text +
         "\n\nCover letter tone reference (match this tone and length):\n" + cover_letter_text +
         "\n\nJob posting URL: " + job_url +
         "\nJob posting content:\n" + job_posting_text +
