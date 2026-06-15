@@ -52,7 +52,7 @@ Always choose 2–3 results that best fit the role.
 - Procurement / supply chain roles: use Valeryd procurement and BHG rollout.
 
 ## CV Rules
-- CV is always generated in Swedish regardless of job posting language.
+- Generate the CV in the same language as the job posting. English posting → English CV. Swedish posting → Swedish CV.
 - Select the 3–4 most relevant work history entries and 2–3 most relevant projects. Cut anything that does not directly serve this role.
 - Favour concrete achievements and role-relevant keywords.
 - Avoid generic phrasing.
@@ -111,7 +111,7 @@ English:
 ## Reference examples — approved output
 These are real approved outputs after human review. Match this quality, structure, and tone exactly.
 
-### Approved CV (Einride BA) — use as structure and quality benchmark. CV should always be in Swedish; the structure and level of detail here is what matters:
+### Approved CV (Einride BA) — use as structure and quality benchmark. Match this structure, level of detail, and voice exactly:
 Lukas Larsson
 Engineer, Business Analyst, Automation & Data
 Alingsås, Sweden · 073-740 97 88 · lukasglarsson88@gmail.com · linkedin.com/in/lukas-larsson-062163169
