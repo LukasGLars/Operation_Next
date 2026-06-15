@@ -60,9 +60,9 @@ Always choose 2–3 results that best fit the role.
 - Do not include profile.png or any image references — output is markdown only.
 
 ### Language rules
-- Never use directly translated verbs that sound unnatural in Swedish, such as "förflyttar", "transformerar", or "förändrar hur X fungerar".
-- When referencing a company's work, describe concretely what they do rather than using abstract impact language.
-- Example: instead of "ett företag som förändrar hur energisystemet fungerar", write "CheckWatts arbete med virtuella kraftverk och smart energistyrning".
+- Write in the same language as the job posting. English posting → English CV and cover letter. Swedish posting → Swedish CV and cover letter.
+- When writing in Swedish: avoid directly translated verbs that sound unnatural, such as "förflyttar", "transformerar", or "förändrar hur X fungerar". Describe what the company concretely does instead of using abstract impact language.
+- When writing in English: match the voice and directness of the approved Einride cover letter reference below.
 
 ## Cover Letter Rules
 
