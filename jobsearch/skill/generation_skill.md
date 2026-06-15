@@ -21,11 +21,11 @@ The cv_base field on the job indicates which angle to emphasise. Use it to weigh
 
 | cv_base | Emphasise |
 |---|---|
-| CV_Einride | Analytical depth, data systems, AI integration, scalable solutions |
+| CV_Einride | Analytical depth, data systems, AI integration, scalable solutions. Lead with data model and Python pipeline. Analytical work is the headline. |
 | CV_Zeppelin | Full sales cycle, B2B relationships, technical product knowledge |
 | CV_Plymovent | HVAC/ventilation domain, partner and channel sales |
 | CV_BYGG | Construction process, project management, cost estimation, site experience |
-| CV | Business development, commercial ownership, broad cross-functional scope |
+| CV | Business development and commercial ownership. Lead with BHG rollout (100+ installer network, Finland expansion, e-commerce integration) and MedTech co-founder. Treat the analytical/automation work as a differentiator — "BD candidate who can also build the systems that make decisions data-driven" — not the headline. Valeryd commercial work (full-cycle B2B, procurement, Nordic distributors) is the body. |
 
 ## Key Results Library
 Always choose 2–3 results that best fit the role.
@@ -44,6 +44,7 @@ Always choose 2–3 results that best fit the role.
 
 ### Selection logic
 - BA / analyst roles: use the data model and Python pipeline.
+- Business developer / affärsutvecklare roles: use BHG rollout, MedTech co-founder, and Valeryd commercial work. Mention automation as a supporting differentiator only.
 - CSM / customer success roles: use Valeryd Toolkit, BHG rollout, and AI email engine.
 - Implementation / solutions roles: use BHG rollout, Valeryd Toolkit, and VVS Invoice App.
 - Technical sales roles: use Spirax Sarco, Valeryd technical sales, and BHG rollout.

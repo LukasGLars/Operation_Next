@@ -98,7 +98,9 @@ Use concise queries and rotate between Swedish and English search terms.
 Swedish:
 - business analyst Göteborg
 - teknisk säljare hybrid
-- affärsutvecklare scale-up
+- affärsutvecklare scale-up Göteborg
+- affärsutvecklare SaaS Sverige
+- affärsutvecklare tech hybrid Sverige
 - implementation consultant Sverige
 - sales engineer Göteborg
 - entreprenadingenjör Göteborg
@@ -110,6 +112,8 @@ English:
 - solutions engineer Sweden hybrid
 - implementation manager Sweden
 - technical sales Gothenburg
+- business developer SaaS Sweden
+- commercial manager tech scale-up Sweden
 - civil engineer Gothenburg hybrid
 - construction project engineer Sweden
 
