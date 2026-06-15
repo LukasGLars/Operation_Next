@@ -22,7 +22,7 @@ load_dotenv(Path(__file__).parent.parent / ".env")
 
 ROOT          = Path(__file__).parent.parent
 JOBLIST_PATH  = ROOT / "jobsearch" / "joblist.md"
-SKILL_PATH    = ROOT / "jobsearch" / "skill" / "SKILL.md"
+SKILL_PATH    = ROOT / "jobsearch" / "skill" / "generation_skill.md"
 LETTER_DOCX   = ROOT / "jobsearch" / "letters" / "Lukas_Larsson_Cover_Letter_Einride.docx"
 APPLICATIONS  = ROOT / "jobsearch" / "applications"
 MASTER_CV     = ROOT / "jobsearch" / "cv" / "master_cv.md"

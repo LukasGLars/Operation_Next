@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT               = Path(__file__).parent.parent
 JOBLIST_PATH       = ROOT / "jobsearch" / "joblist.md"
-SKILL_PATH         = ROOT / "jobsearch" / "skill" / "SKILL.md"
+SKILL_PATH         = ROOT / "jobsearch" / "skill" / "search_skill.md"
 VALIDATION_SKILL   = ROOT / "jobsearch" / "skill" / "URL_VALIDATION_SKILL.md"
 RESULTS_PATH       = Path(__file__).parent / "results.json"
 ERROR_LOG          = Path(__file__).parent / "error.log"
