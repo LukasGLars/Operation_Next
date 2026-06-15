@@ -10,6 +10,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|
 | 1 | Einride | Business Analyst | CV_Einride | Genererat | 2026-06-15 | https://emp.jobylon.com/jobs/354499-einride-senior-business-analyst/ |
