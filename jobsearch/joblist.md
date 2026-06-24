@@ -14,6 +14,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|
 | 1 | Einride | Business Analyst | CV_Einride | Genererat | 2026-06-15 | https://emp.jobylon.com/jobs/354499-einride-senior-business-analyst/ |
@@ -29,3 +30,6 @@
 | 11 | Colly Verkstadsteknik AB (via Reperio) | Teknisk Säljare | CV_Zeppelin | Identifierad | 2026-06-19 | https://reperiosearch.teamtailor.com/jobs/7820818-teknisk-saljare-till-colly-verkstadsteknik-ab |
 | 12 | Qflow Group (Fritunagruppen) | Entreprenadingenjör – Södertälje | CV_BYGG | Identifierad | 2026-06-19 | https://qflow.teamtailor.com/jobs/7900355-entreprenadingenjor-sodertalje |
 | 13 | Qflow Group (Fritunagruppen) | Senior Entreprenadingenjör – Södertälje | CV_BYGG | Identifierad | 2026-06-19 | https://qflow.teamtailor.com/jobs/7894090-senior-entreprenadingenjor-sodertalje |
+| 14 | Arcos Hydraulik (via Boss Business Partner) | Senior Technical Sales & Project Engineer | CV_Zeppelin | Identifierad | 2026-06-24 | https://bossbusinesspartner.teamtailor.com/jobs/7893630-senior-technical-sales-project-engineer-till-arcos-hydraulik |
+| 15 | Novacura (via SEVR) | IFS / ERP Solution Architect | CV_Einride | Identifierad | 2026-06-24 | https://sevr.teamtailor.com/jobs/7950368-novacura-ifs-erp-solution-architect |
+| 16 | Novacura (via SEVR) | IFS / ERP Business Consultant | CV_Einride | Identifierad | 2026-06-24 | https://sevr.teamtailor.com/jobs/7950463-novacura-ifs-erp-business-consultant |
