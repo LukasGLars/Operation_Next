@@ -15,6 +15,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|
 | 1 | Einride | Business Analyst | CV_Einride | Genererat | 2026-06-15 | https://emp.jobylon.com/jobs/354499-einride-senior-business-analyst/ |
@@ -33,3 +34,5 @@
 | 14 | Arcos Hydraulik (via Boss Business Partner) | Senior Technical Sales & Project Engineer | CV_Zeppelin | Identifierad | 2026-06-24 | https://bossbusinesspartner.teamtailor.com/jobs/7893630-senior-technical-sales-project-engineer-till-arcos-hydraulik |
 | 15 | Novacura (via SEVR) | IFS / ERP Solution Architect | CV_Einride | Identifierad | 2026-06-24 | https://sevr.teamtailor.com/jobs/7950368-novacura-ifs-erp-solution-architect |
 | 16 | Novacura (via SEVR) | IFS / ERP Business Consultant | CV_Einride | Identifierad | 2026-06-24 | https://sevr.teamtailor.com/jobs/7950463-novacura-ifs-erp-business-consultant |
+| 17 | Rekryteringsgruppen | Digital affärsutvecklare | CV | Identifierad | 2026-06-26 | https://rekryteringsgruppen.teamtailor.com/jobs/7949661-digital-affarsutvecklare |
+| 18 | Veidekke | Platschef (Entreprenadingenjör) – Bygg Väst | CV_BYGG | Identifierad | 2026-06-26 | https://veidekke.teamtailor.com/sv/jobs/7958681-platschef-till-bygg-vast |
