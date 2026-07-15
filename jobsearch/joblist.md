@@ -19,6 +19,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|
 | 1 | Einride | Business Analyst | CV_Einride | Genererat | 2026-06-15 | https://emp.jobylon.com/jobs/354499-einride-senior-business-analyst/ |
@@ -41,3 +42,5 @@
 | 18 | SEVR | Customer Success – Fintech | CV_Einride | Identifierad | 2026-07-01 | https://sevr.teamtailor.com/jobs/7997143-customer-success-fintech |
 | 19 | Ecoclime (via Andara Professionals) | Teknisk säljare – Ecoclime Stockholm | CV_Zeppelin | Identifierad | 2026-07-03 | https://andaraprofessionals.teamtailor.com/jobs/7783732-teknisk-saljare-till-ecoclime-i-stockholm |
 | 20 | Lindinvent | Kalkylingenjör | CV_Plymovent | Identifierad | 2026-07-10 | https://jobb.lindinvent.se/jobs/7975463-kalkylingenjor |
+| 21 | Premier Rider AB (via Karisma Rekrytering) | Teknisk Säljare / Area Sales Manager Sverige | CV_Zeppelin | Identifierad | 2026-07-15 | https://jobb.karisma.se/jobs/7850826-teknisk-saljare-area-sales-manager-sverige |
+| 22 | Lindinvent | Kalkylingenjör | CV_Plymovent | Identifierad | 2026-07-15 | https://jobb.lindinvent.se/jobs/7975459-kalkylingenjor |
