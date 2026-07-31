@@ -23,6 +23,7 @@ load_dotenv(Path(__file__).parent.parent / ".env")
 ROOT          = Path(__file__).parent.parent
 JOBLIST_PATH  = ROOT / "jobsearch" / "joblist.md"
 SKILL_PATH       = ROOT / "jobsearch" / "skill" / "generation_skill.md"
+REVIEW_SKILL_PATH = ROOT / "jobsearch" / "skill" / "review_skill.md"
 LETTER_DOCX      = ROOT / "jobsearch" / "letters" / "Lukas_Larsson_Cover_Letter_Einride.docx"
 APPLICATIONS     = ROOT / "jobsearch" / "applications"
 MASTER_CV        = ROOT / "jobsearch" / "cv" / "master_cv.md"
@@ -198,11 +199,10 @@ def fetch_job_posting(url: str) -> str:
         return f"Could not fetch job posting: {e}"
 
 
-def _build_doc_content(cv_base: str, job_url: str) -> list:
+def _build_doc_content(cv_base: str, job_url: str, job_posting_text: str) -> list:
     skill_content      = SKILL_PATH.read_text(encoding="utf-8") if SKILL_PATH.exists() else ""
     master_cv_text     = MASTER_CV.read_text(encoding="utf-8") if MASTER_CV.exists() else ""
     sales_phil_text    = SALES_PHILOSOPHY.read_text(encoding="utf-8") if SALES_PHILOSOPHY.exists() else ""
-    job_posting_text   = fetch_job_posting(job_url)
     cover_letter_text  = read_docx_text(LETTER_DOCX) if LETTER_DOCX.exists() else ""
 
     prompt = (
@@ -212,9 +212,32 @@ def _build_doc_content(cv_base: str, job_url: str) -> list:
         "\n\nCover letter tone reference (match this tone and length):\n" + cover_letter_text +
         "\n\nJob posting URL: " + job_url +
         "\nJob posting content:\n" + job_posting_text +
-        '\n\nGenerate a full tailored CV and cover letter for this role.\n'
+        '\n\nGenerate a full tailored CV and cover letter for this role, in the SAME LANGUAGE\n'
+        'as the job posting above (English posting -> English CV; Swedish posting -> Swedish CV;\n'
+        'per SKILL.md language rules -- never default to Swedish regardless of posting language).\n'
         'Return ONLY a valid JSON object with no other text:\n'
-        '{"cv": "full CV in markdown, in Swedish", "cover_letter": "full cover letter in plain text"}'
+        '{"cv": "full CV in markdown, in the job posting'"'"'s language", "cover_letter": "full cover letter in plain text, same language"}'
+    )
+    return [{"type": "text", "text": prompt}]
+
+
+def _build_review_content(draft_cv: str, draft_cover_letter: str, job_posting_text: str) -> list:
+    """Second pass, per jobsearch/skill/review_skill.md: refines the draft
+    to actually speak to what THIS company is anxious about and to read as
+    written by a native speaker who understood the ad, rather than a
+    translation. Never wired into the generation flow before -- the skill
+    file existed but nothing called it."""
+    review_skill_content = REVIEW_SKILL_PATH.read_text(encoding="utf-8") if REVIEW_SKILL_PATH.exists() else ""
+
+    prompt = (
+        "Review instructions — follow all rules here exactly:\n" + review_skill_content +
+        "\n\nJob posting content:\n" + job_posting_text +
+        "\n\nDraft CV:\n" + draft_cv +
+        "\n\nDraft cover letter:\n" + draft_cover_letter +
+        '\n\nRefine the draft CV and cover letter per the review instructions above. '
+        'Keep the same language they are already written in -- do not translate.\n'
+        'Return ONLY a valid JSON object with no other text:\n'
+        '{"cv": "full refined CV in markdown", "cover_letter": "full refined cover letter in plain text"}'
     )
     return [{"type": "text", "text": prompt}]
 
@@ -266,13 +289,35 @@ def generate():
 
     client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY", ""))
     try:
+        job_posting_text = fetch_job_posting(job_url)
+
         response = client.messages.create(
             model="claude-sonnet-4-6",
             max_tokens=4096,
             system="You are Lukas Larsson's job application assistant. Generate a tailored CV and cover letter using the provided reference documents and instructions. Output only valid JSON.",
-            messages=[{"role": "user", "content": _build_doc_content(cv_base, job_url)}],
+            messages=[{"role": "user", "content": _build_doc_content(cv_base, job_url, job_posting_text)}],
         )
         result = _parse_claude_json(response.content[0].text)
+
+        # Review pass (jobsearch/skill/review_skill.md) -- refines the draft
+        # to speak to what THIS company is actually anxious about and to read
+        # as native, not translated. Falls back to the unreviewed draft on
+        # any failure rather than breaking generation entirely.
+        if result.get("cv") and result.get("cover_letter"):
+            try:
+                review_response = client.messages.create(
+                    model="claude-sonnet-4-6",
+                    max_tokens=4096,
+                    system="You are Lukas Larsson's job application assistant, now reviewing your own draft. Output only valid JSON.",
+                    messages=[{"role": "user", "content": _build_review_content(
+                        result["cv"], result["cover_letter"], job_posting_text)}],
+                )
+                reviewed = _parse_claude_json(review_response.content[0].text)
+                if reviewed.get("cv") and reviewed.get("cover_letter"):
+                    result = reviewed
+            except Exception as e:
+                logging.error(f"Review pass failed, using unreviewed draft: {e}")
+
         try:
             _update_job_row(job_url, {"Status": "Genererat", "Datum": date.today().isoformat()})
         except Exception as e:
