@@ -79,40 +79,19 @@ Mobile-first web app for small VVS sole proprietors to manage customers, jobs, m
 
 ---
 
-### 6. Reactor Core — Portfolio Construction & Thesis Pulse Monitor
-**Personal Project** | [GitHub](https://github.com/LukasGLars/reactor-core-thesis-pulse)
+### 6. Asset Universe — Regime-Conditional Portfolio Research & Live Automation
+**Personal Project** | [GitHub](https://github.com/LukasGLars/asset_universe)
 
-Two-part project: a rigorous quantitative research process to construct an 8-position portfolio from scratch, followed by an automated daily monitoring system that tracks whether the thesis behind each position remains intact.
+Quantitative research and live-automation system for a personal investment portfolio — a macro-regime-conditional return engine, an automated risk-guard framework, and a self-directed empirical research pipeline that ships findings straight into production, not just a backtest report.
 
-**Part 1 — Portfolio Construction**
+- Regime-conditional return engine: classifies market regimes from real yield and credit-spread data (FRED), ranks assets by their empirically conditional forward-return distribution rather than a static historical average
+- Automated crash-protection guard for the core position: layered slow (200-day moving average) + fast (5-day crash trigger) detection, validated both in-sample and out-of-sample across three real crashes (2020, 2022, 2025) via a 20-cell parameter sensitivity sweep — no cherry-picked config
+- Independent second trading edge discovered end-to-end in one session: hypothesis → 1,252-entry historical backtest → live verification against real market data → shipped to production, including catching and fixing a real risk gap (a stale-price execution case) found live mid-build
+- Rigorously empirical: rejected its own initial assumption (a naive symmetric risk threshold) once live evidence showed the real risk was asymmetric — re-tested and rebuilt rather than shipping the easy answer
+- Fully automated: runs twice daily via GitHub Actions, pushes real-time Telegram alerts, self-monitors with an automated health check that has already caught a real production bug before it caused harm
+- 346-test automated suite covering every trading rule and alert path
 
-Portfolio built from a 44-ticker candidate universe across commodities, semiconductors, infrastructure, defensives, and EM. No thesis first — let Sharpe, Calmar, and total return determine what belongs and at what weight.
-
-- Screened 44 liquid USD-denominated tickers across 7 categories down to 8 final positions
-- Mean-variance optimization (SLSQP) with 80 random restarts across 3Y, 5Y, and 10Y windows
-- 6-regime historical analysis: Pre-COVID Bull, COVID Crash, COVID Recovery, Rate Hike/Inflation, AI Bull, Rate Cut
-- Leave-one-out position audit: each holding tested for Sharpe contribution, gold correlation, regime wins, and role coverage
-- Gold cap sensitivity tested at 7 levels (10%–uncapped) across all three windows
-- Gold-only and combined precious metals stress tests (−10% to −50% shocks)
-- Quarterly rolling 3Y optimization to test weight stability over time
-- Out-of-sample validation on 2009–2016 data (optimizer never saw): OOS Sharpe 0.955–1.057
-- DCA simulation in SEK: 1,000,000 kr initial + 6,000 kr/month from 2018, with live FX conversion
-- v2 → v3 versioning with full head-to-head comparison on all metrics
-- **10Y results (fixed weights):** Sharpe 1.85 | Ann. Return 30.1% | Max Drawdown −24.9%
-
-**Part 2 — Live Thesis Pulse Monitor**
-
-Automated daily monitoring against the constructed portfolio. Runs on GitHub Actions every weekday morning and delivers a structured email with AI-generated interpretation and raw data.
-
-- Monitors 8 positions across 4 buckets: Hedges (Gold, Silver), Carry (LLY, WMT, JNJ), Cyclical (CCJ), Convexity (VRT, AVGO)
-- FRED: 10Y real yield, WTI spot, uranium price; Yahoo Finance: prices, 52wH drawdowns, 1/3/12M momentum
-- EDGAR XBRL: quarterly/annual revenue per position; hyperscaler capex (MSFT, GOOGL, AMZN, META) as AI spend proxy
-- IMF IFS / WGC: central bank gold demand — monthly TTM net purchases vs prior year
-- Oil term structure: WTI spot vs 12-month forward — STRESS / ELEVATED / NORMAL / CONTANGO signal
-- Claude AI (Haiku): interprets pre-computed facts against thesis document; outputs per-bucket verdict with OVERALL intact/flag/review
-- Rules-based invalidation thresholds with velocity tracking (weeks to breach at current pace)
-
-**Stack:** Python, FRED API, EDGAR XBRL API, Yahoo Finance, IMF IFS API, Anthropic Claude API, GitHub Actions, scipy (SLSQP), pandas, openpyxl, smtplib
+**Stack:** Python, pandas, parquet/DuckDB, FRED API, yfinance, GitHub Actions, Telegram Bot API, pytest
 
 ---
 
@@ -144,4 +123,4 @@ Based in Gothenburg. Working with Tomas Gustafsson (PExa / Micropos Medical) and
 
 ---
 
-*Last updated: June 2026*
+*Last updated: July 2026*

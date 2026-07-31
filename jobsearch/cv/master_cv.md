@@ -89,9 +89,9 @@ Engineer with a strong analytical and commercial profile. I work best when I get
 Internal Flask web app with three tools: PDF order extraction (Claude Vision, server-side PyMuPDF with vision fallback), axle matching (4-stage fallback algorithm distributing specialist knowledge to the full team), and Ask Valeryd (TF-IDF + Claude Haiku rerank + Sonnet synthesis over ~7,500 entries from resolved customer cases). Used daily by 5 people. Reduced order entry from 3–10 minutes to under one minute.
 *Stack: Python, Flask, Claude API (Vision + Haiku + Sonnet), scikit-learn, vanilla JS*
 
-**Reactor Core — Portfolio Construction & Thesis Pulse Monitor (Personal Project)**
-Two-part project: quantitative portfolio construction from a 44-ticker universe using mean-variance optimisation (SLSQP, 80 restarts, 3Y/5Y/10Y windows), followed by an automated daily monitoring system running on GitHub Actions. 10Y results: Sharpe 1.85 | Ann. Return 30.1% | Max Drawdown −24.9%.
-*Stack: Python, FRED API, EDGAR XBRL, Yahoo Finance, Anthropic Claude API, GitHub Actions, scipy, pandas*
+**Asset Universe — Regime-Conditional Portfolio Research & Live Automation (Personal Project)**
+Quantitative research and live-automation system for a personal investment portfolio: a macro-regime-conditional return engine (FRED real yield/credit spreads), an automated crash-protection guard validated out-of-sample across three real crashes (2020, 2022, 2025), and a second trading edge discovered and shipped in one session — hypothesis, 1,252-entry backtest, live verification, and a real risk gap caught and fixed along the way. Runs twice daily via GitHub Actions with real-time Telegram alerts and automated health monitoring; 346-test automated suite.
+*Stack: Python, pandas, parquet/DuckDB, FRED API, yfinance, GitHub Actions, Telegram Bot API, pytest*
 
 **VVS Invoice App (Personal Project)**
 Mobile-first web app for plumbing contractors. Full customer, job, and invoice management with ROT deduction calculations, PDF generation meeting all 14 Swedish mandatory invoice fields, Claude Vision OCR for receipt extraction, and automatic price benchmarking. Self-hosted on Linux.
