@@ -22,6 +22,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|
 | 1 | Einride | Business Analyst | CV_Einride | Genererat | 2026-06-15 | https://emp.jobylon.com/jobs/354499-einride-senior-business-analyst/ |
@@ -41,5 +42,5 @@
 | 15 | Lindinvent | Kalkylingenjör | CV_Plymovent | Identifierad | 2026-07-10 | https://jobb.lindinvent.se/jobs/7975463-kalkylingenjor |
 | 16 | Premier Rider AB (via Karisma Rekrytering) | Teknisk Säljare / Area Sales Manager Sverige | CV_Zeppelin | Identifierad | 2026-07-15 | https://jobb.karisma.se/jobs/7850826-teknisk-saljare-area-sales-manager-sverige |
 | 17 | Lindinvent | Kalkylingenjör | CV_Plymovent | Identifierad | 2026-07-15 | https://jobb.lindinvent.se/jobs/7975459-kalkylingenjor |
-| 18 | Securitas | Business Analyst (Client Engagement) | CV_Einride | Identifierad | 2026-07-24 | https://securitas.teamtailor.com/jobs/7845272-business-analyst-client-engagement |
+| 18 | Securitas | Business Analyst (Client Engagement) | CV_Einride | Genererat | 2026-07-31 | https://securitas.teamtailor.com/jobs/7845272-business-analyst-client-engagement |
 | 19 | Victoriahem | Affärsutvecklare med kompetens inom Fastighets-IT | CV | Identifierad | 2026-07-29 | https://victoriahem.teamtailor.com/jobs/7621512-affarsutvecklare-med-kompetens-inom-fastighets-it |
