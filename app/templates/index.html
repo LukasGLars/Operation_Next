@@ -168,9 +168,11 @@
 
   function deleteJob(e, btn) {
     e.stopPropagation();
+    if (btn.disabled) return;  // already deleting this row -- ignore a second click
     var company = btn.dataset.company;
     var url     = btn.dataset.url;
     if (!confirm("Ta bort " + company + " från listan?")) return;
+    btn.disabled = true;
     fetch("/delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -180,13 +182,17 @@
     .then(function(data) {
       if (data.ok) {
         var row = btn.closest("tr");
-        row.parentNode.removeChild(row);
+        row.remove();  // no-op if already removed, unlike parentNode.removeChild
         rows = rows.filter(function(r) { return r !== row; });
       } else {
+        btn.disabled = false;
         alert("Kunde inte ta bort: " + (data.error || "okänt fel"));
       }
     })
-    .catch(function(e) { alert("Fel: " + e.message); });
+    .catch(function(e) {
+      btn.disabled = false;
+      alert("Fel: " + e.message);
+    });
   }
 </script>
 
