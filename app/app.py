@@ -221,6 +221,35 @@ def _build_doc_content(cv_base: str, job_url: str, job_posting_text: str) -> lis
     return [{"type": "text", "text": prompt}]
 
 
+def _recent_edited_examples(n: int = 2) -> str:
+    """Most recent human-approved edits, paired with their AI draft where
+    available -- the diff between draft and edit is the clearest signal of
+    what actually gets rejected (a canned opening line, a repeated
+    rhetorical tic, etc.), stronger than just showing a finished example.
+    Looks at cover letters only -- that's where the AI-sounding tells
+    showed up in practice; the CV is more structured/less prose-heavy."""
+    edited_files = sorted(
+        APPLICATIONS.glob("*/cover_letter_edited.md"),
+        key=lambda p: p.stat().st_mtime, reverse=True,
+    )[:n]
+    if not edited_files:
+        return ""
+
+    blocks = []
+    for i, edited_path in enumerate(edited_files, 1):
+        edited_text = edited_path.read_text(encoding="utf-8")
+        original_path = edited_path.parent / "cover_letter_original.md"
+        if original_path.exists():
+            original_text = original_path.read_text(encoding="utf-8")
+            blocks.append(
+                f"Example {i} -- AI draft (REJECTED patterns, avoid repeating these):\n{original_text}\n\n"
+                f"Example {i} -- human-approved final version (match this voice instead):\n{edited_text}"
+            )
+        else:
+            blocks.append(f"Example {i} -- human-approved final version (match this voice):\n{edited_text}")
+    return "\n\n---\n\n".join(blocks)
+
+
 def _build_review_content(draft_cv: str, draft_cover_letter: str, job_posting_text: str) -> list:
     """Second pass, per jobsearch/skill/review_skill.md: refines the draft
     to actually speak to what THIS company is anxious about and to read as
@@ -228,9 +257,14 @@ def _build_review_content(draft_cv: str, draft_cover_letter: str, job_posting_te
     translation. Never wired into the generation flow before -- the skill
     file existed but nothing called it."""
     review_skill_content = REVIEW_SKILL_PATH.read_text(encoding="utf-8") if REVIEW_SKILL_PATH.exists() else ""
+    recent_examples = _recent_edited_examples()
 
     prompt = (
         "Review instructions — follow all rules here exactly:\n" + review_skill_content +
+        ("\n\nRecent human-approved edits -- the AI draft/final pairs below show exactly what gets "
+         "rejected in practice (canned opening lines, repeated rhetorical devices, translated-sounding "
+         "phrasing). Do not repeat any pattern shown as rejected, and match the voice of the approved "
+         "versions:\n" + recent_examples if recent_examples else "") +
         "\n\nJob posting content:\n" + job_posting_text +
         "\n\nDraft CV:\n" + draft_cv +
         "\n\nDraft cover letter:\n" + draft_cover_letter +

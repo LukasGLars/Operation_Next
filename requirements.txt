@@ -4,3 +4,5 @@ requests
 python-dotenv
 beautifulsoup4
 python-docx
+markdown
+xhtml2pdf
