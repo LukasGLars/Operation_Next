@@ -25,6 +25,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|
 | 1 | CheckWatt | CSM / Greentech | CV_Einride | Genererat | 2026-06-15 | https://collaborate.checkwatt.se/jobs/4669704-customer-success-manager-till-checkwatt |
