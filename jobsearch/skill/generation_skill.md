@@ -76,15 +76,24 @@ Always choose 2–3 results that best fit the role.
 - No filler.
 - Match the tone and length of the approved reference cover letter below.
 - Never use these phrases: leverage, synergies, passionate, driven, dynamic, results-oriented, team player.
+- Never use the same rhetorical device more than once in one document — most commonly a
+  contrastive "not X, but Y" / "inte X, utan Y" framing, or a "show, don't just tell"
+  construction. One use can read as a natural turn of phrase; two or more in one letter
+  reads as a template. If you notice yourself reaching for this pattern a second time,
+  rewrite that sentence in a completely different structure instead.
 
 ### Opening line
-Always start with the opening line in the language of the job posting:
+Write a FRESH opening for every application — never reuse the same sentence across
+different companies, even as a "safe default." A repeated opening line is one of the
+clearest tells that a letter is templated, not written for this employer.
 
-Swedish:
-> Jag har tagit arbetet på Valeryd så långt jag kan och söker nu nästa utmaning.
+The opening must do two things specific to THIS role: (1) a brief, natural reason
+you're looking now, and (2) something concrete about this company or role — not
+generic praise. Vary the sentence structure and the specific detail referenced each
+time; do not settle into a new fixed template phrase either.
 
-English:
-> I have taken the work at Valeryd as far as I can and I am now looking for the next challenge.
+Do NOT use, in any language: "I am writing to apply for...", "I have taken the work
+at Valeryd as far as I can...", or any structurally identical variant of either.
 
 ### Structure
 - Maximum 4 paragraphs.

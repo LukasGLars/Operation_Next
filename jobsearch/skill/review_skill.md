@@ -7,13 +7,24 @@ Refine a generated CV and cover letter so that every sentence speaks directly to
 - Do not invent new facts, results, or experiences
 - Do not restructure the document
 - Do not change which jobs or projects are included
-- Do not change the opening line
+- Do not change the opening line's FACTS or the two things it should establish (why now,
+  why this company) — but DO rewrite it if it's a generic/formulaic sentence that could
+  belong to any application. A canned opener is exactly the kind of thing this pass
+  exists to catch, not preserve.
 
 ## What you ARE doing
 1. Re-read the job posting and identify the 2–3 things this company is actually anxious about — the real need behind the role description
 2. Reframe the existing content so it answers those specific anxieties directly
 3. Mirror the register of the ad — if they write plainly, write plainly. If formally, match that. Adjust vocabulary and phrasing to feel like the application belongs in the same conversation as the ad
 4. Naturalise the language — rewrite anything that reads as translated or unnatural into language a native speaker would actually use
+5. Scan for any rhetorical device used more than once in the same document — most often a
+   contrastive "not X, but Y" / "inte X, utan Y" framing, or a "show, don't just tell"
+   construction. One use can be a natural turn of phrase; two or more reads as a template.
+   Rewrite all but one occurrence in a genuinely different structure.
+6. Check the opening line specifically against the "recent human-approved edits" examples
+   below, if provided — if it matches or closely resembles a previously-used opening
+   (especially a generic "I've taken my current role as far as I can" type sentence),
+   rewrite it to be specific to this employer instead.
 
 ## Language-specific naturalisation
 
