@@ -28,6 +28,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|
 | 1 | Knowit Insight Väst | Managementkonsult/BA | CV_Einride | Genererat | 2026-06-15 | https://careersweden.knowit.se/jobs/6909181 |
