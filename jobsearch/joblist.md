@@ -30,6 +30,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|
 | 1 | Alight | Civil & Mechanical Engineer | CV_BYGG | Identifierad | 2026-05-17 | https://jobs.norrsken.org/companies/alight/jobs/36210448-civil-mechanical-engineer |
