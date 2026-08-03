@@ -32,6 +32,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|
 | 1 | Alight | Civil & Mechanical Engineer | CV_BYGG | Identifierad | 2026-05-17 | https://jobs.norrsken.org/companies/alight/jobs/36210448-civil-mechanical-engineer |
@@ -41,7 +42,7 @@
 | 5 | Arcos Hydraulik (via Boss Business Partner) | Senior Technical Sales & Project Engineer | CV_Zeppelin | Identifierad | 2026-06-24 | https://bossbusinesspartner.teamtailor.com/jobs/7893630-senior-technical-sales-project-engineer-till-arcos-hydraulik |
 | 6 | Novacura (via SEVR) | IFS / ERP Solution Architect | CV_Einride | Identifierad | 2026-06-24 | https://sevr.teamtailor.com/jobs/7950368-novacura-ifs-erp-solution-architect |
 | 7 | Novacura (via SEVR) | IFS / ERP Business Consultant | CV_Einride | Identifierad | 2026-06-24 | https://sevr.teamtailor.com/jobs/7950463-novacura-ifs-erp-business-consultant |
-| 8 | Rekryteringsgruppen | Digital affärsutvecklare | CV | Identifierad | 2026-06-26 | https://rekryteringsgruppen.teamtailor.com/jobs/7949661-digital-affarsutvecklare |
+| 8 | Rekryteringsgruppen | Digital affärsutvecklare | CV | Genererat | 2026-08-03 | https://rekryteringsgruppen.teamtailor.com/jobs/7949661-digital-affarsutvecklare |
 | 9 | Veidekke | Platschef (Entreprenadingenjör) – Bygg Väst | CV_BYGG | Identifierad | 2026-06-26 | https://veidekke.teamtailor.com/sv/jobs/7958681-platschef-till-bygg-vast |
 | 10 | SEVR | Customer Success – Fintech | CV_Einride | Genererat | 2026-08-03 | https://sevr.teamtailor.com/jobs/7997143-customer-success-fintech |
 | 11 | Ecoclime (via Andara Professionals) | Teknisk säljare – Ecoclime Stockholm | CV_Zeppelin | Identifierad | 2026-07-03 | https://andaraprofessionals.teamtailor.com/jobs/7783732-teknisk-saljare-till-ecoclime-i-stockholm |
