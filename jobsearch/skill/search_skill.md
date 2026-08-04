@@ -43,9 +43,18 @@ Reject roles that:
 - Are at management consulting firms expecting prior consulting career, including KPMG, Accenture, McKinsey, and BCG.
 
 ## Location Rules
-- Primary target: roles within a maximum 40 minute commute from Alingsås.
-- Accept anywhere in Sweden if hybrid or remote is explicitly stated.
-- Reject on-site roles if the commute from Alingsås exceeds 40 minutes.
+- Primary target: roles within a maximum 40 minute commute from Alingsås —
+  Alingsås, Göteborg, Partille, Lerum, Mölndal, Mölnlycke, Härryda, Landvetter,
+  Vårgårda, Sollebrunn, Gråbo, Floda, Bollebygd, Borås, Ale, Lilla Edet.
+- Accept fully remote roles anywhere.
+- Hybrid counts only when the office is within the 40 minute range. A Stockholm
+  hybrid role still means two or three days a week in Stockholm — reject it.
+- Reject on-site and hybrid roles everywhere else — Stockholm, Malmö, Umeå,
+  Södertälje, Borlänge, Örnsköldsvik and the like — regardless of role fit.
+- Always report the city the ad states in the `location` field, or "Hybrid" /
+  "Remote" when the ad states that instead. The pipeline enforces this rule in
+  code (`location_verdict` in `pipeline/search.py`), so a missing or vague
+  location gets the role dropped.
 
 ## Validation Rules
 A role is approved only if all of the following are true:
