@@ -59,6 +59,32 @@ Always choose 2–3 results that best fit the role.
 - Job titles must reflect what is accurate and role-relevant, not what sounds impressive.
 - Do not include profile.png or any image references — output is markdown only.
 
+### Corrections made by hand every time — get these right in the draft
+Each rule below is a change the candidate has actually made to a generated CV.
+
+- **Use the real job title, never an upgraded one.** Hercules is *Arbetsledare*, not
+  Platschef or Site Manager. Valeryd is *Affärsutvecklare & Automation*, not Business
+  Developer & Ingenjör. When unsure, pick the more modest of two readings.
+- **Use the brand the company is known by** — Valeryd.se, Bygghemma.se, Polarpumpen.se —
+  not the legal or internal entity name (Svensk Installationspartner / BHG Group).
+- **The headline mirrors the ad's job title.** An ad for "Digital affärsutvecklare" gets
+  a CV headed *Digital Affärsutvecklare & Dataanalytiker*, not a generic three-role stack.
+- **Core competencies: maximum 4, written as stances, not tools.** Not "Power BI —
+  dashboards, rapporter", not "Python (pandas, scikit-learn, Flask)". Instead:
+  *Dataanalys för beslut, inte presentation*. *Skalbara modeller*.
+  *AI-integration i processer*. Name a tool only if the ad names it first.
+- **Maximum 3 bullets per role.** Cut the weakest rather than compressing all of them.
+- **No internal tech names in CV bullets** — not TF-IDF, Claude Vision, Haiku rerank,
+  Flask, scikit-learn. Describe what colleagues or customers get instead: "Hjälper
+  kollegorna handlägga orders snabbare och utan fel (3–10 min → under 1 min)". A real
+  question a user asks the tool is worth more than the architecture behind it.
+- **Say "vi" for team results.** "Vi ökade sökmatchningen med 155 %", not "jag ökade".
+- **Commas, not em-dashes, mid-sentence.** "Valeryd Toolkit, en intern webbapp i daglig
+  drift", not "Valeryd Toolkit – en intern webbapp". The dash habit is the single most
+  frequent edit.
+- **Do not invent headcount or reach** ("used daily by 5 people") unless it is in
+  master_cv.md.
+
 ### Language rules
 - Write in the same language as the job posting. English posting → English CV and cover letter. Swedish posting → Swedish CV and cover letter.
 - When writing in Swedish: avoid directly translated verbs that sound unnatural, such as "förflyttar", "transformerar", or "förändrar hur X fungerar". Describe what the company concretely does instead of using abstract impact language.
@@ -107,6 +133,21 @@ at Valeryd as far as I can...", or any structurally identical variant of either.
 2. Most relevant key result for the role — concrete, specific, with numbers where possible.
 3. Second relevant result or broader context. For technical sales roles, include a paragraph reflecting the sales philosophy: SPIN methodology, ROI focus, systematic approach to pipeline.
 4. Closing: one sentence inviting conversation.
+
+### Corrections made by hand every time — get these right in the draft
+- **Include one paragraph on what is genuinely different about this candidate**, stated
+  plainly and tied to the role. The approved Rekryteringsgruppen letter added: already
+  working at the boundary of data and AI, with Valeryd Toolkit as a working AI agent
+  answering questions inside the workflow. This paragraph was added by hand because the
+  draft did not have one.
+- **No header block.** Do not emit name, contact details, "Ansökan:" or the company line
+  at the top — the PDF template adds those. Start at the greeting.
+- **Commas, not em-dashes, mid-sentence** — same rule as the CV.
+- **Cut intensifiers**: "särskilt", "verkligen", "väldigt". "Det som tilltalar mig med er
+  roll", not "Det som tilltalar mig särskilt med er roll".
+- **Name the commercial outcome, not only the technical one.** "med ökad försäljning och
+  minskning av felbeställningar som följd" was added by hand to a result that originally
+  mentioned only the error reduction.
 
 ### Never
 - Start with "I am writing to apply for...".
