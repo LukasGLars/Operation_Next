@@ -4,6 +4,7 @@ Read `MEMORY.md` first. It carries the current state, decisions and gotchas.
 
 ## Layout
 - `pipeline/search.py` — finds and validates postings, uses `jobsearch/skill/search_skill.md`
+- `pipeline/jobtech.py` — second source: Arbetsförmedlingen's open JobSearch API
 - `pipeline/updater.py` — writes `jobsearch/joblist.md`
 - `pipeline/mailer.py` — daily digest from `results.json`
 - `app/app.py` — Flask UI on port 5003, generates CV + cover letter, uses `generation_skill.md` then `review_skill.md` as a second pass
@@ -24,6 +25,21 @@ Read `MEMORY.md` first. It carries the current state, decisions and gotchas.
   `Remote status:` line.
 - Keep `search_skill.md`'s Location Rules in sync with the code. The skill text
   steers the search model; the code is what actually enforces.
+
+## Job sources
+Two, merged into one candidate list before the shared validation stages:
+- **Claude web search** — ATS-hosted ads. Queries live in `QUERIES_PASS1/2/3`.
+  `max_uses` on the tool must cover the query count, or the tail of every pass
+  silently never runs.
+- **JobTech / Platsbanken** (`pipeline/jobtech.py`) — most of the Swedish market.
+  Always quote role queries: unquoted `product specialist` matches "HR-specialist"
+  and "Legitimerad Läkare" (271 hits vs 2). A role must be named in the headline
+  or the taxonomy occupation, not merely mentioned in the ad text.
+
+JobTech candidates carry `_source: "jobtech"` and a prebuilt `_page_text`, so they
+skip `_url_looks_specific` (their job id often sits in a query parameter) but are
+still checked for careers-hub URLs and reachability. Keys prefixed `_` are
+stripped before `results.json` is written.
 
 ## Gotchas
 - The app auto-commits and pushes `jobsearch/` on use. Commits titled

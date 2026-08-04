@@ -95,6 +95,51 @@ valid Göteborg roles (both Novacura ads) were silently dropped.
 - `page_location()` must use `[ \t]*`, not `\s*`. With `\s*` a blank
   `Location:` line swallowed the newline and captured `Description:` as the city.
 
+## Second job source — JobTech / Platsbanken (August 2026)
+
+### Why
+After the location filter the joblist was down to 5 roles, three of them
+borderline. The web search alone only reaches what it can find on ATS platforms.
+
+### What was built
+`pipeline/jobtech.py` — Arbetsförmedlingen's open JobSearch API
+(`jobsearch.api.jobtechdev.se`, no auth). Candidates are shaped exactly like the
+search model's output and merged into the same dedup → reachability → location →
+validation stages. A live dry run returned 30 in-range, on-topic roles in
+Göteborg, Alingsås, Mölndal and Borås, against 5 rows in the whole joblist.
+
+Filtering happens in this order, cheapest first:
+1. Quoted role queries, server-side municipality filter (concept ids in
+   `COMMUTABLE_MUNICIPALITY_IDS`), newest first.
+2. Deterministic relevance — headline or taxonomy occupation must name the role;
+   headline/employer exclude rules for support, phone sales, internships and the
+   management consultancies.
+3. The location gate, injected as `location_ok` so jobtech does not import
+   search.py. It runs *before* the cap, otherwise the nationwide remote pass
+   fills the cap with Stockholm ads.
+4. One batched Claude call (`judge_fit`) for the exclude rules that need reading.
+
+### Gotchas found the hard way
+- Unquoted free text is useless: `product specialist` returns 271 hits including
+  "HR-specialist" and "Legitimerad Läkare"; `"product specialist"` returns 2.
+- Platsbanken's own ad pages are client-side rendered — fetching one returns a
+  cookie notice, ~379 characters. Never use `webpage_url` as the joblist URL; use
+  the employer apply URL, normalised to the posting page where the ATS path
+  carries the id. Query-string ids (recman, ponty) must be kept intact.
+- `remote_work` in the API does not distinguish hybrid from fully remote, so no
+  remote status is synthesised — the ad text is passed through and
+  `location_verdict` stays the only place that decides.
+- Ads applied to via Arbetsförmedlingen (`via_af: true`) have no employer URL and
+  are dropped; there would be nothing for document generation to read.
+- Same role often appears twice under different ad ids, so candidates are
+  deduplicated on (company, role) as well as URL.
+
+### Also fixed here
+`max_uses` on the web_search tool was hardcoded to 8 while the query lists held
+12, 8 and 12 — roughly a third of every pass never ran and nothing logged it. Now
+`len(queries) + 2`. Queries were also retuned to the region plus explicit remote,
+since Sweden-wide on-site results are discarded by the location gate anyway.
+
 ## Pending / known issues
 - Review button not yet built (next session)
 - Valeryd Toolkit deployment discussed — Railway recommended over Vercel (PyMuPDF native binaries, timeout risk on serverless)
