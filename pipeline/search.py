@@ -11,8 +11,10 @@ from pathlib import Path
 
 try:                                  # run as a script from pipeline/
     import jobtech
+    from llm_json import TruncatedResponse, parse_json_array
 except ImportError:                   # imported as pipeline.search (tests, CI)
     from pipeline import jobtech
+    from pipeline.llm_json import TruncatedResponse, parse_json_array
 
 ROOT               = Path(__file__).parent.parent
 JOBLIST_PATH       = ROOT / "jobsearch" / "joblist.md"
@@ -123,6 +125,11 @@ QUERIES_PASS3 = [
 ]
 
 SEARCH_TIMEOUT_SECS = 300
+
+# One call for every candidate does not fit: a run with 32 candidates truncated
+# its verdict array and every candidate was dropped as uncertain.
+VALIDATION_CHUNK_SIZE = 8
+VALIDATION_MAX_TOKENS = 4096
 
 
 # ── Loaders ────────────────────────────────────────────────
@@ -422,8 +429,50 @@ def visible_page_text(url):
         return ""
 
 
+def _validate_chunk(entries, validation_skill):
+    """One validation call. Returns dict url -> (verdict, reason)."""
+    items = "\n\n".join(
+        f"--- URL {i+1} ---\nURL: {e['url']}\nPage content:\n{e['content'][:2000]}"
+        for i, e in enumerate(entries)
+    )
+
+    prompt = (
+        f"Validate each of the following {len(entries)} URLs against the skill rules.\n\n"
+        f"{items}\n\n"
+        "Return a JSON array with one object per URL in the same order. Keep each "
+        "reason under 12 words:\n"
+        '[{"url": "...", "verdict": "valid|invalid|uncertain", "reason": "..."}]'
+    )
+
+    client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY", ""))
+    for attempt in range(1, 4):
+        try:
+            response = client.messages.create(
+                model="claude-sonnet-4-6",
+                max_tokens=VALIDATION_MAX_TOKENS,
+                system=validation_skill,
+                messages=[{"role": "user", "content": prompt}],
+            )
+            results = parse_json_array(response.content[0].text)
+            return {r["url"]: (r.get("verdict", "uncertain"), r.get("reason", "")) for r in results}
+        except Exception as exc:
+            is_429 = "429" in str(exc)
+            if is_429 and attempt < 3:
+                wait = 15 * attempt
+                print(f"  429 rate limit — retrying batch validation in {wait}s (attempt {attempt}/3)")
+                time.sleep(wait)
+            else:
+                label = "truncated" if isinstance(exc, TruncatedResponse) else "failed"
+                logging.error(f"Batch URL validation {label} (attempt {attempt}): {exc}")
+                return {e["url"]: ("uncertain", f"validation error: {str(exc)[:60]}") for e in entries}
+
+
 def batch_validate_urls(candidates, validation_skill):
-    """Validate all candidate URLs in a single Claude call. Returns dict url -> (verdict, reason)."""
+    """Validate candidate URLs in chunks. Returns dict url -> (verdict, reason).
+
+    Chunked because one call for everything does not fit: a run with 32
+    candidates truncated its verdict array and every single candidate was
+    dropped as uncertain."""
     if not validation_skill or not candidates:
         return {c.get("url", ""): ("uncertain", "no skill or no candidates") for c in candidates}
 
@@ -438,45 +487,13 @@ def batch_validate_urls(candidates, validation_skill):
     if not entries:
         return {}
 
-    items = "\n\n".join(
-        f"--- URL {i+1} ---\nURL: {e['url']}\nPage content:\n{e['content'][:2000]}"
-        for i, e in enumerate(entries)
-    )
-
-    prompt = (
-        f"Validate each of the following {len(entries)} URLs against the skill rules.\n\n"
-        f"{items}\n\n"
-        "Return a JSON array with one object per URL in the same order:\n"
-        '[{"url": "...", "verdict": "valid|invalid|uncertain", "reason": "..."}]'
-    )
-
-    client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY", ""))
-    for attempt in range(1, 4):
-        try:
-            response = client.messages.create(
-                model="claude-sonnet-4-6",
-                max_tokens=2048,
-                system=validation_skill,
-                messages=[{"role": "user", "content": prompt}],
-            )
-            text = response.content[0].text.strip()
-            if text.startswith("```"):
-                text = re.sub(r"^```(?:json)?\n?", "", text)
-                text = re.sub(r"\n?```$", "", text)
-            match = re.search(r'\[.*\]', text, re.DOTALL)
-            if not match:
-                raise ValueError(f"No JSON array in response: {text[:200]}")
-            results = json.loads(match.group())
-            return {r["url"]: (r.get("verdict", "uncertain"), r.get("reason", "")) for r in results}
-        except Exception as exc:
-            is_429 = "429" in str(exc)
-            if is_429 and attempt < 3:
-                wait = 15 * attempt
-                print(f"  429 rate limit — retrying batch validation in {wait}s (attempt {attempt}/3)")
-                time.sleep(wait)
-            else:
-                logging.error(f"Batch URL validation failed (attempt {attempt}): {exc}")
-                return {entry["url"]: ("uncertain", f"validation error: {str(exc)[:60]}") for entry in entries}
+    verdicts = {}
+    chunks = [entries[i:i + VALIDATION_CHUNK_SIZE]
+              for i in range(0, len(entries), VALIDATION_CHUNK_SIZE)]
+    for i, chunk in enumerate(chunks, 1):
+        print(f"  Validating chunk {i}/{len(chunks)} ({len(chunk)} URL(s))...")
+        verdicts.update(_validate_chunk(chunk, validation_skill))
+    return verdicts
 
 
 # ── Claude web search ──────────────────────────────────────
@@ -601,12 +618,13 @@ Respond with ONLY a JSON array (empty array if no qualifying roles found):
         if hasattr(block, "text"):
             text += block.text
 
-    match = re.search(r'\[.*?\]', text, re.DOTALL)
-    if match:
-        try:
-            return json.loads(match.group())
-        except json.JSONDecodeError as e:
-            logging.error(f"JSON parse failed ({pass_label}): {e} — raw: {text[:300]}")
+    try:
+        return parse_json_array(text)
+    except TruncatedResponse as e:
+        logging.error(f"Search response truncated ({pass_label}): {e}")
+        print(f"  ERROR: search response truncated ({pass_label}) — raise max_tokens")
+    except Exception as e:
+        logging.error(f"JSON parse failed ({pass_label}): {e} — raw: {text[:300]}")
     return []
 
 
@@ -683,7 +701,7 @@ def search_new_jobs():
     try:
         jt_candidates = jobtech.fetch_candidates(known_urls, location_ok=location_verdict)
         print(f"  JobTech returned {len(jt_candidates)} candidate(s) in range")
-        jt_candidates = jobtech.judge_fit(jt_candidates, skill_content)
+        jt_candidates = jobtech.judge_fit(jt_candidates, skill_content, errors=run_errors)
         print(f"  JobTech after role-fit judgement: {len(jt_candidates)}")
         jobtech_candidate_count = len(jt_candidates)
         raw_candidates.extend(jt_candidates)
