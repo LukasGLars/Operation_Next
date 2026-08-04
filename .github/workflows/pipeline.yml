@@ -3,6 +3,11 @@ on:
   schedule:
     - cron: "0 5 * * 3,5"   # Wednesday and Friday 07:00 CET
   push:
+    # branches is required: GitHub ignores paths filters for tag pushes, so
+    # without it every `git push origin vX.Y.Z` ran the whole pipeline — and
+    # failed at the commit step, because a tag checkout is a detached HEAD.
+    branches:
+      - main
     paths:
       - "jobsearch/skill/SKILL.md"
       - "jobsearch/skill/URL_VALIDATION_SKILL.md"
