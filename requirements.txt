@@ -6,3 +6,4 @@ beautifulsoup4
 python-docx
 markdown
 xhtml2pdf
+pytest
