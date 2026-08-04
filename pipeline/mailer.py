@@ -26,22 +26,19 @@ STAT_LABELS = [
 ]
 
 
-def should_send(new_jobs, closed_jobs, errors):
-    """Mail on failures and on news only. A clean run with nothing new stays
-    silent — a dead pipeline still reports, because a missing or stale
-    results.json counts as an error, and a hard crash fails the Actions job."""
-    return bool(new_jobs or closed_jobs or errors)
+def should_send(new_jobs, errors):
+    """Mail on new roles and on failures only. Closed ads are still recorded in
+    the joblist, they just do not warrant a mail. A dead pipeline still reports,
+    because a missing or stale results.json counts as an error, and a hard crash
+    fails the Actions job."""
+    return bool(new_jobs or errors)
 
 
-def build_subject(new_jobs, closed_jobs, errors):
+def build_subject(new_jobs, errors):
     today = date.today().isoformat()
     if errors:
         return f"Operation Next — FEL I PIPELINE ({len(errors)}) {today}"
-    if new_jobs:
-        return f"Operation Next — {len(new_jobs)} nya roller {today}"
-    if closed_jobs:
-        return f"Operation Next — inga nya roller, {len(closed_jobs)} stängda {today}"
-    return f"Operation Next — inga nya roller {today}"
+    return f"Operation Next — {len(new_jobs)} nya roller {today}"
 
 
 def stale_warning(timestamp):
@@ -126,8 +123,8 @@ def send_digest():
         if stale:
             errors.append(stale)
 
-    if not should_send(new_jobs, closed_jobs, errors):
-        print("  Clean run, nothing new — no mail sent")
+    if not should_send(new_jobs, errors):
+        print("  No new roles and no errors — no mail sent")
         return
 
     # Credentials
@@ -141,7 +138,7 @@ def send_digest():
         return
 
     # Build message — only reached when there is news or a failure to report.
-    subject = build_subject(new_jobs, closed_jobs, errors)
+    subject = build_subject(new_jobs, errors)
     body    = build_body(new_jobs, closed_jobs, stats, errors)
 
     msg = MIMEMultipart()

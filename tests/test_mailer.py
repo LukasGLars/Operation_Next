@@ -13,25 +13,29 @@ STATS = {"web_candidates": 4, "jobtech_candidates": 30, "reachable": 28,
 
 
 def test_errors_dominate_the_subject():
-    subject = build_subject([JOB], [], ["web search pass 'ATS-targeted' failed: 429"])
+    subject = build_subject([JOB], ["web search pass 'ATS-targeted' failed: 429"])
     assert "FEL I PIPELINE" in subject
 
 
-def test_only_failures_and_news_are_mailed():
-    assert should_send([JOB], [], [])                    # new roles
-    assert should_send([], [], ["JobTech source failed"])  # failure
-    assert should_send([], [JOB], [])                    # a tracked ad closed
-    assert not should_send([], [], [])                   # clean, nothing new
+def test_only_new_roles_and_failures_are_mailed():
+    assert should_send([JOB], [])                     # new roles
+    assert should_send([], ["JobTech source failed"])   # failure
+    assert not should_send([], [])                    # nothing new, no errors
+
+
+def test_closed_ads_alone_do_not_warrant_a_mail():
+    """They are still written to the joblist as Stängd, just not mailed."""
+    assert not should_send([], [])
 
 
 def test_a_dead_pipeline_still_reports():
     """Silence is only safe because these two count as errors."""
-    assert should_send([], [], [stale_warning("")])
-    assert should_send([], [], ["results.json saknas"])
+    assert should_send([], [stale_warning("")])
+    assert should_send([], ["results.json saknas"])
 
 
 def test_new_roles_keep_the_count_in_the_subject():
-    assert "1 nya roller" in build_subject([JOB], [], [])
+    assert "1 nya roller" in build_subject([JOB], [])
 
 
 def test_body_explains_that_zero_may_be_a_failure():
