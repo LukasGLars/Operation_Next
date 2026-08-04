@@ -46,6 +46,32 @@ _GENERIC_PATH_ENDS = {
 # Active statuses — partial match so "Ansökt 2026-05-02" is caught by "ansökt"
 ACTIVE_STATUS_TOKENS = {"identifierad", "spontanansökan", "spontanansokan", "genererat", "ansökt"}
 
+# Places within roughly a 40 minute commute of Alingsås. Anything outside this
+# set only passes when the ad explicitly states hybrid or remote work.
+COMMUTABLE_PLACES = {
+    "alingsås", "vårgårda", "sollebrunn", "gråbo", "floda", "stenkullen",
+    "lerum", "partille", "sävedalen", "jonsered", "göteborg", "gothenburg",
+    "mölndal", "mölnlycke", "härryda", "landvetter", "bollebygd", "borås",
+    "lilla edet", "nödinge", "älvängen", "surte", "bohus", "ale",
+}
+
+# Fully remote passes from anywhere. Hybrid does not — two or three days a week
+# in a Stockholm office is not commutable from Alingsås — so the two are matched
+# separately. In body text both need a full phrase, otherwise "hybrid cloud" or
+# "remote sensing" would let an out-of-range role through.
+_FULLY_REMOTE_IN_LOCATION = re.compile(r"\b(remote|distans\w*|anywhere)\b", re.I)
+_FULLY_REMOTE_IN_BODY = re.compile(
+    r"(remote[- ]first|fully remote|helt remote|100\s*% remote|work from anywhere|"
+    r"helt på distans|arbeta helt på distans)",
+    re.I,
+)
+_HYBRID_IN_BODY = re.compile(
+    r"(hybridarbete|hybridupplägg|hybridlösning|hybrid work|hybrid remote|"
+    r"distansarbete|arbeta på distans|jobba på distans|arbeta hemifrån|"
+    r"jobba hemifrån|möjlighet till distans|work from home)",
+    re.I,
+)
+
 # Search queries split into two thematic passes
 QUERIES_PASS1 = [
     "business analyst Göteborg",
@@ -216,6 +242,49 @@ def _url_looks_specific(url):
         return False
 
 
+def page_location(page_text):
+    """The Location: line fetch_page_text writes from JSON-LD — more reliable
+    than the location the search model reports."""
+    match = re.search(r"^Location:[ \t]*(.+)$", page_text or "", re.M)
+    return match.group(1).strip() if match else ""
+
+
+def remote_status_of(page_text):
+    """"" | "hybrid" | "remote" — from the Remote status line fetch_page_text adds."""
+    match = re.search(r"^Remote status:[ \t]*(.+)$", page_text or "", re.M)
+    if not match:
+        return ""
+    value = match.group(1).strip().lower()
+    if "hybrid" in value or "tillfälligt" in value or "temporarily" in value:
+        return "hybrid"
+    if "remote" in value or "distans" in value:
+        return "remote"
+    return ""
+
+
+def location_verdict(stated_location, page_text=""):
+    """Return (ok, reason). A role passes if its office is within commuting
+    distance of Alingsås, or if it is fully remote. Hybrid only passes when the
+    office itself is commutable — a Stockholm hybrid still means two or three
+    days a week in Stockholm."""
+    loc = (page_location(page_text) or stated_location or "").strip()
+    status = remote_status_of(page_text)
+
+    if any(re.search(rf"\b{re.escape(p)}\b", loc, re.I) for p in COMMUTABLE_PLACES):
+        return True, f"within commute range ({loc})"
+    if (status == "remote"
+            or _FULLY_REMOTE_IN_LOCATION.search(loc)
+            or (page_text and _FULLY_REMOTE_IN_BODY.search(page_text))):
+        return True, f"fully remote ({loc or 'no location stated'})"
+    if not loc:
+        if status == "hybrid" or (page_text and _HYBRID_IN_BODY.search(page_text)):
+            return True, "hybrid, no location stated"
+        return False, "no location stated and no hybrid/remote wording"
+    if status == "hybrid" or _HYBRID_IN_BODY.search(page_text or ""):
+        return False, f"hybrid, but office outside 40 min commute ({loc})"
+    return False, f"outside 40 min commute from Alingsås ({loc})"
+
+
 def validate_url(url):
     """Returns (status_ok, final_url).
     status_ok: True=200, False=non-200, None=error/skip.
@@ -286,19 +355,49 @@ def _extract_jsonld_job(soup):
     return None
 
 
+def _remote_status(soup):
+    """Teamtailor and friends state the work model in a definition list:
+    <dt>Remote status</dt><dd>Hybrid</dd> / <dt>Distansarbete</dt><dd>Hybridarbete</dd>.
+    More reliable than prose — the word "hybrid" also shows up in "hybrid cloud"."""
+    for dt in soup.find_all("dt"):
+        if dt.get_text(strip=True).lower() in ("remote status", "distansarbete"):
+            dd = dt.find_next("dd")
+            if dd:
+                return dd.get_text(" ", strip=True)
+    return ""
+
+
 def fetch_page_text(url):
     try:
         from bs4 import BeautifulSoup
         r = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
         soup = BeautifulSoup(r.text, "html.parser")
+        status = _remote_status(soup)
+        suffix = f"\n\nRemote status: {status}" if status else ""
         jsonld = _extract_jsonld_job(soup)
         if jsonld:
-            return jsonld[:4000]
+            return jsonld[:4000] + suffix
         for tag in soup(["script", "style", "nav", "footer", "header"]):
             tag.decompose()
-        return soup.get_text(separator="\n", strip=True)[:4000]
+        return soup.get_text(separator="\n", strip=True)[:4000] + suffix
     except Exception as e:
         logging.error(f"fetch_page_text({url}): {e}")
+        return ""
+
+
+def visible_page_text(url):
+    """Full visible page text. Used only as a location fallback — some ATS pages
+    carry no location in their JSON-LD and tag hybrid/remote in page chrome that
+    fetch_page_text discards."""
+    try:
+        from bs4 import BeautifulSoup
+        r = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
+        soup = BeautifulSoup(r.text, "html.parser")
+        for tag in soup(["script", "style", "nav", "footer", "header"]):
+            tag.decompose()
+        return soup.get_text(" ", strip=True)[:6000]
+    except Exception as e:
+        logging.error(f"visible_page_text({url}): {e}")
         return ""
 
 
@@ -312,7 +411,7 @@ def batch_validate_urls(candidates, validation_skill):
         url = c.get("url", "").strip()
         if not url:
             continue
-        page_text = fetch_page_text(url)
+        page_text = c.get("_page_text") or fetch_page_text(url)
         entries.append({"url": url, "content": page_text or "(could not fetch)"})
 
     if not entries:
@@ -407,6 +506,19 @@ INVALID URL examples — reject these:
   company.com/en/careers/open-positions            ← listing hub, no ID
   linkedin.com/jobs/view/123456789                 ← aggregator
   biner.se/en/career                               ← generic page, no ID
+
+LOCATION RULES — CRITICAL:
+Only return a role if it is either
+  (a) within a 40 minute commute of Alingsås — Alingsås, Göteborg, Partille,
+      Lerum, Mölndal, Mölnlycke, Härryda, Landvetter, Vårgårda, Bollebygd,
+      Borås, Ale, Lilla Edet and equivalent, or
+  (b) fully remote.
+A hybrid role counts only if its office is inside that range — a Stockholm
+hybrid still means two or three days a week in Stockholm. Reject on-site and
+hybrid roles anywhere else — Stockholm, Malmö, Umeå, Södertälje, Borlänge,
+Örnsköldsvik and the like — however well the role otherwise matches.
+Always fill "location" with the city the ad states, or "Remote" when the ad is
+fully remote.
 
 CANDIDATE PROFILE:
 {profile_block}
@@ -578,12 +690,32 @@ def search_new_jobs():
             continue
         reachable.append(candidate)
 
+    # Stage 1.5 — location gate. Page text is fetched once here and reused by
+    # the validation call below.
+    in_range = []
+    for candidate in reachable:
+        page_text = fetch_page_text(candidate["url"])
+        candidate["_page_text"] = page_text
+        ok, reason = location_verdict(candidate.get("location", ""), page_text)
+        if not ok and not page_location(page_text):
+            ok, reason = location_verdict(
+                candidate.get("location", ""), visible_page_text(candidate["url"])
+            )
+        if not ok:
+            logging.error(f"SKIP (location — {reason}): {candidate['url']}")
+            print(f"  SKIP (location — {reason}): {candidate.get('company')}")
+            continue
+        candidate["location"] = page_location(page_text) or candidate.get("location", "")
+        in_range.append(candidate)
+    if reachable:
+        print(f"  In range: {len(in_range)}/{len(reachable)} (location filter)")
+
     # Stage 2 — batched quality validation
     new_jobs = []
-    if reachable:
-        print(f"  Validating {len(reachable)} reachable URL(s) in one call...")
-        verdicts = batch_validate_urls(reachable, val_skill)
-        for candidate in reachable:
+    if in_range:
+        print(f"  Validating {len(in_range)} reachable URL(s) in one call...")
+        verdicts = batch_validate_urls(in_range, val_skill)
+        for candidate in in_range:
             url = candidate.get("url", "").strip()
             verdict, reason = verdicts.get(url, ("uncertain", "not in response"))
             if verdict == "valid":
@@ -594,6 +726,9 @@ def search_new_jobs():
                 print(f"  SKIP ({verdict} — {reason[:60]}): {url}")
 
     # Save results
+    for job in new_jobs:
+        job.pop("_page_text", None)
+
     results = {
         "timestamp":   datetime.now().isoformat(),
         "new_jobs":    new_jobs,
