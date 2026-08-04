@@ -221,32 +221,43 @@ def _build_doc_content(cv_base: str, job_url: str, job_posting_text: str) -> lis
     return [{"type": "text", "text": prompt}]
 
 
-def _recent_edited_examples(n: int = 2) -> str:
+def _recent_edited_examples(n: int = 1) -> str:
     """Most recent human-approved edits, paired with their AI draft where
     available -- the diff between draft and edit is the clearest signal of
     what actually gets rejected (a canned opening line, a repeated
     rhetorical tic, etc.), stronger than just showing a finished example.
-    Looks at cover letters only -- that's where the AI-sounding tells
-    showed up in practice; the CV is more structured/less prose-heavy."""
-    edited_files = sorted(
-        APPLICATIONS.glob("*/cover_letter_edited.md"),
-        key=lambda p: p.stat().st_mtime, reverse=True,
-    )[:n]
-    if not edited_files:
-        return ""
 
+    Covers both documents. This used to read cover letters only, on the
+    assumption that the CV was too structured to carry AI tells. The edits to
+    the Rekryteringsgruppen CV disproved that -- inflated job titles, tool
+    laundry lists in the competency section and bullets naming internals
+    instead of outcomes all had to be corrected by hand, and none of it was
+    ever fed back.
+
+    Newest edit per document only. Reaching further back pulled in the May
+    CheckWatt edits, which were deliberately retired as a reference, and
+    doubled the prompt for older taste."""
     blocks = []
-    for i, edited_path in enumerate(edited_files, 1):
-        edited_text = edited_path.read_text(encoding="utf-8")
-        original_path = edited_path.parent / "cover_letter_original.md"
-        if original_path.exists():
-            original_text = original_path.read_text(encoding="utf-8")
-            blocks.append(
-                f"Example {i} -- AI draft (REJECTED patterns, avoid repeating these):\n{original_text}\n\n"
-                f"Example {i} -- human-approved final version (match this voice instead):\n{edited_text}"
-            )
-        else:
-            blocks.append(f"Example {i} -- human-approved final version (match this voice):\n{edited_text}")
+    for label, stem in (("Cover letter", "cover_letter"), ("CV", "cv")):
+        edited_files = sorted(
+            APPLICATIONS.glob(f"*/{stem}_edited.md"),
+            key=lambda p: p.stat().st_mtime, reverse=True,
+        )[:n]
+        for i, edited_path in enumerate(edited_files, 1):
+            edited_text = edited_path.read_text(encoding="utf-8")
+            original_path = edited_path.parent / f"{stem}_original.md"
+            if original_path.exists():
+                original_text = original_path.read_text(encoding="utf-8")
+                blocks.append(
+                    f"{label} example {i} -- AI draft (REJECTED patterns, avoid repeating these):\n"
+                    f"{original_text}\n\n"
+                    f"{label} example {i} -- human-approved final version (match this instead):\n"
+                    f"{edited_text}"
+                )
+            else:
+                blocks.append(
+                    f"{label} example {i} -- human-approved final version (match this):\n{edited_text}"
+                )
     return "\n\n---\n\n".join(blocks)
 
 
@@ -262,9 +273,10 @@ def _build_review_content(draft_cv: str, draft_cover_letter: str, job_posting_te
     prompt = (
         "Review instructions — follow all rules here exactly:\n" + review_skill_content +
         ("\n\nRecent human-approved edits -- the AI draft/final pairs below show exactly what gets "
-         "rejected in practice (canned opening lines, repeated rhetorical devices, translated-sounding "
-         "phrasing). Do not repeat any pattern shown as rejected, and match the voice of the approved "
-         "versions:\n" + recent_examples if recent_examples else "") +
+         "rejected in practice: canned opening lines, repeated rhetorical devices, translated-sounding "
+         "phrasing, inflated job titles, tool lists in place of stances, and bullets that name internal "
+         "tech instead of what colleagues get. Do not repeat any pattern shown as rejected, and match "
+         "the voice and structure of the approved versions:\n" + recent_examples if recent_examples else "") +
         "\n\nJob posting content:\n" + job_posting_text +
         "\n\nDraft CV:\n" + draft_cv +
         "\n\nDraft cover letter:\n" + draft_cover_letter +
