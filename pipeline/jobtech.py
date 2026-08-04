@@ -27,10 +27,21 @@ from datetime import date
 import anthropic
 import requests
 
+try:                                  # run as a script from pipeline/
+    from llm_json import TruncatedResponse, parse_json_array
+except ImportError:                   # imported as pipeline.jobtech (tests, CI)
+    from pipeline.llm_json import TruncatedResponse, parse_json_array
+
 SEARCH_API = "https://jobsearch.api.jobtechdev.se/search"
 MODEL = "claude-sonnet-4-6"
 PER_QUERY_LIMIT = 25
 MAX_CANDIDATES = 30
+
+# Same reason as the validation call in search.py: one request for 30 candidates
+# truncates its verdict array, and a truncated array meant every candidate passed
+# through unjudged.
+JUDGE_CHUNK_SIZE = 10
+JUDGE_MAX_TOKENS = 4096
 
 # Municipality concept ids for the commutable ring in search.py. Filtering server
 # side keeps responses small, and localities are covered by their municipality —
@@ -229,16 +240,9 @@ def fetch_candidates(known_urls=(), max_candidates=MAX_CANDIDATES, location_ok=N
     return found
 
 
-def judge_fit(candidates, skill_content):
-    """One batched Claude call applying the role filters. Returns the keepers.
-    Without a key or a skill file the candidates pass through — the URL
-    validation stage still runs on them."""
-    if not candidates:
-        return []
-    if not skill_content or not os.environ.get("ANTHROPIC_API_KEY"):
-        logging.error("jobtech judge_fit skipped — no skill content or no API key")
-        return candidates
-
+def _judge_chunk(candidates, skill_content, errors=None):
+    """One judging call over a chunk. Returns {1-based index: verdict}, empty on
+    failure so the caller passes the chunk through rather than dropping it."""
     items = "\n\n".join(
         f"--- {i + 1} ---\nCompany: {c['company']}\nRole: {c['role']}\n"
         f"Occupation: {c['role_type']}\nLocation: {c['location']}\n"
@@ -248,7 +252,8 @@ def judge_fit(candidates, skill_content):
     prompt = (
         f"Judge each of the following {len(candidates)} roles against the role "
         "filters. A role fits only if it matches an include keyword and breaks no "
-        "exclude rule. Prefer precision over recall.\n\n"
+        "exclude rule. Prefer precision over recall. Keep each reason under 12 "
+        "words.\n\n"
         f"{items}\n\n"
         "Return a JSON array with one object per role in the same order:\n"
         '[{"index": 1, "fit": true, "cv_base": "CV_Einride", "reason": "..."}]'
@@ -258,27 +263,45 @@ def judge_fit(candidates, skill_content):
         client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY", ""))
         response = client.messages.create(
             model=MODEL,
-            max_tokens=2048,
+            max_tokens=JUDGE_MAX_TOKENS,
             system=skill_content,
             messages=[{"role": "user", "content": prompt}],
         )
-        text = response.content[0].text.strip()
-        match = re.search(r"\[.*\]", text, re.DOTALL)
-        if not match:
-            raise ValueError(f"no JSON array in response: {text[:200]}")
-        verdicts = {v.get("index"): v for v in json.loads(match.group())}
+        return {v.get("index"): v for v in parse_json_array(response.content[0].text)}
     except Exception as e:
-        logging.error(f"jobtech judge_fit failed: {e}")
+        label = "truncated" if isinstance(e, TruncatedResponse) else "failed"
+        logging.error(f"jobtech judge_fit {label}: {e}")
+        print(f"  WARNING: role-fit judgement {label} for {len(candidates)} "
+              f"candidate(s) — passing them through unjudged")
+        if errors is not None:
+            errors.append(f"JobTech role-fit judgement {label} for "
+                          f"{len(candidates)} candidate(s): {str(e)[:80]}")
+        return {}
+
+
+def judge_fit(candidates, skill_content, errors=None):
+    """Apply the role filters in chunks. Returns the keepers.
+
+    Without a key or a skill file the candidates pass through — the URL
+    validation stage still runs on them. A chunk whose call fails also passes
+    through, so a judging problem costs precision rather than the whole run."""
+    if not candidates:
+        return []
+    if not skill_content or not os.environ.get("ANTHROPIC_API_KEY"):
+        logging.error("jobtech judge_fit skipped — no skill content or no API key")
         return candidates
 
     kept = []
-    for i, candidate in enumerate(candidates, 1):
-        verdict = verdicts.get(i)
-        if verdict and not verdict.get("fit", True):
-            print(f"  SKIP (role fit — {str(verdict.get('reason', ''))[:60]}): "
-                  f"{candidate['company']} — {candidate['role'][:40]}")
-            continue
-        if verdict and verdict.get("cv_base"):
-            candidate["cv_base"] = verdict["cv_base"]
-        kept.append(candidate)
+    for start in range(0, len(candidates), JUDGE_CHUNK_SIZE):
+        chunk = candidates[start:start + JUDGE_CHUNK_SIZE]
+        verdicts = _judge_chunk(chunk, skill_content, errors)
+        for i, candidate in enumerate(chunk, 1):
+            verdict = verdicts.get(i)
+            if verdict and not verdict.get("fit", True):
+                print(f"  SKIP (role fit — {str(verdict.get('reason', ''))[:60]}): "
+                      f"{candidate['company']} — {candidate['role'][:40]}")
+                continue
+            if verdict and verdict.get("cv_base"):
+                candidate["cv_base"] = verdict["cv_base"]
+            kept.append(candidate)
     return kept
