@@ -68,7 +68,7 @@
     <table>
       <thead>
         <tr>
-          <th>#</th><th>F&#246;retag</th><th>Roll/Typ</th><th>CV-bas</th>
+          <th>#</th><th>F&#246;retag</th><th>Roll/Typ</th><th>Plats</th><th>CV-bas</th>
           <th>Status</th><th>Datum</th><th>URL</th><th></th>
         </tr>
       </thead>
@@ -80,10 +80,11 @@
             data-role="{{ job.get('Roll/Typ','') }}"
             data-cvbase="{{ job.get('CV-bas','CV_Einride') }}"
             data-url="{{ job.get('URL','') }}"
-            data-location="">
+            data-location="{{ job.get('Plats','') }}">
           <td class="datum">{{ job.get('#','') }}</td>
           <td><div class="company">{{ job.get('Företag','') }}</div></td>
           <td class="role">{{ job.get('Roll/Typ','') }}</td>
+          <td class="datum">{{ job.get('Plats','') }}</td>
           <td><span class="cv-badge">{{ job.get('CV-bas','') }}</span></td>
           <td>
             {% set st = job.get('Status','') | lower %}
@@ -113,7 +114,7 @@
           </td>
         </tr>
         {% else %}
-        <tr><td colspan="8" class="empty">Inga jobb i joblist.md</td></tr>
+        <tr><td colspan="9" class="empty">Inga jobb i joblist.md</td></tr>
         {% endfor %}
       </tbody>
     </table>
