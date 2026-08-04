@@ -1,0 +1,301 @@
+{
+  "total": {
+    "value": 9
+  },
+  "hits": [
+    {
+      "id": "31259593",
+      "headline": "Vi söker Projektledare, Verksamhetsutvecklare och Business Analyst",
+      "publication_date": "2026-07-08T14:45:18",
+      "remote_work": null,
+      "webpage_url": "https://arbetsformedlingen.se/platsbanken/annonser/31259593",
+      "employer": {
+        "phone_number": null,
+        "email": null,
+        "url": "https://nexergroup.teamtailor.com",
+        "organization_number": "5564519345",
+        "name": "Nexer AB",
+        "workplace": "Nexer Group"
+      },
+      "workplace_address": {
+        "municipality": "Göteborg",
+        "municipality_code": "1480",
+        "municipality_concept_id": "PVZL_BQT_XtL",
+        "region": "Västra Götalands län",
+        "region_code": "14",
+        "region_concept_id": "zdoY_6u5_Krt",
+        "country": "Sverige",
+        "country_code": "199",
+        "country_concept_id": "i46j_HmG_v64",
+        "street_address": "Lindholmspiren 9",
+        "postcode": "41756",
+        "city": "Göteborg",
+        "coordinates": [
+          11.9405419709546,
+          57.7062402675412
+        ]
+      },
+      "application_details": {
+        "information": null,
+        "reference": "teamtailor-8039554-2092733",
+        "email": null,
+        "via_af": false,
+        "url": "https://nexergroup.teamtailor.com/jobs/8039554-vi-soker-projektledare-verksamhetsutvecklare-och-business-analyst/applications/new?promotion=2092733-arbetsformedlingen",
+        "other": null
+      },
+      "occupation": {
+        "concept_id": "TT8h_qKk_1iu",
+        "label": "Affärskonsult, IT",
+        "legacy_ams_taxonomy_id": "7579"
+      },
+      "description": {
+        "text": "Vill du utvecklas tillsammans med oss på Nexer? Vår enhet West Strategy i Göteborg växer!\nVår enhet West Strategy i Göteborg söker fler kompetenta kollegor som är Projektledare, Verksamhetsutvecklare eller Business Analysts. Här får du chansen att växa i en miljö där du både utvecklas och bidrar till att utveckla våra kunder – med stöd av ett team som vill framåt.\nPå Nexer tror vi på möjligheterna i förändring. Vi är ett företag präglat av innovation, nyfikenhet och framtidstro, med rötter i Göteborg och global närvaro. Som konsult hos Nexer får du möjlighet att testa och utveckla dig i olika uppdrag. Vi tror på en långsiktig och hållbar anställning där vi lägger stor vikt på både kompetensu"
+      }
+    },
+    {
+      "id": "31258484",
+      "headline": "Senior Business Development Consultant",
+      "publication_date": "2026-07-08T11:37:50",
+      "remote_work": null,
+      "webpage_url": "https://arbetsformedlingen.se/platsbanken/annonser/31258484",
+      "employer": {
+        "phone_number": null,
+        "email": null,
+        "url": "https://karriar.poolia.se",
+        "organization_number": "5564267655",
+        "name": "Poolia AB",
+        "workplace": "Poolia "
+      },
+      "workplace_address": {
+        "municipality": "Göteborg",
+        "municipality_code": "1480",
+        "municipality_concept_id": "PVZL_BQT_XtL",
+        "region": "Västra Götalands län",
+        "region_code": "14",
+        "region_concept_id": "zdoY_6u5_Krt",
+        "country": "Sverige",
+        "country_code": "199",
+        "country_concept_id": "i46j_HmG_v64",
+        "street_address": "Drakegatan 10",
+        "postcode": "41250",
+        "city": "Göteborg",
+        "coordinates": [
+          11.9934124647375,
+          57.7057338078023
+        ]
+      },
+      "application_details": {
+        "information": null,
+        "reference": "teamtailor-8037870-2092075",
+        "email": null,
+        "via_af": false,
+        "url": "https://karriar.poolia.se/jobs/8037870-senior-business-development-consultant/applications/new?promotion=2092075-arbetsformedlingen",
+        "other": null
+      },
+      "occupation": {
+        "concept_id": "9LoK_Hba_2NG",
+        "label": "Affärsanalytiker/Business analyst",
+        "legacy_ams_taxonomy_id": null
+      },
+      "description": {
+        "text": "Vill du kombinera strategi med operativt genomförande och vara med och utveckla framtidens serviceerbjudanden inom marinindustrin? Nu söker vi en erfaren konsult till ett spännande uppdrag hos en global ledare inom marina framdrivningssystem och kraftlösningar.\nI denna roll får du en nyckelposition där du driver utvecklingen av framtidens serviceavtal, digitala uppkopplade tjänster och kommersialisering av nya erbjudanden. Du arbetar nära affär, produktledning, IT och internationella marknader för att skapa lösningar som ökar kundvärdet genom hela produktens livscykel.\nTjänsten är ett konsultuppdrag på heltid med start 1 september och sträcker sig till 30 april 2027.\nOm uppdraget\nSom konsult"
+      }
+    },
+    {
+      "id": "31251179",
+      "headline": "Business Analyst - Digital Solutions",
+      "publication_date": "2026-07-06T11:40:36",
+      "remote_work": null,
+      "webpage_url": "https://arbetsformedlingen.se/platsbanken/annonser/31251179",
+      "employer": {
+        "phone_number": null,
+        "email": null,
+        "url": "https://www.nxtinterim.se/",
+        "organization_number": "5592796170",
+        "name": "NXT Interim Göteborg AB",
+        "workplace": "NXT Interim Göteborg"
+      },
+      "workplace_address": {
+        "municipality": "Göteborg",
+        "municipality_code": "1480",
+        "municipality_concept_id": "PVZL_BQT_XtL",
+        "region": "Västra Götalands län",
+        "region_code": "14",
+        "region_concept_id": "zdoY_6u5_Krt",
+        "country": "Sverige",
+        "country_code": "199",
+        "country_concept_id": "i46j_HmG_v64",
+        "street_address": null,
+        "postcode": "41101",
+        "city": "Göteborg",
+        "coordinates": [
+          11.987394754572932,
+          57.70907996684877
+        ]
+      },
+      "application_details": {
+        "information": null,
+        "reference": null,
+        "email": null,
+        "via_af": false,
+        "url": "https://apply.recman.page/job_post.php?id=482070&apply_only&sub_id=406&path=ams",
+        "other": null
+      },
+      "occupation": {
+        "concept_id": "Gjz2_EJT_HGL",
+        "label": "Kravanalytiker",
+        "legacy_ams_taxonomy_id": "7621"
+      },
+      "description": {
+        "text": "Business Analyst – Digital Solutions \nVi söker nu en erfaren Business Analyst för ett spännande uppdrag till en av våra kunder inom Digital Solutions. I rollen ansvarar du för att leda initiativ från idé och kravställning till utveckling, implementation och driftsättning. Du fungerar som länken mellan verksamhet, ledning och leveransteam och säkerställer att projekt genomförs enligt plan, budget och uppsatta mål.\nArbetsuppgifter\nLeda initiativ genom hela livscykeln – från kravinsamling och design till utveckling, implementation och överlämning.\nDefiniera projektets omfattning, tidplan, budget och riskhanteringsplan.\nPlanera aktiviteter, resurser och tidslinjer för ett effektivt genomförande."
+      }
+    },
+    {
+      "id": "31231122",
+      "headline": "Business Analyst",
+      "publication_date": "2026-06-30T13:11:35",
+      "remote_work": null,
+      "webpage_url": "https://arbetsformedlingen.se/platsbanken/annonser/31231122",
+      "employer": {
+        "phone_number": null,
+        "email": null,
+        "url": "http://cilbuper.se",
+        "organization_number": "5590501804",
+        "name": "cilbuper IT AB",
+        "workplace": "cilbuper IT AB"
+      },
+      "workplace_address": {
+        "municipality": "Göteborg",
+        "municipality_code": "1480",
+        "municipality_concept_id": "PVZL_BQT_XtL",
+        "region": "Västra Götalands län",
+        "region_code": "14",
+        "region_concept_id": "zdoY_6u5_Krt",
+        "country": "Sverige",
+        "country_code": "199",
+        "country_concept_id": "i46j_HmG_v64",
+        "street_address": "Heurlins Plats 1 A",
+        "postcode": "41301",
+        "city": "Göteborg",
+        "coordinates": [
+          11.955619794630008,
+          57.69842037868284
+        ]
+      },
+      "application_details": {
+        "information": null,
+        "reference": null,
+        "email": null,
+        "via_af": false,
+        "url": "https://pnty-apply.ponty-system.se/cilbuper?id=555",
+        "other": null
+      },
+      "occupation": {
+        "concept_id": "9LoK_Hba_2NG",
+        "label": "Affärsanalytiker/Business analyst",
+        "legacy_ams_taxonomy_id": null
+      },
+      "description": {
+        "text": "Vi söker just nu en IT Business Analyst inom Industry 4.0 åt vår kund, en ledande aktör inom försvarssektorn med avancerad teknik och produktion. Här får du möjlighet att arbeta i en innovativ miljö där du är med och utvecklar framtidens smarta fabrik och digitala produktionslösningar.\nOm rollen\nI rollen som IT Business Analyst blir du en nyckelperson i kundens satsning på Industry 4.0 och utvecklingen av en smart fabrik där system, data och produktion integreras.\nDu kommer att arbeta i ett tvärfunktionellt team tillsammans med experter inom strategi, business intelligence och produktion. Rollen innebär ett stort ansvar där du driver initiativ kopplade till digitalisering och förbättringsarb"
+      }
+    },
+    {
+      "id": "31216312",
+      "headline": "Project Manager M&A & Strategy till Axel Johnson International, Göteborg",
+      "publication_date": "2026-06-25T13:44:49",
+      "remote_work": null,
+      "webpage_url": "https://arbetsformedlingen.se/platsbanken/annonser/31216312",
+      "employer": {
+        "phone_number": null,
+        "email": null,
+        "url": null,
+        "organization_number": "5568812571",
+        "name": "Jerrie AB",
+        "workplace": "Axel Johnson International"
+      },
+      "workplace_address": {
+        "municipality": "Göteborg",
+        "municipality_code": "1480",
+        "municipality_concept_id": "PVZL_BQT_XtL",
+        "region": "Västra Götalands län",
+        "region_code": "14",
+        "region_concept_id": "zdoY_6u5_Krt",
+        "country": "Sverige",
+        "country_code": "199",
+        "country_concept_id": "i46j_HmG_v64",
+        "street_address": "Vasaplatsen",
+        "postcode": "41126",
+        "city": "Göteborg",
+        "coordinates": [
+          11.9691096148428,
+          57.6992743218025
+        ]
+      },
+      "application_details": {
+        "information": null,
+        "reference": null,
+        "email": null,
+        "via_af": false,
+        "url": "https://jerrie.se/lediga-jobb/2910-project-manager-m-a-strategy-till-axel-johnson-international-goteborg?pnty_src=platsbanken",
+        "other": null
+      },
+      "occupation": {
+        "concept_id": "9LoK_Hba_2NG",
+        "label": "Affärsanalytiker/Business analyst",
+        "legacy_ams_taxonomy_id": null
+      },
+      "description": {
+        "text": "Om rollenVill du ta nästa steg i karriären och arbeta nära företagsförvärv, strategi och affärsutveckling i en internationell industrigrupp med stark tillväxtagenda? Axel Johnson International söker nu en Project Manager M&A & Strategy till affärsområdet Transport Solutions med placering i Göteborg. Transport Solutions omsätter cirka 3 miljarder kronor, har verksamhet i 12 länder och består av ett 20-tal bolag inom lastsäkring, fordonskomponenter och marina lösningar. Förvärv är en central del av affärsstrategin, och ambitionen är att genomföra ett stort antal internationella förvärv de kommande åren.\nRollen passar dig som idag arbetar inom revision, business controlling, M&A-analys eller in"
+      }
+    },
+    {
+      "id": "31132788",
+      "headline": "Copy of Junior Data Process Lead",
+      "publication_date": "2026-06-03T10:49:34",
+      "remote_work": null,
+      "webpage_url": "https://arbetsformedlingen.se/platsbanken/annonser/31132788",
+      "employer": {
+        "phone_number": null,
+        "email": null,
+        "url": "https://careers.qbemanning.se",
+        "organization_number": "5567199962",
+        "name": "Quattro Bemanning & Rekrytering AB",
+        "workplace": "Q Sverige "
+      },
+      "workplace_address": {
+        "municipality": "Göteborg",
+        "municipality_code": "1480",
+        "municipality_concept_id": "PVZL_BQT_XtL",
+        "region": "Västra Götalands län",
+        "region_code": "14",
+        "region_concept_id": "zdoY_6u5_Krt",
+        "country": "Sverige",
+        "country_code": "199",
+        "country_concept_id": "i46j_HmG_v64",
+        "street_address": "Gothenburg Central Station",
+        "postcode": "41103",
+        "city": "Göteborg",
+        "coordinates": [
+          11.975949446682327,
+          57.70919013143568
+        ]
+      },
+      "application_details": {
+        "information": null,
+        "reference": "teamtailor-7842378-2033198",
+        "email": null,
+        "via_af": false,
+        "url": "https://careers.qbemanning.se/jobs/7842378-copy-of-junior-data-process-lead/applications/new?promotion=2033198-arbetsformedlingen",
+        "other": null
+      },
+      "occupation": {
+        "concept_id": "9LoK_Hba_2NG",
+        "label": "Affärsanalytiker/Business analyst",
+        "legacy_ams_taxonomy_id": null
+      },
+      "description": {
+        "text": "Beskrivning\nVi söker nu en Junior Data Process Lead för ett långsiktigt uppdrag hos en internationell verksamhet med starkt fokus på digitalisering, datakvalitet och verksamhetsutveckling. I rollen får du möjlighet att bidra till att skapa effektiva och hållbara arbetssätt för hantering av data genom hela organisationen. Du kommer att arbeta i gränslandet mellan verksamhet, IT och datafunktioner där ditt uppdrag blir att säkerställa att data är konsekvent, användbar och tillförlitlig för verksamhetens processer, beslut och digitala initiativ.\nDetta är en utvecklande roll för dig som har ett analytiskt tänkande, ett intresse för processutveckling och en vilja att driva förbättringar i en komp"
+      }
+    }
+  ]
+}
