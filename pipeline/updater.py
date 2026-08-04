@@ -48,8 +48,8 @@ _GENERIC_TERMINALS = {
 
 # ── Markdown table parser / writer ─────────────────────────
 
-HEADERS_WITHOUT_DATUM = ["#", "Företag", "Roll/Typ", "CV-bas", "Status", "URL"]
-HEADERS_WITH_DATUM    = ["#", "Företag", "Roll/Typ", "CV-bas", "Status", "Datum", "URL"]
+HEADERS_WITHOUT_DATUM = ["#", "Företag", "Roll/Typ", "Plats", "CV-bas", "Status", "URL"]
+HEADERS_WITH_DATUM    = ["#", "Företag", "Roll/Typ", "Plats", "CV-bas", "Status", "Datum", "URL"]
 
 
 def _is_generic_careers_url(url: str) -> bool:
@@ -108,6 +108,7 @@ def write_table(rows):
             row.get("#", ""),
             row.get("Företag", ""),
             row.get("Roll/Typ", ""),
+            row.get("Plats", "—"),
             row.get("CV-bas", ""),
             row.get("Status", ""),
             row.get("Datum", TODAY),
@@ -183,6 +184,7 @@ def update_joblist():
             "#":        str(len(rows) + 1),
             "Företag":  job.get("company", ""),
             "Roll/Typ": job.get("role", ""),
+            "Plats":    job.get("location", "") or "—",
             "CV-bas":   job.get("cv_base") or cv_base_for_role(job.get("role_type", "")),
             "Status":   "Identifierad",
             "Datum":    TODAY,

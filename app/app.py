@@ -29,7 +29,7 @@ APPLICATIONS     = ROOT / "jobsearch" / "applications"
 MASTER_CV        = ROOT / "jobsearch" / "cv" / "master_cv.md"
 SALES_PHILOSOPHY = ROOT / "jobsearch" / "sales_philosophy.md"
 
-_HEADERS = ["#", "Företag", "Roll/Typ", "CV-bas", "Status", "Datum", "URL"]
+_HEADERS = ["#", "Företag", "Roll/Typ", "Plats", "CV-bas", "Status", "Datum", "URL"]
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.ERROR)
@@ -94,7 +94,7 @@ def _write_joblist_raw(preamble, rows):
     for row in rows:
         cells = [
             row.get("#", ""), row.get("Företag", ""), row.get("Roll/Typ", ""),
-            row.get("CV-bas", ""), row.get("Status", ""),
+            row.get("Plats", "—"), row.get("CV-bas", ""), row.get("Status", ""),
             row.get("Datum", today), row.get("URL", ""),
         ]
         table_lines.append("| " + " | ".join(cells) + " |")
