@@ -26,6 +26,13 @@ STAT_LABELS = [
 ]
 
 
+def should_send(new_jobs, closed_jobs, errors):
+    """Mail on failures and on news only. A clean run with nothing new stays
+    silent — a dead pipeline still reports, because a missing or stale
+    results.json counts as an error, and a hard crash fails the Actions job."""
+    return bool(new_jobs or closed_jobs or errors)
+
+
 def build_subject(new_jobs, closed_jobs, errors):
     today = date.today().isoformat()
     if errors:
@@ -119,6 +126,10 @@ def send_digest():
         if stale:
             errors.append(stale)
 
+    if not should_send(new_jobs, closed_jobs, errors):
+        print("  Clean run, nothing new — no mail sent")
+        return
+
     # Credentials
     mail_from = os.environ.get("MAIL_FROM", "")
     mail_to   = os.environ.get("MAIL_TO", "")
@@ -129,7 +140,7 @@ def send_digest():
         print("  ERROR: mail credentials not set")
         return
 
-    # Build message. Sent every run, so silence means the pipeline itself is down.
+    # Build message — only reached when there is news or a failure to report.
     subject = build_subject(new_jobs, closed_jobs, errors)
     body    = build_body(new_jobs, closed_jobs, stats, errors)
 
