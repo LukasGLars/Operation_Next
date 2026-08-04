@@ -9,6 +9,11 @@ from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeou
 from datetime import datetime, date
 from pathlib import Path
 
+try:                                  # run as a script from pipeline/
+    import jobtech
+except ImportError:                   # imported as pipeline.search (tests, CI)
+    from pipeline import jobtech
+
 ROOT               = Path(__file__).parent.parent
 JOBLIST_PATH       = ROOT / "jobsearch" / "joblist.md"
 SKILL_PATH         = ROOT / "jobsearch" / "skill" / "search_skill.md"
@@ -72,47 +77,49 @@ _HYBRID_IN_BODY = re.compile(
     re.I,
 )
 
-# Search queries split into two thematic passes
+# Search queries split into three thematic passes. Sweden-wide on-site queries
+# are wasted effort now that the location gate drops everything outside the ring
+# unless it is fully remote — so the geography is either the region or remote.
 QUERIES_PASS1 = [
     "business analyst Göteborg",
-    "teknisk säljare hybrid Sverige",
-    "affärsutvecklare scale-up Göteborg",
-    "implementation consultant Sverige",
-    "sales engineer Göteborg",
-    "customer success manager Sverige",
-    "product specialist Göteborg",
     "business analyst Gothenburg",
-    "solutions engineer Sweden hybrid",
-    "implementation manager Sweden",
-    "technical sales Gothenburg",
-    "customer success manager Sweden",
+    "affärsutvecklare Göteborg",
+    "teknisk säljare Göteborg",
+    "sales engineer Göteborg",
+    "customer success manager Göteborg",
+    "solutions engineer Göteborg",
+    "implementation consultant Göteborg",
+    "product specialist Västra Götaland",
+    "business analyst helt distansarbete Sverige",
+    "customer success fully remote Sweden",
+    "affärsutvecklare distans Sverige",
 ]
 
 QUERIES_PASS2 = [
     "entreprenadingenjör Göteborg",
-    "kalkylingenjör bygg hybrid",
-    "projekteringsingenjör anläggning Sverige",
-    "inköpare bygg Sverige",
-    "procurement engineer Sverige",
-    "civil engineer Gothenburg hybrid",
-    "construction project engineer Sweden",
-    "quantity surveyor Sweden",
+    "kalkylingenjör Göteborg",
+    "projekteringsingenjör Göteborg",
+    "inköpare bygg Göteborg",
+    "entreprenadingenjör Alingsås Borås",
+    "civil engineer Gothenburg",
+    "construction project engineer Gothenburg",
+    "procurement engineer Västra Götaland",
 ]
 
 # ATS-targeted pass — site: searches return only direct employer postings with numeric IDs
 QUERIES_PASS3 = [
     'site:teamtailor.com "business analyst" Göteborg',
-    'site:teamtailor.com "customer success" Sverige',
-    'site:teamtailor.com "sales engineer" Sverige',
-    'site:teamtailor.com "affärsutvecklare" Sverige',
-    'site:teamtailor.com "implementation" Sverige',
-    'site:teamtailor.com "teknisk säljare" Sverige',
-    'site:teamtailor.com "entreprenadingenjör" Sverige',
-    'site:teamtailor.com "kalkylingenjör" Sverige',
-    'site:jobylon.com "business analyst" Sverige',
-    'site:jobylon.com "customer success" Sverige',
-    'site:greenhouse.io "business analyst" Sweden',
-    'site:lever.co "business analyst" Sweden',
+    'site:teamtailor.com "customer success" Göteborg',
+    'site:teamtailor.com "sales engineer" Göteborg',
+    'site:teamtailor.com "affärsutvecklare" Göteborg',
+    'site:teamtailor.com "implementation" Göteborg',
+    'site:teamtailor.com "teknisk säljare" Göteborg',
+    'site:teamtailor.com "entreprenadingenjör" Göteborg',
+    'site:teamtailor.com "kalkylingenjör" Göteborg',
+    'site:jobylon.com "business analyst" Göteborg',
+    'site:jobylon.com "customer success" Göteborg',
+    'site:greenhouse.io "business analyst" Gothenburg',
+    'site:lever.co "business analyst" remote Sweden',
 ]
 
 SEARCH_TIMEOUT_SECS = 300
@@ -283,6 +290,20 @@ def location_verdict(stated_location, page_text=""):
     if status == "hybrid" or _HYBRID_IN_BODY.search(page_text or ""):
         return False, f"hybrid, but office outside 40 min commute ({loc})"
     return False, f"outside 40 min commute from Alingsås ({loc})"
+
+
+def _is_generic_landing(url):
+    """A careers hub with nothing identifying a role. Applied to candidates that
+    skip the stricter URL shape check — such a page cannot support generation."""
+    try:
+        from urllib.parse import urlparse
+        parsed = urlparse(url)
+        if parsed.query:
+            return False
+        last = parsed.path.rstrip("/").split("/")[-1].lower()
+        return last in _GENERIC_PATH_ENDS
+    except Exception:
+        return False
 
 
 def validate_url(url):
@@ -546,7 +567,9 @@ Respond with ONLY a JSON array (empty array if no qualifying roles found):
             tools=[{
                 "type": "web_search_20250305",
                 "name": "web_search",
-                "max_uses": 8,
+                # Must cover the query list, plus room for a retry. At the old
+                # fixed 8 the last third of every pass never ran, silently.
+                "max_uses": len(queries) + 2,
             }],
             messages=[{"role": "user", "content": user_msg}],
         )
@@ -648,6 +671,17 @@ def search_new_jobs():
             logging.error(f"Claude search failed ({pass_label}): {e}")
             print(f"  ERROR: Claude search failed ({pass_label}): {e}")
 
+    # Platsbanken via the JobTech API — structured location, no scraping
+    try:
+        jt_candidates = jobtech.fetch_candidates(known_urls, location_ok=location_verdict)
+        print(f"  JobTech returned {len(jt_candidates)} candidate(s) in range")
+        jt_candidates = jobtech.judge_fit(jt_candidates, skill_content)
+        print(f"  JobTech after role-fit judgement: {len(jt_candidates)}")
+        raw_candidates.extend(jt_candidates)
+    except Exception as e:
+        logging.error(f"JobTech source failed: {e}")
+        print(f"  ERROR: JobTech source failed: {e}")
+
     # Deduplicate across passes by URL
     seen_urls: set = set()
     deduped: list  = []
@@ -671,16 +705,25 @@ def search_new_jobs():
             logging.error(f"BLOCKED (aggregator domain): {url}")
             print(f"  SKIP (aggregator): {url}")
             continue
-        if not _url_looks_specific(url):
+        # JobTech candidates come from structured ad data, so they are known to be
+        # single postings. The URL shape heuristics only exist to catch listing
+        # pages the search model invented, and would reject valid apply URLs whose
+        # job id sits in a query parameter.
+        from_jobtech = candidate.get("_source") == "jobtech"
+        if not from_jobtech and not _url_looks_specific(url):
             logging.error(f"SKIP (no job ID or unique slug): {url}")
             print(f"  SKIP (generic URL — no job ID): {url}")
+            continue
+        if from_jobtech and _is_generic_landing(url):
+            logging.error(f"SKIP (careers hub, not a posting): {url}")
+            print(f"  SKIP (careers hub): {url}")
             continue
         try:
             ok, final_url = validate_url(url)
             if not ok:
                 print(f"  SKIP (bad URL): {url}")
                 continue
-            if _redirect_to_hub(url, final_url):
+            if not from_jobtech and _redirect_to_hub(url, final_url):
                 logging.error(f"SKIP (redirect to hub): {url} → {final_url}")
                 print(f"  SKIP (redirect to hub): {url}")
                 continue
@@ -694,7 +737,7 @@ def search_new_jobs():
     # the validation call below.
     in_range = []
     for candidate in reachable:
-        page_text = fetch_page_text(candidate["url"])
+        page_text = candidate.get("_page_text") or fetch_page_text(candidate["url"])
         candidate["_page_text"] = page_text
         ok, reason = location_verdict(candidate.get("location", ""), page_text)
         if not ok and not page_location(page_text):
@@ -727,7 +770,8 @@ def search_new_jobs():
 
     # Save results
     for job in new_jobs:
-        job.pop("_page_text", None)
+        for key in [k for k in job if k.startswith("_")]:
+            job.pop(key)
 
     results = {
         "timestamp":   datetime.now().isoformat(),
