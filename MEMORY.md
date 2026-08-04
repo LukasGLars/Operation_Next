@@ -46,6 +46,55 @@ Generated Swedish reads like translated English — clunky compound nouns, unnat
 ### Prompt anchoring
 The review prompt must receive the raw job posting text so it can identify the 2–3 real anxieties behind the role and mirror the ad's register back. See `review_skill.md` for full instruction.
 
+## Location filter (August 2026)
+
+### What was wrong
+Ads far outside commuting range were reaching the joblist — Umeå, Örnsköldsvik,
+Borlänge, Södertälje, five Stockholm roles. 14 of 16 rows failed the location
+rule. Three causes:
+- The "40 minute commute from Alingsås" rule existed only as prose in the search
+  prompt. An LLM cannot compute commute times, so it guessed.
+- The search model returned a `location` field, but `updater.py` dropped it.
+  joblist.md had no location column, so a Umeå ad looked like a Göteborg ad.
+- `URL_VALIDATION_SKILL.md` (the second gate) has no location rules at all — it
+  only checks that a location exists on the page, never that it is acceptable.
+
+### What was built
+- `location_verdict()` in `pipeline/search.py` — deterministic gate, runs as
+  stage 1.5 between reachability and quality validation. Page text is fetched
+  once there and reused by `batch_validate_urls`.
+- `COMMUTABLE_PLACES` — the tunable knob. Municipalities within ~40 min of
+  Alingsås. Widen or narrow this set rather than touching the logic.
+- `_remote_status()` — reads Teamtailor's `<dt>Remote status</dt><dd>Hybrid</dd>`
+  definition list. This is the reliable work-model signal; prose matching on
+  "hybrid" alone gives false positives ("hybrid cloud", "remote sensing").
+- `Plats` column in joblist.md, written by `updater.py` and `app.py`, rendered in
+  `templates/index.html`.
+- `tests/` — first test suite in the repo (pytest, 16 tests). Run with
+  `python -m pytest tests/`.
+
+### Decision: hybrid needs a local office
+Fully remote passes from anywhere. Hybrid passes only when the office itself is
+within range — a Stockholm hybrid still means two or three days a week in
+Stockholm. Chosen deliberately over the looser "any hybrid tag passes" reading,
+which would have kept an Örnsköldsvik and a Knivsta role.
+
+Fallback path worth knowing: when JSON-LD carries no city, the gate re-checks
+against the full visible page text (`visible_page_text`), because some ATS pages
+tag hybrid/remote in page chrome that `fetch_page_text` discards. Without this,
+valid Göteborg roles (both Novacura ads) were silently dropped.
+
+### Gotchas
+- Securitas "Business Analyst (Client Engagement)" was a **Warsaw, Poland** role
+  all along — generated documents exist for it. The old pipeline surfaced it
+  because nothing checked location.
+- 11 rows were removed from joblist.md, two of them `Genererat`
+  (Rekryteringsgruppen Stockholm, Securitas Warsaw). Their generated documents in
+  `jobsearch/applications/` were left untouched, and the rows are recoverable
+  from git history.
+- `page_location()` must use `[ \t]*`, not `\s*`. With `\s*` a blank
+  `Location:` line swallowed the newline and captured `Description:` as the city.
+
 ## Pending / known issues
 - Review button not yet built (next session)
 - Valeryd Toolkit deployment discussed — Railway recommended over Vercel (PyMuPDF native binaries, timeout risk on serverless)
