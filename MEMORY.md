@@ -142,5 +142,4 @@ since Sweden-wide on-site results are discarded by the location gate anyway.
 
 ## Pending / known issues
 - Review button not yet built (next session)
-- Valeryd Toolkit deployment discussed — Railway recommended over Vercel (PyMuPDF native binaries, timeout risk on serverless)
 - Silent pipeline failure — mailer sends nothing when no new/closed jobs, can't distinguish from crash
