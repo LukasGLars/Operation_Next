@@ -615,6 +615,10 @@ Respond with ONLY a JSON array (empty array if no qualifying roles found):
 def search_new_jobs():
     print(f"[{datetime.now().isoformat()}] search.py starting")
 
+    # Collected for the digest. A pass that fails is caught and logged, so
+    # without this a broken run and a quiet week look identical downstream.
+    run_errors: list = []
+
     try:
         jobs          = load_joblist()
         skill_content = load_skill()
@@ -670,17 +674,27 @@ def search_new_jobs():
         except Exception as e:
             logging.error(f"Claude search failed ({pass_label}): {e}")
             print(f"  ERROR: Claude search failed ({pass_label}): {e}")
+            run_errors.append(f"web search pass '{pass_label}' failed: {str(e)[:120]}")
+
+    web_candidate_count = len(raw_candidates)
 
     # Platsbanken via the JobTech API — structured location, no scraping
+    jobtech_candidate_count = 0
     try:
         jt_candidates = jobtech.fetch_candidates(known_urls, location_ok=location_verdict)
         print(f"  JobTech returned {len(jt_candidates)} candidate(s) in range")
         jt_candidates = jobtech.judge_fit(jt_candidates, skill_content)
         print(f"  JobTech after role-fit judgement: {len(jt_candidates)}")
+        jobtech_candidate_count = len(jt_candidates)
         raw_candidates.extend(jt_candidates)
     except Exception as e:
         logging.error(f"JobTech source failed: {e}")
         print(f"  ERROR: JobTech source failed: {e}")
+        run_errors.append(f"JobTech source failed: {str(e)[:120]}")
+
+    if not raw_candidates:
+        run_errors.append("no candidates from any source — both the web search "
+                          "and JobTech returned nothing")
 
     # Deduplicate across passes by URL
     seen_urls: set = set()
@@ -758,6 +772,7 @@ def search_new_jobs():
     if in_range:
         print(f"  Validating {len(in_range)} reachable URL(s) in one call...")
         verdicts = batch_validate_urls(in_range, val_skill)
+        validation_errors = 0
         for candidate in in_range:
             url = candidate.get("url", "").strip()
             verdict, reason = verdicts.get(url, ("uncertain", "not in response"))
@@ -765,8 +780,13 @@ def search_new_jobs():
                 print(f"  NEW: {candidate.get('company')} — {candidate.get('role')}")
                 new_jobs.append(candidate)
             else:
+                if reason.startswith("validation error"):
+                    validation_errors += 1
                 logging.error(f"URL rejected [{verdict}] ({reason}): {url}")
                 print(f"  SKIP ({verdict} — {reason[:60]}): {url}")
+        if validation_errors:
+            run_errors.append(f"validation call failed for {validation_errors} of "
+                              f"{len(in_range)} candidate(s)")
 
     # Save results
     for job in new_jobs:
@@ -777,6 +797,14 @@ def search_new_jobs():
         "timestamp":   datetime.now().isoformat(),
         "new_jobs":    new_jobs,
         "closed_jobs": closed_jobs,
+        "stats": {
+            "web_candidates":     web_candidate_count,
+            "jobtech_candidates": jobtech_candidate_count,
+            "reachable":          len(reachable),
+            "in_range":           len(in_range),
+            "validated":          len(new_jobs),
+        },
+        "errors": run_errors,
     }
     try:
         with open(RESULTS_PATH, "w", encoding="utf-8") as f:
