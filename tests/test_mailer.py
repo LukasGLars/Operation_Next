@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from pipeline.mailer import build_body, build_subject, stale_warning  # noqa: E402
+from pipeline.mailer import build_body, build_subject, should_send, stale_warning  # noqa: E402
 
 JOB = {"company": "SEVR", "role": "Customer Success", "url": "https://x.se/jobs/1"}
 STATS = {"web_candidates": 4, "jobtech_candidates": 30, "reachable": 28,
@@ -17,11 +17,17 @@ def test_errors_dominate_the_subject():
     assert "FEL I PIPELINE" in subject
 
 
-def test_quiet_run_says_so_instead_of_going_silent():
-    subject = build_subject([], [], [])
-    assert "inga nya roller" in subject
-    body = build_body([], [], STATS, [])
-    assert "utan fel" in body
+def test_only_failures_and_news_are_mailed():
+    assert should_send([JOB], [], [])                    # new roles
+    assert should_send([], [], ["JobTech source failed"])  # failure
+    assert should_send([], [JOB], [])                    # a tracked ad closed
+    assert not should_send([], [], [])                   # clean, nothing new
+
+
+def test_a_dead_pipeline_still_reports():
+    """Silence is only safe because these two count as errors."""
+    assert should_send([], [], [stale_warning("")])
+    assert should_send([], [], ["results.json saknas"])
 
 
 def test_new_roles_keep_the_count_in_the_subject():
