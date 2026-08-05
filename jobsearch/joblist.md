@@ -7,6 +7,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|---|
 | 1 | CheckWatt | Sales Engineer | Göteborg | CV_Zeppelin | Identifierad | 2026-08-05 | https://collaborate.checkwatt.se/jobs/5389677-sales-engineer |
@@ -21,7 +22,7 @@
 | 10 | Oddwork Sweden AB | Teknisk säljare till Profcon // Göteborg | Göteborg | CV_Plymovent | Identifierad | 2026-08-05 | https://jobb.oddwork.se/jobs/8031694-teknisk-saljare-till-profcon-goteborg/applications/new?promotion=2090960-arbetsformedlingen |
 | 11 | Poolia AB | Inköpare inom Indirekt Inköp (IT & HR) | Göteborg | CV | Identifierad | 2026-08-05 | https://karriar.poolia.se/jobs/8030877-inkopare-inom-indirekt-inkop-it-hr |
 | 12 | OnePartnerGroup Jönköping AB | Teknisk säljare till Böttcher Nordic | Göteborg | CV_Zeppelin | Identifierad | 2026-08-05 | https://www.onepartnergroup.se/lediga-jobb/482201 |
-| 13 | Thomas Betong AB | Teknisk säljare Prefab Göteborg | Göteborg | CV_Zeppelin | Identifierad | 2026-08-05 | https://thomasbetong.se/karriar/lediga-tjanster/?rmpage=job&rmjob=463&utm_medium=talentech_publishing&utm_source=jobtip |
+| 13 | Thomas Betong AB | Teknisk säljare Prefab Göteborg | Göteborg | CV_Zeppelin | Genererat | 2026-08-05 | https://thomasbetong.se/karriar/lediga-tjanster/?rmpage=job&rmjob=463&utm_medium=talentech_publishing&utm_source=jobtip |
 | 14 | NXT Interim Göteborg AB | Business Analyst - Digital Solutions | Göteborg | CV_Einride | Identifierad | 2026-08-05 | https://nxtinterim.recman.page/job/482070?path=ams&apply_only |
 | 15 | Trafikverket | Kvalificerad inköpare inom entreprenadupphandling | Göteborg | CV | Identifierad | 2026-08-05 | https://trv.heroma.se/prod/trvpp01/externwebbv2/LedigaJobb/EW2PageJobPostingAdvert.aspx?jobpostingid=8354234315932008458 |
 | 16 | AB Effektiv Väst | Buyer – Private Label & Produktutveckling till Mshop | Göteborg | CV | Identifierad | 2026-08-05 | https://effektiv.se/jobb/kontor-administration/goteborg/buyer-private-label-and-produktutveckling-till-mshop-8009874/ |
