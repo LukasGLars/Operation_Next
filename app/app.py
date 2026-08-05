@@ -205,11 +205,16 @@ def _build_doc_content(cv_base: str, job_url: str, job_posting_text: str) -> lis
     sales_phil_text    = SALES_PHILOSOPHY.read_text(encoding="utf-8") if SALES_PHILOSOPHY.exists() else ""
     cover_letter_text  = read_docx_text(LETTER_DOCX) if LETTER_DOCX.exists() else ""
 
-    prompt = (
+    # Static reference docs -- identical on every /generate call. Cached
+    # separately from the job-specific tail so repeat calls only pay full
+    # price for the posting text, not the whole CV + skill + tone reference.
+    static_text = (
         "Generation instructions — follow all rules here exactly:\n" + skill_content +
         "\n\nMaster CV — complete work history and all projects. Select and tailor from this:\n" + master_cv_text +
         "\n\nSales philosophy — use paragraph from this for technical sales cover letters (para 3):\n" + sales_phil_text +
-        "\n\nCover letter tone reference (match this tone and length):\n" + cover_letter_text +
+        "\n\nCover letter tone reference (match this tone and length):\n" + cover_letter_text
+    )
+    dynamic_text = (
         "\n\nJob posting URL: " + job_url +
         "\nJob posting content:\n" + job_posting_text +
         '\n\nGenerate a full tailored CV and cover letter for this role, in the SAME LANGUAGE\n'
@@ -218,7 +223,10 @@ def _build_doc_content(cv_base: str, job_url: str, job_posting_text: str) -> lis
         'Return ONLY a valid JSON object with no other text:\n'
         '{"cv": "full CV in markdown, in the job posting'"'"'s language", "cover_letter": "full cover letter in plain text, same language"}'
     )
-    return [{"type": "text", "text": prompt}]
+    return [
+        {"type": "text", "text": static_text, "cache_control": {"type": "ephemeral"}},
+        {"type": "text", "text": dynamic_text},
+    ]
 
 
 def _recent_edited_examples(n: int = 1) -> str:
@@ -270,13 +278,17 @@ def _build_review_content(draft_cv: str, draft_cover_letter: str, job_posting_te
     review_skill_content = REVIEW_SKILL_PATH.read_text(encoding="utf-8") if REVIEW_SKILL_PATH.exists() else ""
     recent_examples = _recent_edited_examples()
 
-    prompt = (
+    # Static across every /review call -- cached separately from the
+    # per-request draft/posting text, which changes every time.
+    static_text = (
         "Review instructions — follow all rules here exactly:\n" + review_skill_content +
         ("\n\nRecent human-approved edits -- the AI draft/final pairs below show exactly what gets "
          "rejected in practice: canned opening lines, repeated rhetorical devices, translated-sounding "
          "phrasing, inflated job titles, tool lists in place of stances, and bullets that name internal "
          "tech instead of what colleagues get. Do not repeat any pattern shown as rejected, and match "
-         "the voice and structure of the approved versions:\n" + recent_examples if recent_examples else "") +
+         "the voice and structure of the approved versions:\n" + recent_examples if recent_examples else "")
+    )
+    dynamic_text = (
         "\n\nJob posting content:\n" + job_posting_text +
         "\n\nDraft CV:\n" + draft_cv +
         "\n\nDraft cover letter:\n" + draft_cover_letter +
@@ -285,7 +297,10 @@ def _build_review_content(draft_cv: str, draft_cover_letter: str, job_posting_te
         'Return ONLY a valid JSON object with no other text:\n'
         '{"cv": "full refined CV in markdown", "cover_letter": "full refined cover letter in plain text"}'
     )
-    return [{"type": "text", "text": prompt}]
+    return [
+        {"type": "text", "text": static_text, "cache_control": {"type": "ephemeral"}},
+        {"type": "text", "text": dynamic_text},
+    ]
 
 
 def _parse_claude_json(text: str):
