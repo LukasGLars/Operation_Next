@@ -140,6 +140,28 @@ Filtering happens in this order, cheapest first:
 `len(queries) + 2`. Queries were also retuned to the region plus explicit remote,
 since Sweden-wide on-site results are discarded by the location gate anyway.
 
+## Matched edited examples by role (PR #8, merged before this entry)
+
+`_matched_edited_examples` in `app/app.py` replaced "always show the newest
+edit" with a Claude call that picks the past edited example whose role is
+closest to the one being drafted, then feeds the *original vs. edited* diff
+(not just the finished edit) into the review pass. The diff is the sharper
+signal — it shows exactly what gets rejected (reused anecdotes, bulleted
+metrics, wrong company name), not just what a finished draft looks like.
+Matching reads `meta.json` (`{"company", "role"}`) per application folder;
+falls back to the folder slug if `meta.json` is missing, so a missing file
+degrades match quality but doesn't break anything.
+
+### Gotcha: meta.json goes missing when an example is saved outside `/save`
+Both `/generate` and `/save` call `_save_meta` automatically, so `meta.json`
+should always exist for anything the app itself wrote. It's gone missing
+twice now (`8fb94b1`, and again 2026-08-05 for the Vitec/Infometric example,
+fixed in PR #9) — both times for a folder that has `_edited.md` files but no
+`meta.json`, consistent with the docs having been created outside the app's
+own save flow rather than a code bug. When you notice a new application
+folder without `meta.json`, backfill it manually from `joblist.md`'s
+company/role columns rather than assuming the app is broken.
+
 ## Pending / known issues
 - Review button not yet built (next session)
 - Silent pipeline failure — mailer sends nothing when no new/closed jobs, can't distinguish from crash
