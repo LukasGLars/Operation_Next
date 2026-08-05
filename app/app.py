@@ -57,6 +57,17 @@ def _save_docs(folder: Path, cv: str, cover_letter: str, suffix: str):
         cl_path.write_text(cover_letter, encoding="utf-8")
 
 
+def _save_meta(folder: Path, company: str, role: str):
+    """Full company/role text, kept separately from the folder name -- that
+    name only carries the first word of the role (see _app_folder) and isn't
+    enough to tell roles apart when picking a similar past example."""
+    folder.mkdir(parents=True, exist_ok=True)
+    (folder / "meta.json").write_text(
+        json.dumps({"company": company, "role": role}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+
 # ── Joblist read/write ─────────────────────────────────────
 
 def _parse_joblist_raw():
@@ -229,54 +240,103 @@ def _build_doc_content(cv_base: str, job_url: str, job_posting_text: str) -> lis
     ]
 
 
-def _recent_edited_examples(n: int = 1) -> str:
-    """Most recent human-approved edits, paired with their AI draft where
-    available -- the diff between draft and edit is the clearest signal of
-    what actually gets rejected (a canned opening line, a repeated
-    rhetorical tic, etc.), stronger than just showing a finished example.
+def _match_similar_role(client, role: str, company: str, candidates: list[str]) -> int | None:
+    """One Claude call: which past role (by list position) is closest to the
+    new one in function, seniority and register. Split out from
+    _matched_edited_examples so tests can stub the judgement without an API
+    call, same pattern as _validate_chunk / _judge_chunk in pipeline/."""
+    listing = "\n".join(f"{i}. {title}" for i, title in enumerate(candidates, 1))
+    prompt = (
+        f"New role: {role} at {company}\n\n"
+        f"Past roles with human-edited application examples:\n{listing}\n\n"
+        "Which past role is closest to the new role in function, seniority and register? "
+        "Roles in different fields (e.g. technical field sales vs. digital business "
+        "development) are NOT close even if both are commercial. "
+        "Reply with only the number, or NONE if nothing is a reasonable match."
+    )
+    response = client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=16,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    answer = response.content[0].text.strip()
+    match = re.search(r"\d+", answer)
+    if "NONE" in answer.upper() or not match:
+        return None
+    idx = int(match.group()) - 1
+    return idx if 0 <= idx < len(candidates) else None
 
-    Covers both documents. This used to read cover letters only, on the
-    assumption that the CV was too structured to carry AI tells. The edits to
-    the Rekryteringsgruppen CV disproved that -- inflated job titles, tool
-    laundry lists in the competency section and bullets naming internals
-    instead of outcomes all had to be corrected by hand, and none of it was
-    ever fed back.
 
-    Newest edit per document only. Reaching further back pulled in the May
-    CheckWatt edits, which were deliberately retired as a reference, and
-    doubled the prompt for older taste."""
+def _matched_edited_examples(client, company: str, role: str) -> str:
+    """Human-approved edit closest to the new role, paired with its AI draft
+    where available -- the diff between draft and edit is the clearest
+    signal of what gets rejected, stronger than just showing a finished
+    example.
+
+    Replaces picking the single newest edit regardless of role. A technical
+    field-sales edit (Thomas Betong) has nothing to teach a digital business
+    developer draft (Voi) -- wrong register and wrong content entirely.
+    Matching is one Claude call over past role titles rather than a fixed
+    taxonomy, since roles applied for don't cluster into a few clean buckets.
+    Returns "" rather than forcing a weak match when nothing is close."""
+    if not role:
+        return ""
+    current_folder = _app_folder(company, role) if company else None
+    candidates = []
+    for folder in sorted(p for p in APPLICATIONS.glob("*") if p.is_dir()):
+        if folder == current_folder:
+            continue
+        if not ((folder / "cv_edited.md").exists() or (folder / "cover_letter_edited.md").exists()):
+            continue
+        meta_path = folder / "meta.json"
+        if meta_path.exists():
+            meta = json.loads(meta_path.read_text(encoding="utf-8"))
+            title = f"{meta.get('role', '')} at {meta.get('company', '')}".strip()
+        else:
+            title = folder.name.replace("_", " ")
+        candidates.append((folder, title))
+    if not candidates:
+        return ""
+
+    try:
+        idx = _match_similar_role(client, role, company, [title for _, title in candidates])
+    except Exception as e:
+        logging.error(f"Example matching failed: {e}")
+        return ""
+    if idx is None:
+        return ""
+    folder, title = candidates[idx]
+
     blocks = []
     for label, stem in (("Cover letter", "cover_letter"), ("CV", "cv")):
-        edited_files = sorted(
-            APPLICATIONS.glob(f"*/{stem}_edited.md"),
-            key=lambda p: p.stat().st_mtime, reverse=True,
-        )[:n]
-        for i, edited_path in enumerate(edited_files, 1):
-            edited_text = edited_path.read_text(encoding="utf-8")
-            original_path = edited_path.parent / f"{stem}_original.md"
-            if original_path.exists():
-                original_text = original_path.read_text(encoding="utf-8")
-                blocks.append(
-                    f"{label} example {i} -- AI draft (REJECTED patterns, avoid repeating these):\n"
-                    f"{original_text}\n\n"
-                    f"{label} example {i} -- human-approved final version (match this instead):\n"
-                    f"{edited_text}"
-                )
-            else:
-                blocks.append(
-                    f"{label} example {i} -- human-approved final version (match this):\n{edited_text}"
-                )
+        edited_path = folder / f"{stem}_edited.md"
+        if not edited_path.exists():
+            continue
+        edited_text = edited_path.read_text(encoding="utf-8")
+        original_path = folder / f"{stem}_original.md"
+        if original_path.exists():
+            original_text = original_path.read_text(encoding="utf-8")
+            blocks.append(
+                f"{label} example -- AI draft (REJECTED patterns, avoid repeating these):\n"
+                f"{original_text}\n\n"
+                f"{label} example -- human-approved final version, from a similar role "
+                f"({title}) -- match this instead:\n{edited_text}"
+            )
+        else:
+            blocks.append(
+                f"{label} example -- human-approved final version, from a similar role "
+                f"({title}) -- match this:\n{edited_text}"
+            )
     return "\n\n---\n\n".join(blocks)
 
 
-def _build_review_content(draft_cv: str, draft_cover_letter: str, job_posting_text: str) -> list:
+def _build_review_content(draft_cv: str, draft_cover_letter: str, job_posting_text: str, recent_examples: str) -> list:
     """Second pass, per jobsearch/skill/review_skill.md: refines the draft
     to actually speak to what THIS company is anxious about and to read as
     written by a native speaker who understood the ad, rather than a
     translation. Never wired into the generation flow before -- the skill
     file existed but nothing called it."""
     review_skill_content = REVIEW_SKILL_PATH.read_text(encoding="utf-8") if REVIEW_SKILL_PATH.exists() else ""
-    recent_examples = _recent_edited_examples()
 
     # Static across every /review call -- cached separately from the
     # per-request draft/posting text, which changes every time.
@@ -366,12 +426,13 @@ def generate():
         # any failure rather than breaking generation entirely.
         if result.get("cv") and result.get("cover_letter"):
             try:
+                recent_examples = _matched_edited_examples(client, company, role)
                 review_response = client.messages.create(
                     model="claude-sonnet-4-6",
                     max_tokens=4096,
                     system="You are Lukas Larsson's job application assistant, now reviewing your own draft. Output only valid JSON.",
                     messages=[{"role": "user", "content": _build_review_content(
-                        result["cv"], result["cover_letter"], job_posting_text)}],
+                        result["cv"], result["cover_letter"], job_posting_text, recent_examples)}],
                 )
                 reviewed = _parse_claude_json(review_response.content[0].text)
                 if reviewed.get("cv") and reviewed.get("cover_letter"):
@@ -387,6 +448,7 @@ def generate():
             try:
                 folder = _app_folder(company, role)
                 _save_docs(folder, result["cv"], result.get("cover_letter", ""), "original")
+                _save_meta(folder, company, role)
             except Exception as e:
                 logging.error(f"Save original failed: {e}")
         return jsonify(result)
@@ -407,6 +469,7 @@ def save_edited():
     try:
         folder = _app_folder(company, role)
         _save_docs(folder, cv, cover_letter, "edited")
+        _save_meta(folder, company, role)
         return jsonify({"ok": True, "folder": str(folder.relative_to(ROOT))})
     except Exception as e:
         logging.error(f"Save edited failed: {e}")
