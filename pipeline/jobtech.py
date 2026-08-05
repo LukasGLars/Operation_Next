@@ -264,7 +264,7 @@ def _judge_chunk(candidates, skill_content, errors=None):
         response = client.messages.create(
             model=MODEL,
             max_tokens=JUDGE_MAX_TOKENS,
-            system=skill_content,
+            system=[{"type": "text", "text": skill_content, "cache_control": {"type": "ephemeral"}}],
             messages=[{"role": "user", "content": prompt}],
         )
         return {v.get("index"): v for v in parse_json_array(response.content[0].text)}

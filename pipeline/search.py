@@ -450,7 +450,7 @@ def _validate_chunk(entries, validation_skill):
             response = client.messages.create(
                 model="claude-sonnet-4-6",
                 max_tokens=VALIDATION_MAX_TOKENS,
-                system=validation_skill,
+                system=[{"type": "text", "text": validation_skill, "cache_control": {"type": "ephemeral"}}],
                 messages=[{"role": "user", "content": prompt}],
             )
             results = parse_json_array(response.content[0].text)
@@ -580,7 +580,9 @@ Respond with ONLY a JSON array (empty array if no qualifying roles found):
         return client.messages.create(
             model="claude-sonnet-4-6",
             max_tokens=4096,
-            system=system,
+            # Identical across pass1/2/3 within one run (same known_urls) --
+            # cached so only the first pass pays full price for it.
+            system=[{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}],
             tools=[{
                 "type": "web_search_20250305",
                 "name": "web_search",
