@@ -1,0 +1,116 @@
+Ganska bra resultat, men ett par saker att fixa:
+
+1) När CV och personligt brev genererats kan man ej gå tillbaka i flödet utan att förlora informationen. 
+2) Vid öppnande av annonslänk så kommer vi hit: https://collaborate.checkwatt.se/jobs och vi kan se att personligt brev skriver både Sales Engineer / Customer Success Manager. Det är fel, den relevanta tjänsten i detta fall är https://collaborate.checkwatt.se/jobs/4669704-customer-success-manager-till-checkwatt, Sales Engineer är fel eftersom dom letar efter; MSc in Energy Systems or equivalent (preferably engineering degree)
+4–5 years of experience in energy systems and solar power projects
+Understanding of the Nordic electricity system and its regulations
+Technical understanding of the electricity grid and energy systems
+https://collaborate.checkwatt.se/jobs/5389677-sales-engineer
+3) genererade cv och personligt brev måste ha input möjligheter så AI kan uppdatera efter instruction, och spara dokumentationen. 
+
+Rätt i detta fall är att resultatet är https://collaborate.checkwatt.se/jobs/4669704-customer-success-manager-till-checkwatt att CV och Personligt brev skrivs baserat på detta. 
+
+Här är outputen av körningen:
+# Lukas Larsson
+**Engineer | Business Developer | Automation & Data**
+
+Alingsås, Sverige · 073-740 97 88 · lukasglarsson88@gmail.com · linkedin.com/in/lukas-larsson-062163169
+
+---
+
+## Profil
+
+Ingenjör med analytisk och kommersiell profil. Jag arbetar bäst när jag får ta ett komplext operationellt problem, bryta ner det och bygga en strukturerad lösning som skalar. Min bakgrund spänner över e-handel, bygg och industriförsäljning, med praktisk erfarenhet av Python, Excel och AI-driven automation. Det som driver mig är hävstång – ett välbyggt system kan ersätta år av manuellt arbete, och det är den typen av problem jag vill lägga min tid på.
+
+---
+
+## Kärnkompetenser
+
+- Affärsutveckling, affärscasemodellering och datadriven beslutsfattning
+- Python (pandas, automation, AI-integration), Excel, strukturerad datamodellering
+- Kundframgång och teknisk rådgivning mot komplexa B2B-kunder
+- Processautomation, skalbarhet och operationell effektivitet
+- Stakeholderhantering mot seniora kund- och leverantörskontakter
+- Logistik, installationstjänster och supply chain-koordinering
+
+---
+CV
+## Yrkeserfarenhet
+
+### Valeryd AB — Business Developer & Engineer
+*2023 – Nu*
+
+- Designade en strukturerad eftermarknadsmodell för trailerdelsdata. Sökmatchningsgraden ökade med 155 % i Sverige och 203 % i Norge på 12 månader, med tydligt fall i felbeställningar.
+- Byggde en Python-baserad contentpipeline med few-shot AI för att uppdatera titlar och beskrivningar för 4 100 produkter på 7 språk. Vad som hade krävt 28 000 manuella redigeringar kördes på några timmar. Pipelinen lämnades sedan över till SEO-teamet för vidare skalning.
+- Utvecklade en AI-driven kundsupportmotor som kombinerar Claude API, Microsoft Graph API och Power Automate. Systemet analyserar inkommande e-post och genererar kontextuella utkast till svar på avsändarens språk, direkt från delade postlådor.
+
+### Hercules Grundläggning — Platschef
+*2022 – 2023*
+
+- Ledde tvärfunktionella projektteam och maskintunga operationer med balans mellan säkerhet, juridisk efterlevnad och lönsamhet.
+- Koordinerade leverantörer, underentreprenörer och klientstakeholders och översatte teknisk komplexitet till tydlig statusrapportering och beslut.
+
+### Svensk Installationspartner / BHG Group — Product Manager & Business Developer
+*2017 – 2021*
+
+- Ledde utveckling och nationell utrullning av installationstjänster inom VVS, el och sol. Arbetet omfattade marknadsanalys, uppbyggnad av partnernätverk och IT-systemintegration.
+- Byggde och förhandlade ett rikstäckande installatörsnätverk med kontrakt och kvalitetsuppföljning, vilket möjliggjorde expansion till Finland.
+- Integrerade tjänster i e-handelsflöden för en sömlös resa från köp till installation.
+
+### Polarpumpen — Teknisk Säljare
+*2014 – 2017*
+
+- Högvolymteknisk försäljning av värmepumpar och solpaneler med stark kundrådgivning och produktmatchning.
+
+### Försvarsmakten — Spaningsjägare, Vicekorpral
+*2012 – 2014*
+
+- Strategisk spaning, underrättelseinhämtning och amfibieoperationer. Byggde ledarskap, disciplin och förmågan att agera lugnt under osäkerhet.
+
+---
+
+## Urval av projekt
+
+**AI Customer Support Engine (Valeryd AB)**
+- End-to-end automationsflöde i Power Automate som orkestrar Claude AI och Microsoft Graph API. Hanterar inkommande e-post, genererar kontextmedvetna svar på avsändarens språk och levererar dessa som autentiska trådade svar från delade postlådor inom sekunder.
+
+**Macro Regime Signal & Alert System (Personligt projekt)**
+- Python-baserat system som hämtar makroekonomisk data från FRED (yieldkurvor, kreditspreadar, VIX, arbetsmarknadsdata), beräknar momentumskiften och genererar risk-on/risk-off-signaler via automatiserad e-postrapport.
+
+**VVS Faktureringsapp (Personligt projekt)**
+- Mobilanpassad webbapp för VVS-hantverkare byggd med Flask, SQLite och Alpine.js. Hanterar kunder, jobb och fakturor end-to-end med ROT-avdragsberäkning, PDF-generering, Claude Vision OCR för kvittoavläsning och automatisk prisreferens mot Bauhaus.
+
+**MedTech RegTech Startup (Sidoprojekt, 2025–Nu)**
+- Medutvecklar en SaaS-plattform som automatiserar regulatorisk efterlevnad för MedTech (MDR/IVDR). Arbetet översätter komplex reglering till produktfunktioner som minskar kunders kostnader och tid till marknad.
+
+---
+
+## Utbildning
+
+**Högskoleingenjör — Yrgo, Göteborg**
+*2020 – 2022*
+
+---
+
+## Språk
+
+Svenska (Modersmål) · Engelska (Flytande) · Danska (Arbetsförståelse)
+
+PERSONLIGT BREV
+Lukas Larsson
+Alingsås, Sverige · 073-740 97 88 · lukasglarsson88@gmail.com
+
+Ansökan: Sales Engineer / Customer Success Manager – CheckWatt
+
+Hej CheckWatt,
+
+Jag har tagit arbetet på Valeryd så långt jag kan och söker nu nästa utmaning. När jag läste om CheckWatts roll som Sales Engineer fastnade jag direkt – ett bolag som sitter i skärningspunkten mellan batterilager, styrning och förnybara energisystem, och som faktiskt mäter vad de lovar. Det är en marknad som rör sig snabbt och där teknisk trovärdighet och kommersiell skärpa behöver sitta i samma person.
+
+På Valeryd byggde jag ett AI-drivet kundsupportsystem som kombinerar Claude API, Microsoft Graph API och Power Automate. Systemet analyserar inkommande e-post, genererar kontextmedvetna svar på avsändarens språk och levererar dem direkt från delade postlådor inom några sekunder. Innan dess designade jag en strukturerad eftermarknadsmodell för trailerdelsdata som ökade sökmatchningen med 155 % i Sverige och 203 % i Norge på tolv månader. Båda projekten handlade om samma sak: att ta ett komplext operationellt problem, bryta ner det och bygga något som håller när det skalar.
+
+Tidigare på BHG Group ledde jag den nationella utrullningen av installationstjänster inom VVS, el och sol – från marknadsanalys och kontraktsförhandling till integration i e-handelsflödet och expansion till Finland. Det arbetet lärde mig att en bra lösning inte räcker om den inte kan säljas, implementeras och förvaltas i verkligheten. Teknisk förståelse och förmågan att driva affär hänger ihop.
+
+Jag skulle gärna prata mer om hur jag kan bidra till det CheckWatt bygger.
+
+Med vänliga hälsningar,
+Lukas Larsson

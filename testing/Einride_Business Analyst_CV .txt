@@ -1,0 +1,76 @@
+# Lukas Larsson
+Engineer, Business Analyst, Automation & Data
+Alingsås, Sweden · 073-740 97 88 · lukasglarsson88@gmail.com · linkedin.com/in/lukas-larsson-062163169
+
+---
+
+## Profile
+Engineer with a strong analytical and commercial profile. I work best when I get to take a complex operational problem, break it down, and build a structured solution that scales. My background spans e-commerce, automotive aftermarket, construction, and industrial sales, with hands-on experience in Python, Excel, and AI-driven automation. What drives me is leverage — one well-built system can replace years of manual work, and that is the kind of problem I want to spend my time on.
+
+---
+
+## Core Competencies
+- Business case modelling & data-driven decision-making
+- Python (pandas, automation, AI integration), Excel, structured data modelling
+- Process automation, scalability, and operational efficiency
+- Stakeholder management with senior client and supplier counterparts
+- Logistics, supply chain coordination, and operational analysis
+- Full-cycle B2B account management and commercial ownership
+
+---
+
+## Professional Experience
+
+### Valeryd AB — Business Developer & Engineer
+*2023 – Present*
+- Designed a structured aftermarket data model for trailer parts. Search match rates increased by 155% in Sweden and 203% in Norway over 12 months, with a measurable drop in incorrect orders.
+- Built a Python-based content pipeline using a few-shot AI approach to update titles and descriptions across 4,100 products in 7 languages. What would have been 28,000 manual edits ran in a few hours. The pipeline was later handed over to the SEO team to scale further.
+- Built the Valeryd Toolkit — an internal Flask web app used daily by the full sales and back-office team. Includes PDF order extraction via Claude Vision (order entry reduced from 3–10 minutes to under one minute), axle matching from trailer dimensions and weight, and semantic knowledge base search over ~7,500 entries from resolved customer cases (TF-IDF retrieval → Claude Haiku rerank → Claude Sonnet synthesis).
+- Developed an AI-powered customer support engine combining the Claude API, Microsoft Graph API, and Power Automate. Analyses incoming emails and generates contextual draft replies in the sender's language directly from shared mailboxes within seconds.
+- Full-cycle B2B account management across Nordic distributors and e-commerce partners in the automotive aftermarket.
+
+### Hercules Grundläggning — Site Manager
+*2022 – 2023*
+- Led multi-disciplinary project teams and machinery-heavy operations across foundation and groundwork projects, balancing safety, legal compliance, and profitability.
+- Coordinated suppliers, subcontractors, and client stakeholders, translating technical complexity into clear status reporting and decisions.
+
+### Svensk Installationspartner / BHG Group — Product Manager & Business Developer
+*2017 – 2021*
+- Led the development and nationwide rollout of installation services across HVAC, plumbing, electrical, and solar. Covered market research, partner network building, contract negotiation, and IT system alignment.
+- Built and managed a network of 100+ certified installers with contracts and quality tracking, enabling expansion into Finland.
+- Integrated services into e-commerce flows for a seamless purchase-to-installation customer journey.
+
+### Polarpumpen — Technical Sales
+*2014 – 2017*
+- High-volume technical sales of heat pumps and solar panels, managing the full cycle from needs analysis through closing and aftersales.
+
+### Swedish Armed Forces — Reconnaissance Marine, Corporal
+*2012 – 2014*
+- Strategic surveillance, intelligence gathering, and amphibious operations in the 4th Amphibious Regiment.
+- Built leadership, discipline, and the ability to operate calmly under pressure and ambiguity.
+
+---
+
+## Selected Projects
+
+**Macro Regime Signal & Alert System (Personal Project)**
+Python-based system that ingests daily macroeconomic data from FRED (yield curves, credit spreads, VIX, labour data), calculates momentum and regime shifts, and generates risk-on/risk-off signals. AI-assisted interpretation pipeline that produces a daily macro briefing via automated email. Part of a broader portfolio construction project (Reactor Core) with 10Y backtested Sharpe of 1.85.
+*Stack: Python, FRED API, Anthropic Claude API, GitHub Actions, pandas, scipy*
+
+**VVS Invoicing App (Personal Project)**
+Web-based invoicing app for plumbing contractors. Flask, SQLite, Alpine.js. Handles customers, jobs, and invoices end to end. ROT deduction calculations, PDF generation, Claude Vision OCR for receipt extraction, automatic price benchmarking. Self-hosted on Linux.
+*Stack: Python, Flask, SQLite, Alpine.js, Tailwind CSS*
+
+**MedTech Compliance Platform (Co-founder, 2025–Present)**
+Co-developing a SaaS platform that automates MedTech regulatory compliance under EU MDR/IVDR. Integrates with a company's QMS to reduce manual documentation, automate competence verification, and detect compliance gaps before audits. Early customer validation through GoCo Health Innovation City in the Nordic MedTech ecosystem.
+
+---
+
+## Education
+**B.Sc. in Engineering — Yrgo, Gothenburg**
+*2020 – 2022*
+
+---
+
+## Languages
+Swedish (Native) · English (Fluent) · Danish (Working Proficiency)

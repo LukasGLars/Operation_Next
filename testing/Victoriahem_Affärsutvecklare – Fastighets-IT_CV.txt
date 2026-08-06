@@ -1,0 +1,92 @@
+# Lukas Larsson
+**Affärsutvecklare | Ingenjör | Automation & Data**
+
+Alingsås, Sverige · 073-740 97 88 · lukasglarsson88@gmail.com · linkedin.com/in/lukas-larsson-062163169
+
+---
+
+## Profil
+
+Ingenjör med stark kommersiell och analytisk profil. Jag trivs bäst när jag får ta ett komplext operativt problem, bryta ner det och bygga en strukturerad lösning som håller över tid. Min bakgrund spänner över e-handel, bygg, fastighetsteknik och industriell försäljning. Jag är van vid att röra mig mellan teknik och affär, och att ta egna initiativ från idé till resultat.
+
+---
+
+## Kärnkompetenser
+
+- Affärsutveckling och verksamhetsutveckling
+- Projektledning av tekniska och tvärfunktionella initiativ
+- Konceptutveckling och processutveckling
+- Fastighetsteknik, HVAC, ventilation och installationstjänster
+- Stakeholderhantering mot ledning, förvaltning och externa partners
+- Datamodellering, Python, Excel och AI-driven automation
+- Partner- och nätverksutveckling
+
+---
+
+## Yrkeserfarenhet
+
+### Valeryd AB — Affärsutvecklare & Ingenjör
+*2023 – Nu*
+
+- Byggde Valeryd Toolkit — ett internt Flask-baserat webbverktyg som används dagligen av hela sälj- och backoffice-teamet. Tre AI-drivna funktioner: PDF-orderextraktion via Claude Vision (orderinmatning minskad från 3–10 minuter till under en minut), axelmatching från trailerdimensioner och vikt, samt semantisk kunskapsbassökning över ~7 500 poster från lösta kundärenden.
+- Designade en strukturerad eftermarknadsmodell för trailerdelar. Sökmatchningsgraden ökade med 155 % i Sverige och 203 % i Norge under 12 månader, med tydlig minskning av felbeställningar.
+- Byggde en AI-driven kundtjänstmotor som kombinerar Claude API, Microsoft Graph API och Power Automate — analyserar inkommande e-post och genererar kontextuella svarsutkast på avsändarens språk direkt från delade postlådor.
+- Full-cycle B2B-kontohantering mot nordiska distributörer och e-handelspartners inom fordonssektorn.
+
+---
+
+### Hercules Grundläggning — Platschef
+*2022 – 2023*
+
+- Ledde tvärfunktionella projektteam och maskintung drift inom grundläggning och markarbeten, med ansvar för säkerhet, regelefterlevnad och lönsamhet.
+- Koordinerade leverantörer, underentreprenörer och beställare — översatte teknisk komplexitet till tydlig statusrapportering och beslutsunderlag.
+- Praktisk erfarenhet av stålkonstruktioner, betong och geoteknik i krävande miljöer.
+
+---
+
+### Svensk Installationspartner / BHG Group — Produktchef & Affärsutvecklare
+*2017 – 2021*
+
+- Ledde utveckling och rikstäckande utrullning av installationstjänster inom VVS, el och solenergi — från marknadsanalys och partnerrekrytering till avtalsskrivning och IT-integration.
+- Byggde och förvaltade ett nätverk av 100+ certifierade installatörer med kvalitetsuppföljning, vilket möjliggjorde expansion till Finland.
+- Integrerade tjänster i e-handelsflöden för en sömlös köp-till-installation-upplevelse.
+
+---
+
+### Polarpumpen — Teknisk försäljning
+*2014 – 2017*
+
+- Teknisk B2B-försäljning av värmepumpar och solpaneler med fullt kundansvar från behovsanalys till avslut och eftermarknad.
+
+---
+
+### Försvarsmakten — Spaningsmarinkår, Korpral
+*2012 – 2014*
+
+- Strategisk spaning, underrättelseinhämtning och amfibiska operationer vid 4. amfibieregementet.
+
+---
+
+## Urval av projekt
+
+**Valeryd Toolkit — Interna AI-verktyg (Valeryd AB)**
+Internt Flask-baserat webbverktyg med tre moduler: PDF-orderextraktion (Claude Vision), axelmatching (4-stegs fallback-algoritm) och Ask Valeryd (TF-IDF + Claude Haiku rerank + Sonnet-syntes över ~7 500 poster). Används dagligen av 5 personer. Minskade orderinmatning från 3–10 minuter till under en minut.
+*Stack: Python, Flask, Claude API, scikit-learn, vanilla JS*
+
+**MedTech-plattform (Medskapare, 2025–Nu)**
+Medskapar en AI-driven compliance-plattform för medicintekniska bolag under EU MDR. Plattformen integreras med bolagets QMS för att minska manuell dokumentation, automatisera kompetenssäkring och identifiera avvikelser inför revisioner. Tidig kundvalidering sker via GoCo Health Innovation City i det nordiska MedTech-ekosystemet.
+
+---
+
+## Utbildning
+
+**Högskoleingenjör — Yrgo, Göteborg**
+*2020 – 2022*
+
+**Certifieringar:** Säkra Lyft · Ställningsarbeten · Brandfarliga arbeten
+
+---
+
+## Språk
+
+Svenska (Modersmål) · Engelska (Flytande) · Danska (Arbetsförståelse)

@@ -1,0 +1,18 @@
+Lukas Larsson
+Alingsås, Sweden · 073-740 97 88 · lukasglarsson88@gmail.com
+
+Application: Senior Business Analyst
+Einride, Gothenburg
+
+Hello Einride,
+
+I have taken the work at Valeryd as far as I can and I am now looking for the next challenge. The Senior Business Analyst role caught my attention for the same reason the junior version did not — the scope is larger, the problems are more complex, and the expectation is that you can own an analytical workstream end to end rather than support one. That is exactly where I operate best. The fact that Einride is doing this for road freight, one of the largest and most operationally opaque systems in the economy, makes the work feel worth doing.
+
+At Valeryd I built a structured aftermarket data model for trailer parts that lifted search match rates by 155% in Sweden and 203% in Norway over twelve months, with a measurable drop in incorrect orders. I also built a Python pipeline using a few-shot AI approach that updated 4,100 products across 7 languages in a few hours — replacing what would have been 28,000 manual edits. Neither of those started as a clearly defined project. Both started as a problem someone had accepted as normal, and ended as a system that ran itself. That pattern — find the structural cause, build the fix, hand it off — is where I add the most.
+
+Beyond the data work, I have spent years on the commercial side of complex operations. At BHG Group I led the rollout of nationwide installation services across HVAC, plumbing, electrical, and solar, building the installer network from zero to 100+ certified partners and integrating the whole thing into an e-commerce purchase flow. That work taught me how to translate messy operational reality into something that can be modelled, managed, and scaled. I bring that same instinct to analytical work — I am not just interested in the output of the model, I want to understand the operational system it describes.
+
+I would welcome the chance to talk about what you are working on and where I could contribute.
+
+Best regards,
+Lukas Larsson
