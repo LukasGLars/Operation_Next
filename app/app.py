@@ -108,6 +108,7 @@ def _write_joblist_raw(preamble, rows):
             row.get("Plats", "—"), row.get("CV-bas", ""), row.get("Status", ""),
             row.get("Datum", today), row.get("URL", ""),
         ]
+        cells = [str(c).replace("|", "/") for c in cells]
         table_lines.append("| " + " | ".join(cells) + " |")
     output = "\n".join(preamble) + "\n\n" + "\n".join(table_lines) + "\n"
     with open(JOBLIST_PATH, "w", encoding="utf-8") as f:

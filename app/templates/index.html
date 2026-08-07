@@ -38,6 +38,10 @@
     .status-intervju     { background: #fce7f3; color: #be185d; }
     .status-stängd       { background: #f3f4f6; color: #9ca3af; }
     .status-other        { background: #fef3c7; color: #92400e; }
+    .status-select { border: none; background: transparent; font-size: 12px;
+                      font-weight: 500; cursor: pointer; padding: 3px 4px;
+                      border-radius: 6px; color: inherit; }
+    .status-select:hover { background: rgba(0,0,0,0.05); }
     .url-link { display: inline-block; padding: 4px 10px; background: #f4f5f7;
                 border: 1px solid #e5e7eb; border-radius: 5px; color: #374151;
                 font-size: 12px; font-weight: 500; text-decoration: none;
@@ -99,6 +103,15 @@
             {% else %}
               <span class="status-badge status-other">{{ job.get('Status','') }}</span>
             {% endif %}
+            <select class="status-select" data-url="{{ job.get('URL','') }}"
+                    onclick="event.stopPropagation()" onchange="updateStatus(event, this)">
+              <option value="">&#8595;</option>
+              <option value="Identifierad">Identifierad</option>
+              <option value="Genererat">Genererat</option>
+              <option value="Ansökt">Ans&#246;kt</option>
+              <option value="Intervju">Intervju</option>
+              <option value="Stängd">St&#228;ngd</option>
+            </select>
           </td>
           <td class="datum">{{ job.get('Datum','') }}</td>
           <td>
@@ -166,6 +179,30 @@
       window.location.href = "/generate?" + p.toString();
     });
   });
+
+  function updateStatus(e, sel) {
+    e.stopPropagation();
+    var status = sel.value;
+    if (!status) return;
+    fetch("/status", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: sel.dataset.url, status: status }),
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.ok) {
+        window.location.reload();
+      } else {
+        alert("Kunde inte uppdatera status: " + (data.error || "okänt fel"));
+        sel.value = "";
+      }
+    })
+    .catch(function(e) {
+      alert("Fel: " + e.message);
+      sel.value = "";
+    });
+  }
 
   function deleteJob(e, btn) {
     e.stopPropagation();
