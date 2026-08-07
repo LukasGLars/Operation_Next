@@ -21,10 +21,11 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|---|
 | 1 | SEVR (for fintech client) | Customer Success – Fintech | Gothenburg | CV_Einride | Identifierad | 2026-08-07 | https://sevr.teamtailor.com/jobs/7997143-customer-success-fintech |
-| 2 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Genererat | 2026-08-05 | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
+| 2 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
 | 3 | HORNBACH BYGGMARKNAD AB | Inköpare till Huvudkontoret | Göteborg | CV | Identifierad | 2026-08-05 | https://karriar.hornbach.se/offer/inkopare-till-huvudkontoret/aadc50ca-d1f1-4605-919a-2ce36bf60e00?jobPipeline=Arbetsformedlingen&utm_source=Arbetformedlingen&showApplicationForm=true |
 | 4 | Experis AB | Inköpare/ Upphandlare | Alingsås Energi | Alingsås | CV | Identifierad | 2026-08-05 |
 | 5 | Kraftsam Rekrytering & Bemanning AB | Teknisk säljare | Göteborg | CV_Zeppelin | Identifierad | 2026-08-05 | https://pnty-apply.ponty-system.se/kraftsam?id=2331&pnty_src=platsbanken |
