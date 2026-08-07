@@ -29,7 +29,7 @@ APPLICATIONS     = ROOT / "jobsearch" / "applications"
 MASTER_CV        = ROOT / "jobsearch" / "cv" / "master_cv.md"
 SALES_PHILOSOPHY = ROOT / "jobsearch" / "sales_philosophy.md"
 
-_HEADERS = ["#", "Företag", "Roll/Typ", "Plats", "CV-bas", "Status", "Datum", "URL"]
+_HEADERS = ["#", "Företag", "Roll/Typ", "Plats", "CV-bas", "Status", "Datum", "URL", "Score"]
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.ERROR)
@@ -106,7 +106,7 @@ def _write_joblist_raw(preamble, rows):
         cells = [
             row.get("#", ""), row.get("Företag", ""), row.get("Roll/Typ", ""),
             row.get("Plats", "—"), row.get("CV-bas", ""), row.get("Status", ""),
-            row.get("Datum", today), row.get("URL", ""),
+            row.get("Datum", today), row.get("URL", ""), row.get("Score", "—"),
         ]
         table_lines.append("| " + " | ".join(cells) + " |")
     output = "\n".join(preamble) + "\n\n" + "\n".join(table_lines) + "\n"
@@ -149,6 +149,15 @@ def _push_joblist():
 def parse_joblist():
     _, rows = _parse_joblist_raw()
     return rows
+
+
+def _score_value(raw):
+    """Rows with no score yet (older postings, "—") sort to the bottom rather
+    than the top, since an unscored ad isn't a confirmed-poor match."""
+    try:
+        return float(raw)
+    except (TypeError, ValueError):
+        return -1.0
 
 
 def read_docx_text(path: Path) -> str:
@@ -384,7 +393,9 @@ def auto_pull():
 
 @app.route("/")
 def index():
-    return render_template("index.html", jobs=parse_joblist())
+    jobs = parse_joblist()
+    jobs.sort(key=lambda j: _score_value(j.get("Score", "")), reverse=True)
+    return render_template("index.html", jobs=jobs)
 
 
 @app.route("/generate", methods=["GET"])

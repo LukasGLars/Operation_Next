@@ -11,12 +11,15 @@ from pathlib import Path
 
 try:                                  # run as a script from pipeline/
     import jobtech
+    import rank_jobs
     from llm_json import TruncatedResponse, parse_json_array
 except ImportError:                   # imported as pipeline.search (tests, CI)
     from pipeline import jobtech
+    from pipeline import rank_jobs
     from pipeline.llm_json import TruncatedResponse, parse_json_array
 
 ROOT               = Path(__file__).parent.parent
+CV_PATH            = ROOT / "jobsearch" / "cv" / "master_cv.md"
 JOBLIST_PATH       = ROOT / "jobsearch" / "joblist.md"
 SKILL_PATH         = ROOT / "jobsearch" / "skill" / "search_skill.md"
 VALIDATION_SKILL   = ROOT / "jobsearch" / "skill" / "URL_VALIDATION_SKILL.md"
@@ -429,6 +432,18 @@ def visible_page_text(url):
         return ""
 
 
+def _attach_scores(jobs):
+    """TF-IDF cosine score of each job against master_cv.md, reusing the
+    _page_text the location gate already fetched — no extra network call."""
+    if not jobs:
+        return
+    cv_text = CV_PATH.read_text(encoding="utf-8")
+    doc_texts = [job.get("_page_text", "") for job in jobs]
+    scores = rank_jobs.score_documents(cv_text, doc_texts)
+    for job, score in zip(jobs, scores):
+        job["score"] = round(score, 4)
+
+
 def _validate_chunk(entries, validation_skill):
     """One validation call. Returns dict url -> (verdict, reason)."""
     items = "\n\n".join(
@@ -809,6 +824,7 @@ def search_new_jobs():
                               f"{len(in_range)} candidate(s)")
 
     # Save results
+    _attach_scores(new_jobs)
     for job in new_jobs:
         for key in [k for k in job if k.startswith("_")]:
             job.pop(key)

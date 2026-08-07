@@ -46,6 +46,9 @@
                 white-space: nowrap; vertical-align: middle; }
     .url-link:hover { background: #1a1a2e; color: white; border-color: #1a1a2e; }
     .datum { font-size: 12px; color: #9ca3af; }
+    .score-badge { display: inline-block; padding: 2px 8px; border-radius: 10px;
+                   font-size: 11px; font-weight: 600; background: #dcfce7; color: #15803d; }
+    .score-none { font-size: 12px; color: #9ca3af; }
     .btn-delete { background: none; border: none; color: #d1d5db; font-size: 16px;
                   cursor: pointer; padding: 2px 6px; border-radius: 4px;
                   transition: color 0.15s; line-height: 1; }
@@ -68,7 +71,7 @@
     <table>
       <thead>
         <tr>
-          <th>#</th><th>F&#246;retag</th><th>Roll/Typ</th><th>Plats</th><th>CV-bas</th>
+          <th>#</th><th>Score</th><th>F&#246;retag</th><th>Roll/Typ</th><th>Plats</th><th>CV-bas</th>
           <th>Status</th><th>Datum</th><th>URL</th><th></th>
         </tr>
       </thead>
@@ -82,6 +85,14 @@
             data-url="{{ job.get('URL','') }}"
             data-location="{{ job.get('Plats','') }}">
           <td class="datum">{{ job.get('#','') }}</td>
+          <td>
+            {% set score = job.get('Score','') %}
+            {% if score and score != '—' %}
+              <span class="score-badge">{{ (score | float * 100) | round | int }}%</span>
+            {% else %}
+              <span class="score-none">—</span>
+            {% endif %}
+          </td>
           <td><div class="company">{{ job.get('Företag','') }}</div></td>
           <td class="role">{{ job.get('Roll/Typ','') }}</td>
           <td class="datum">{{ job.get('Plats','') }}</td>
@@ -114,7 +125,7 @@
           </td>
         </tr>
         {% else %}
-        <tr><td colspan="9" class="empty">Inga jobb i joblist.md</td></tr>
+        <tr><td colspan="10" class="empty">Inga jobb i joblist.md</td></tr>
         {% endfor %}
       </tbody>
     </table>
