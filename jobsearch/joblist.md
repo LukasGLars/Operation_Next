@@ -13,6 +13,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|---|
 | 1 | SEVR (for fintech client) | Customer Success – Fintech | Gothenburg | CV_Einride | Identifierad | 2026-08-05 | https://sevr.teamtailor.com/jobs/7997143-customer-success-fintech |
@@ -36,3 +37,15 @@
 | 19 | Vitec Software Group AB (publ) | Teknisk säljare Infometric | Göteborg | CV_Zeppelin | Genererat | 2026-08-05 | https://jobs.vitecsoftware.se/jobs/7951572-teknisk-saljare-infometric/applications/new?promotion=2064864-arbetsformedlingen |
 | 20 | LERNIA BEMANNING AB | Customer Success Specialist | Timeplan | Göteborg | Göteborg | CV_Einride | Identifierad |
 | 21 | Intensogruppen AB | Teknisk säljare till Göteborg | Göteborg | CV_Zeppelin | Identifierad | 2026-08-05 | https://candidate.masterhelp.se/apply/64f87c79-11e0-47ce-9ebb-61e6e118c976?ps=ams |
+| 22 | Peab Anläggning AB | Entreprenadingenjör | Göteborg | CV_BYGG | Identifierad | 2026-08-07 | https://peab.se/karriar/lediga-tjanster/2026/juli/entreprenadingenjor/ |
+| 23 | Novacura (via SEVR) | IFS / ERP Solution Architect | Göteborg | CV_Einride | Identifierad | 2026-08-07 | https://sevr.teamtailor.com/jobs/7950368-novacura-ifs-erp-solution-architect |
+| 24 | Novacura (via SEVR) | IFS / ERP Business Consultant | Göteborg | CV_Einride | Identifierad | 2026-08-07 | https://sevr.teamtailor.com/jobs/7950463-novacura-ifs-erp-business-consultant |
+| 25 | Experis AB | Inköpare/ Upphandlare | Alingsås Energi | Alingsås | CV | Identifierad | 2026-08-07 | https://www.aplitrak.com/?adid=ZWVrZGFoLjY3NDIxLjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
+| 26 | ACADEMIC WORK SWEDEN AB | Teknisk Säljare till innovativt techbolag i Göteborg! | Göteborg | CV_Zeppelin | Identifierad | 2026-08-07 | https://www.academicwork.se/lediga-jobb/j/teknisk-saljare-till-innovativt-techbolag-i-goteborg/SDEK67 |
+| 27 | LERNIA BEMANNING AB | Customer Success Specialist | Timeplan | Göteborg | Göteborg | CV_Einride | Identifierad | 2026-08-07 | https://www.lernia.se/jobb/andra-yrken/goteborg-customer-success-specialist-timeplan-goteborg-7856290/ |
+| 28 | Surgical Science Sweden AB | Product Specialist | Göteborg | CV_Einride | Identifierad | 2026-08-07 | https://careers.surgicalscience.com/job/f5bf3d064cd04672a6149bb9bea16db6?utm_medium=talentech_publishing&utm_source=jobtip_editor |
+| 29 | Etraveli Group AB | AI Solutions Engineer | Göteborg | CV_Einride | Identifierad | 2026-08-07 | https://etraveligroup.teamtailor.com/jobs/7746887-ai-solutions-engineer |
+| 30 | Cloudgruppen Sverige AB | Customer Success Manager | Göteborg | CV_Einride | Identifierad | 2026-08-07 | https://jobb.cloudgruppen.se/jobs/7753563-customer-success-manager/applications/new?promotion=2005473-arbetsformedlingen |
+| 31 | Wrknest AB | Teknisk säljare till växande teknikbolag ⚡ | Göteborg | CV_Zeppelin | Identifierad | 2026-08-07 | https://careers.wrknest.se/jobs/7726001-teknisk-saljare-till-vaxande-teknikbolag/applications/new?promotion=1997206-arbetsformedlingen |
+| 32 | Gina Tricot AB | Inköpare | Borås | CV | Identifierad | 2026-08-07 | https://careerssweden.ginatricot.com/jobs/7675393-inkopare/applications/new?promotion=1983666-arbetsformedlingen |
+| 33 | Friday Väst AB | Strategisk Inköpare till fordonsbolag! | Göteborg | CV | Identifierad | 2026-08-07 | https://pnty-apply.ponty-system.se/friday?id=4580&pnty_src=platsbanken |
