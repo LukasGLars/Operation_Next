@@ -152,6 +152,26 @@ def parse_joblist():
     return rows
 
 
+_STATUS_ORDER = [
+    ["intervju"],
+    ["ansökt", "ansokt"],
+    ["genererat"],
+    ["identifierad"],
+]
+
+
+def _status_rank(status):
+    """Furthest-along-in-the-process first; unrecognized statuses sort just
+    before Stängd rather than at either extreme."""
+    s = (status or "").lower()
+    for i, keys in enumerate(_STATUS_ORDER):
+        if any(k in s for k in keys):
+            return i
+    if "stängd" in s:
+        return len(_STATUS_ORDER) + 1
+    return len(_STATUS_ORDER)
+
+
 def read_docx_text(path: Path) -> str:
     doc = Document(str(path))
     return "\n".join(p.text for p in doc.paragraphs if p.text.strip())
@@ -385,7 +405,9 @@ def auto_pull():
 
 @app.route("/")
 def index():
-    return render_template("index.html", jobs=parse_joblist())
+    jobs = parse_joblist()
+    jobs.sort(key=lambda j: _status_rank(j.get("Status", "")))
+    return render_template("index.html", jobs=jobs)
 
 
 @app.route("/generate", methods=["GET"])
