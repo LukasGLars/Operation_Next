@@ -27,6 +27,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|---|
 | 1 | SEVR (for fintech client) | Customer Success – Fintech | Gothenburg | CV_Einride | Identifierad | 2026-08-07 | https://sevr.teamtailor.com/jobs/7997143-customer-success-fintech |
@@ -45,7 +46,7 @@
 | 14 | Framtiden i Sverige AB | Junior entreprenadingenjör / Projektkoordinator inom el | Göteborg | CV_BYGG | Identifierad | 2026-08-05 | https://jobb.framtiden.com/jobs/Careers/35955000196504653 |
 | 15 | Jerrie AB | Customer Success Manager till Videotech, Göteborg | Göteborg | CV_Einride | Identifierad | 2026-08-05 | https://jerrie.se/lediga-jobb/2921-customer-success-manager-till-videotech-goteborg?pnty_src=platsbanken |
 | 16 | PEAB SVERIGE AB | Inköpare | Göteborg | CV_BYGG | Identifierad | 2026-08-05 | https://pages.adway.ai/peab-sweden-ab/20534/goteborg/inkopare |
-| 17 | Workz Sweden AB | Affärsutvecklare till dormakaba | Göteborg | CV | Identifierad | 2026-08-05 | https://karriar.workz.se/jobs/7965921-affarsutvecklare-till-dormakaba |
+| 17 | Workz Sweden AB | Affärsutvecklare till dormakaba | Göteborg | CV | Genererat | 2026-08-07 | https://karriar.workz.se/jobs/7965921-affarsutvecklare-till-dormakaba |
 | 18 | Vitec Software Group AB (publ) | Teknisk säljare Infometric | Göteborg | CV_Zeppelin | Genererat | 2026-08-05 | https://jobs.vitecsoftware.se/jobs/7951572-teknisk-saljare-infometric/applications/new?promotion=2064864-arbetsformedlingen |
 | 19 | Intensogruppen AB | Teknisk säljare till Göteborg | Göteborg | CV_Zeppelin | Identifierad | 2026-08-05 | https://candidate.masterhelp.se/apply/64f87c79-11e0-47ce-9ebb-61e6e118c976?ps=ams |
 | 20 | Peab Anläggning AB | Entreprenadingenjör | Göteborg | CV_BYGG | Identifierad | 2026-08-07 | https://peab.se/karriar/lediga-tjanster/2026/juli/entreprenadingenjor/ |
