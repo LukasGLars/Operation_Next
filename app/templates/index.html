@@ -30,13 +30,12 @@
     tr.job-row:hover td { background: #f4f7ff; }
     .company { font-weight: 600; color: #1a1a2e; }
     .role { color: #444; font-size: 13px; }
-    .cv-badge { display: inline-block; padding: 2px 8px; border-radius: 10px;
-                font-size: 11px; font-weight: 600; background: #e0e7ff; color: #3730a3; }
     .status-badge { display: inline-block; padding: 3px 10px; border-radius: 10px;
                     font-size: 12px; font-weight: 500; }
     .status-identifierad { background: #dbeafe; color: #1d4ed8; }
     .status-ansökt       { background: #dcfce7; color: #15803d; }
     .status-genererat    { background: #f3e8ff; color: #7e22ce; }
+    .status-intervju     { background: #fce7f3; color: #be185d; }
     .status-stängd       { background: #f3f4f6; color: #9ca3af; }
     .status-other        { background: #fef3c7; color: #92400e; }
     .url-link { display: inline-block; padding: 4px 10px; background: #f4f5f7;
@@ -46,9 +45,6 @@
                 white-space: nowrap; vertical-align: middle; }
     .url-link:hover { background: #1a1a2e; color: white; border-color: #1a1a2e; }
     .datum { font-size: 12px; color: #9ca3af; }
-    .score-badge { display: inline-block; padding: 2px 8px; border-radius: 10px;
-                   font-size: 11px; font-weight: 600; background: #dcfce7; color: #15803d; }
-    .score-none { font-size: 12px; color: #9ca3af; }
     .btn-delete { background: none; border: none; color: #d1d5db; font-size: 16px;
                   cursor: pointer; padding: 2px 6px; border-radius: 4px;
                   transition: color 0.15s; line-height: 1; }
@@ -71,7 +67,7 @@
     <table>
       <thead>
         <tr>
-          <th>#</th><th>Score</th><th>F&#246;retag</th><th>Roll/Typ</th><th>Plats</th><th>CV-bas</th>
+          <th>#</th><th>F&#246;retag</th><th>Roll/Typ</th><th>Plats</th>
           <th>Status</th><th>Datum</th><th>URL</th><th></th>
         </tr>
       </thead>
@@ -85,24 +81,17 @@
             data-url="{{ job.get('URL','') }}"
             data-location="{{ job.get('Plats','') }}">
           <td class="datum">{{ job.get('#','') }}</td>
-          <td>
-            {% set score = job.get('Score','') %}
-            {% if score and score != '—' %}
-              <span class="score-badge">{{ (score | float * 100) | round | int }}%</span>
-            {% else %}
-              <span class="score-none">—</span>
-            {% endif %}
-          </td>
           <td><div class="company">{{ job.get('Företag','') }}</div></td>
           <td class="role">{{ job.get('Roll/Typ','') }}</td>
           <td class="datum">{{ job.get('Plats','') }}</td>
-          <td><span class="cv-badge">{{ job.get('CV-bas','') }}</span></td>
           <td>
             {% set st = job.get('Status','') | lower %}
             {% if 'identifierad' in st %}
               <span class="status-badge status-identifierad">Identifierad</span>
             {% elif 'genererat' in st %}
               <span class="status-badge status-genererat">Genererat</span>
+            {% elif 'intervju' in st %}
+              <span class="status-badge status-intervju">Intervju</span>
             {% elif 'ansökt' in st or 'ansokt' in st %}
               <span class="status-badge status-ansökt">{{ job.get('Status','') }}</span>
             {% elif 'stängd' in st %}
@@ -125,7 +114,7 @@
           </td>
         </tr>
         {% else %}
-        <tr><td colspan="10" class="empty">Inga jobb i joblist.md</td></tr>
+        <tr><td colspan="8" class="empty">Inga jobb i joblist.md</td></tr>
         {% endfor %}
       </tbody>
     </table>

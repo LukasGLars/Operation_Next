@@ -11,15 +11,12 @@ from pathlib import Path
 
 try:                                  # run as a script from pipeline/
     import jobtech
-    import rank_jobs
     from llm_json import TruncatedResponse, parse_json_array
 except ImportError:                   # imported as pipeline.search (tests, CI)
     from pipeline import jobtech
-    from pipeline import rank_jobs
     from pipeline.llm_json import TruncatedResponse, parse_json_array
 
 ROOT               = Path(__file__).parent.parent
-CV_PATH            = ROOT / "jobsearch" / "cv" / "master_cv.md"
 JOBLIST_PATH       = ROOT / "jobsearch" / "joblist.md"
 SKILL_PATH         = ROOT / "jobsearch" / "skill" / "search_skill.md"
 VALIDATION_SKILL   = ROOT / "jobsearch" / "skill" / "URL_VALIDATION_SKILL.md"
@@ -398,6 +395,18 @@ def _remote_status(soup):
     return ""
 
 
+def _strip_page_chrome(soup):
+    """Removes non-content chrome, including cookie-consent dialogs (e.g.
+    Teamtailor's <dialog data-controller="common--cookies--alert">) which
+    otherwise fill the 4000-char cap before any real job content is reached."""
+    for tag in soup(["script", "style", "nav", "footer", "header", "dialog"]):
+        tag.decompose()
+    for tag in soup.find_all(attrs={"class": re.compile("cookie", re.I)}):
+        tag.decompose()
+    for tag in soup.find_all(attrs={"id": re.compile("cookie", re.I)}):
+        tag.decompose()
+
+
 def fetch_page_text(url):
     try:
         from bs4 import BeautifulSoup
@@ -408,8 +417,7 @@ def fetch_page_text(url):
         jsonld = _extract_jsonld_job(soup)
         if jsonld:
             return jsonld[:4000] + suffix
-        for tag in soup(["script", "style", "nav", "footer", "header"]):
-            tag.decompose()
+        _strip_page_chrome(soup)
         return soup.get_text(separator="\n", strip=True)[:4000] + suffix
     except Exception as e:
         logging.error(f"fetch_page_text({url}): {e}")
@@ -424,24 +432,11 @@ def visible_page_text(url):
         from bs4 import BeautifulSoup
         r = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
         soup = BeautifulSoup(r.text, "html.parser")
-        for tag in soup(["script", "style", "nav", "footer", "header"]):
-            tag.decompose()
+        _strip_page_chrome(soup)
         return soup.get_text(" ", strip=True)[:6000]
     except Exception as e:
         logging.error(f"visible_page_text({url}): {e}")
         return ""
-
-
-def _attach_scores(jobs):
-    """TF-IDF cosine score of each job against master_cv.md, reusing the
-    _page_text the location gate already fetched — no extra network call."""
-    if not jobs:
-        return
-    cv_text = CV_PATH.read_text(encoding="utf-8")
-    doc_texts = [job.get("_page_text", "") for job in jobs]
-    scores = rank_jobs.score_documents(cv_text, doc_texts)
-    for job, score in zip(jobs, scores):
-        job["score"] = round(score, 4)
 
 
 def _validate_chunk(entries, validation_skill):
@@ -824,7 +819,6 @@ def search_new_jobs():
                               f"{len(in_range)} candidate(s)")
 
     # Save results
-    _attach_scores(new_jobs)
     for job in new_jobs:
         for key in [k for k in job if k.startswith("_")]:
             job.pop(key)

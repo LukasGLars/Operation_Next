@@ -49,7 +49,7 @@ _GENERIC_TERMINALS = {
 # ── Markdown table parser / writer ─────────────────────────
 
 HEADERS_WITHOUT_DATUM = ["#", "Företag", "Roll/Typ", "Plats", "CV-bas", "Status", "URL"]
-HEADERS_WITH_DATUM    = ["#", "Företag", "Roll/Typ", "Plats", "CV-bas", "Status", "Datum", "URL", "Score"]
+HEADERS_WITH_DATUM    = ["#", "Företag", "Roll/Typ", "Plats", "CV-bas", "Status", "Datum", "URL"]
 
 
 def _is_generic_careers_url(url: str) -> bool:
@@ -113,7 +113,6 @@ def write_table(rows):
             row.get("Status", ""),
             row.get("Datum", TODAY),
             row.get("URL", ""),
-            row.get("Score", "—"),
         ]
         lines.append("| " + " | ".join(cells) + " |")
     return "\n".join(lines)
@@ -181,7 +180,6 @@ def update_joblist():
         if url in known_urls:
             print(f"  SKIP (duplicate): {url}")
             continue
-        score = job.get("score")
         new_row = {
             "#":        str(len(rows) + 1),
             "Företag":  job.get("company", ""),
@@ -191,7 +189,6 @@ def update_joblist():
             "Status":   "Identifierad",
             "Datum":    TODAY,
             "URL":      url,
-            "Score":    f"{score:.4f}" if score is not None else "—",
         }
         rows.append(new_row)
         known_urls.add(url)
