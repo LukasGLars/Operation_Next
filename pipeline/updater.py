@@ -114,6 +114,10 @@ def write_table(rows):
             row.get("Datum", TODAY),
             row.get("URL", ""),
         ]
+        # A literal "|" in any field (e.g. a role title copied from a site that
+        # uses "|" as a separator) would otherwise split into extra table
+        # columns and shift every field after it out of alignment.
+        cells = [str(c).replace("|", "/") for c in cells]
         lines.append("| " + " | ".join(cells) + " |")
     return "\n".join(lines)
 

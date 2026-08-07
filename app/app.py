@@ -108,6 +108,7 @@ def _write_joblist_raw(preamble, rows):
             row.get("Plats", "—"), row.get("CV-bas", ""), row.get("Status", ""),
             row.get("Datum", today), row.get("URL", ""),
         ]
+        cells = [str(c).replace("|", "/") for c in cells]
         table_lines.append("| " + " | ".join(cells) + " |")
     output = "\n".join(preamble) + "\n\n" + "\n".join(table_lines) + "\n"
     with open(JOBLIST_PATH, "w", encoding="utf-8") as f:
@@ -149,6 +150,26 @@ def _push_joblist():
 def parse_joblist():
     _, rows = _parse_joblist_raw()
     return rows
+
+
+_STATUS_ORDER = [
+    ["intervju"],
+    ["ansökt", "ansokt"],
+    ["genererat"],
+    ["identifierad"],
+]
+
+
+def _status_rank(status):
+    """Furthest-along-in-the-process first; unrecognized statuses sort just
+    before Stängd rather than at either extreme."""
+    s = (status or "").lower()
+    for i, keys in enumerate(_STATUS_ORDER):
+        if any(k in s for k in keys):
+            return i
+    if "stängd" in s:
+        return len(_STATUS_ORDER) + 1
+    return len(_STATUS_ORDER)
 
 
 def read_docx_text(path: Path) -> str:
@@ -384,7 +405,9 @@ def auto_pull():
 
 @app.route("/")
 def index():
-    return render_template("index.html", jobs=parse_joblist())
+    jobs = parse_joblist()
+    jobs.sort(key=lambda j: _status_rank(j.get("Status", "")))
+    return render_template("index.html", jobs=jobs)
 
 
 @app.route("/generate", methods=["GET"])

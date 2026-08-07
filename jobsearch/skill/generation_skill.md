@@ -88,6 +88,9 @@ Each rule below is a change the candidate has actually made to a generated CV.
 ### Language rules
 - Write in the same language as the job posting. English posting → English CV and cover letter. Swedish posting → Swedish CV and cover letter.
 - When writing in Swedish: avoid directly translated verbs that sound unnatural, such as "förflyttar", "transformerar", or "förändrar hur X fungerar". Describe what the company concretely does instead of using abstract impact language.
+- Never use corporate-jargon words that don't appear in plain spoken Swedish, even if
+  grammatically correct — e.g. "tvärfunktionell". If a plain-Swedish phrase would sound
+  more natural, use that instead, even if less "professional"-sounding.
 - When writing in English: match the voice and directness of the approved Einride cover letter reference below.
 
 ## Cover Letter Rules

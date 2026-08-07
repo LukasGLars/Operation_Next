@@ -395,6 +395,18 @@ def _remote_status(soup):
     return ""
 
 
+def _strip_page_chrome(soup):
+    """Removes non-content chrome, including cookie-consent dialogs (e.g.
+    Teamtailor's <dialog data-controller="common--cookies--alert">) which
+    otherwise fill the 4000-char cap before any real job content is reached."""
+    for tag in soup(["script", "style", "nav", "footer", "header", "dialog"]):
+        tag.decompose()
+    for tag in soup.find_all(attrs={"class": re.compile("cookie", re.I)}):
+        tag.decompose()
+    for tag in soup.find_all(attrs={"id": re.compile("cookie", re.I)}):
+        tag.decompose()
+
+
 def fetch_page_text(url):
     try:
         from bs4 import BeautifulSoup
@@ -405,8 +417,7 @@ def fetch_page_text(url):
         jsonld = _extract_jsonld_job(soup)
         if jsonld:
             return jsonld[:4000] + suffix
-        for tag in soup(["script", "style", "nav", "footer", "header"]):
-            tag.decompose()
+        _strip_page_chrome(soup)
         return soup.get_text(separator="\n", strip=True)[:4000] + suffix
     except Exception as e:
         logging.error(f"fetch_page_text({url}): {e}")
@@ -421,8 +432,7 @@ def visible_page_text(url):
         from bs4 import BeautifulSoup
         r = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
         soup = BeautifulSoup(r.text, "html.parser")
-        for tag in soup(["script", "style", "nav", "footer", "header"]):
-            tag.decompose()
+        _strip_page_chrome(soup)
         return soup.get_text(" ", strip=True)[:6000]
     except Exception as e:
         logging.error(f"visible_page_text({url}): {e}")

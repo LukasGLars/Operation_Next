@@ -41,6 +41,14 @@ Reject roles that:
 - Require security clearance.
 - Are academic or research focused.
 - Are at management consulting firms expecting prior consulting career, including KPMG, Accenture, McKinsey, and BCG.
+- State travel of roughly 40-50% or more as part of the role.
+- Require hands-on expertise or certification in a specific platform or domain
+  the candidate does not have — named ERP/enterprise software (IFS, SAP,
+  Dynamics), or a science/clinical/technical degree (life science, medicine,
+  biomedical engineering). Do not reject for tools or domains the candidate
+  does have: Python, Excel, CRM, procurement, construction, technical sales,
+  AI/automation, or roles merely based at a healthtech/medtech/fintech company
+  without those specific requirements.
 
 ## Location Rules
 - Primary target: roles within a maximum 40 minute commute from Alingsås —

@@ -30,15 +30,18 @@
     tr.job-row:hover td { background: #f4f7ff; }
     .company { font-weight: 600; color: #1a1a2e; }
     .role { color: #444; font-size: 13px; }
-    .cv-badge { display: inline-block; padding: 2px 8px; border-radius: 10px;
-                font-size: 11px; font-weight: 600; background: #e0e7ff; color: #3730a3; }
     .status-badge { display: inline-block; padding: 3px 10px; border-radius: 10px;
                     font-size: 12px; font-weight: 500; }
     .status-identifierad { background: #dbeafe; color: #1d4ed8; }
     .status-ansökt       { background: #dcfce7; color: #15803d; }
     .status-genererat    { background: #f3e8ff; color: #7e22ce; }
+    .status-intervju     { background: #fce7f3; color: #be185d; }
     .status-stängd       { background: #f3f4f6; color: #9ca3af; }
     .status-other        { background: #fef3c7; color: #92400e; }
+    .status-select { border: none; background: transparent; font-size: 12px;
+                      font-weight: 500; cursor: pointer; padding: 3px 4px;
+                      border-radius: 6px; color: inherit; }
+    .status-select:hover { background: rgba(0,0,0,0.05); }
     .url-link { display: inline-block; padding: 4px 10px; background: #f4f5f7;
                 border: 1px solid #e5e7eb; border-radius: 5px; color: #374151;
                 font-size: 12px; font-weight: 500; text-decoration: none;
@@ -68,7 +71,7 @@
     <table>
       <thead>
         <tr>
-          <th>#</th><th>F&#246;retag</th><th>Roll/Typ</th><th>Plats</th><th>CV-bas</th>
+          <th>#</th><th>F&#246;retag</th><th>Roll/Typ</th><th>Plats</th>
           <th>Status</th><th>Datum</th><th>URL</th><th></th>
         </tr>
       </thead>
@@ -85,13 +88,14 @@
           <td><div class="company">{{ job.get('Företag','') }}</div></td>
           <td class="role">{{ job.get('Roll/Typ','') }}</td>
           <td class="datum">{{ job.get('Plats','') }}</td>
-          <td><span class="cv-badge">{{ job.get('CV-bas','') }}</span></td>
           <td>
             {% set st = job.get('Status','') | lower %}
             {% if 'identifierad' in st %}
               <span class="status-badge status-identifierad">Identifierad</span>
             {% elif 'genererat' in st %}
               <span class="status-badge status-genererat">Genererat</span>
+            {% elif 'intervju' in st %}
+              <span class="status-badge status-intervju">Intervju</span>
             {% elif 'ansökt' in st or 'ansokt' in st %}
               <span class="status-badge status-ansökt">{{ job.get('Status','') }}</span>
             {% elif 'stängd' in st %}
@@ -99,6 +103,15 @@
             {% else %}
               <span class="status-badge status-other">{{ job.get('Status','') }}</span>
             {% endif %}
+            <select class="status-select" data-url="{{ job.get('URL','') }}"
+                    onclick="event.stopPropagation()" onchange="updateStatus(event, this)">
+              <option value="">&#8595;</option>
+              <option value="Identifierad">Identifierad</option>
+              <option value="Genererat">Genererat</option>
+              <option value="Ansökt">Ans&#246;kt</option>
+              <option value="Intervju">Intervju</option>
+              <option value="Stängd">St&#228;ngd</option>
+            </select>
           </td>
           <td class="datum">{{ job.get('Datum','') }}</td>
           <td>
@@ -114,7 +127,7 @@
           </td>
         </tr>
         {% else %}
-        <tr><td colspan="9" class="empty">Inga jobb i joblist.md</td></tr>
+        <tr><td colspan="8" class="empty">Inga jobb i joblist.md</td></tr>
         {% endfor %}
       </tbody>
     </table>
@@ -166,6 +179,30 @@
       window.location.href = "/generate?" + p.toString();
     });
   });
+
+  function updateStatus(e, sel) {
+    e.stopPropagation();
+    var status = sel.value;
+    if (!status) return;
+    fetch("/status", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: sel.dataset.url, status: status }),
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.ok) {
+        window.location.reload();
+      } else {
+        alert("Kunde inte uppdatera status: " + (data.error || "okänt fel"));
+        sel.value = "";
+      }
+    })
+    .catch(function(e) {
+      alert("Fel: " + e.message);
+      sel.value = "";
+    });
+  }
 
   function deleteJob(e, btn) {
     e.stopPropagation();
