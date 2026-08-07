@@ -23,6 +23,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|---|
 | 1 | SEVR (for fintech client) | Customer Success – Fintech | Gothenburg | CV_Einride | Identifierad | 2026-08-07 | https://sevr.teamtailor.com/jobs/7997143-customer-success-fintech |
@@ -53,3 +54,5 @@
 | 26 | Wrknest AB | Teknisk säljare till växande teknikbolag ⚡ | Göteborg | CV_Zeppelin | Identifierad | 2026-08-07 | https://careers.wrknest.se/jobs/7726001-teknisk-saljare-till-vaxande-teknikbolag/applications/new?promotion=1997206-arbetsformedlingen |
 | 27 | Gina Tricot AB | Inköpare | Borås | CV | Identifierad | 2026-08-07 | https://careerssweden.ginatricot.com/jobs/7675393-inkopare/applications/new?promotion=1983666-arbetsformedlingen |
 | 28 | Friday Väst AB | Strategisk Inköpare till fordonsbolag! | Göteborg | CV | Identifierad | 2026-08-07 | https://pnty-apply.ponty-system.se/friday?id=4580&pnty_src=platsbanken |
+| 29 | Securitas | Business Analyst (Client Engagement) | Warsaw, Poland | CV_Einride | Genererat | 2026-07-31 | https://securitas.teamtailor.com/jobs/7845272-business-analyst-client-engagement |
+| 30 | Rekryteringsgruppen | Digital affärsutvecklare | Stockholm | CV | Genererat | 2026-08-03 | https://rekryteringsgruppen.teamtailor.com/jobs/7949661-digital-affarsutvecklare |
