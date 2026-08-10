@@ -50,6 +50,7 @@ Always choose 2–3 results that best fit the role.
 - Technical sales roles: use Spirax Sarco, Valeryd technical sales, and BHG rollout.
 - Automation / AI roles: use AI email engine, Valeryd Toolkit, and Reactor Core.
 - Procurement / supply chain roles: use Valeryd procurement and BHG rollout.
+- Anläggning / entreprenad roles: use ANLAB internship (ÄTA/KMA) and Mark- och Energibyggarna Infra internship, alongside Hercules.
 
 ## CV Rules
 - Generate the CV in the same language as the job posting. English posting → English CV. Swedish posting → Swedish CV.
