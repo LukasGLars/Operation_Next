@@ -31,6 +31,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|---|
 | 1 | SEVR (for fintech client) | Customer Success – Fintech | Gothenburg | CV_Einride | Identifierad | 2026-08-07 | https://sevr.teamtailor.com/jobs/7997143-customer-success-fintech |
@@ -50,7 +51,7 @@
 | 15 | PEAB SVERIGE AB | Inköpare | Göteborg | CV_BYGG | Identifierad | 2026-08-05 | https://pages.adway.ai/peab-sweden-ab/20534/goteborg/inkopare |
 | 16 | Workz Sweden AB | Affärsutvecklare till dormakaba | Göteborg | CV | Ansökt | 2026-08-07 | https://karriar.workz.se/jobs/7965921-affarsutvecklare-till-dormakaba |
 | 17 | Intensogruppen AB | Teknisk säljare till Göteborg | Göteborg | CV_Zeppelin | Identifierad | 2026-08-05 | https://candidate.masterhelp.se/apply/64f87c79-11e0-47ce-9ebb-61e6e118c976?ps=ams |
-| 18 | Peab Anläggning AB | Entreprenadingenjör | Göteborg | CV_BYGG | Identifierad | 2026-08-07 | https://peab.se/karriar/lediga-tjanster/2026/juli/entreprenadingenjor/ |
+| 18 | Peab Anläggning AB | Entreprenadingenjör | Göteborg | CV_BYGG | Genererat | 2026-08-10 | https://peab.se/karriar/lediga-tjanster/2026/juli/entreprenadingenjor/ |
 | 19 | ACADEMIC WORK SWEDEN AB | Teknisk Säljare till innovativt techbolag i Göteborg! | Göteborg | CV_Zeppelin | Identifierad | 2026-08-07 | https://www.academicwork.se/lediga-jobb/j/teknisk-saljare-till-innovativt-techbolag-i-goteborg/SDEK67 |
 | 20 | Etraveli Group AB | AI Solutions Engineer | Göteborg | CV_Einride | Identifierad | 2026-08-07 | https://etraveligroup.teamtailor.com/jobs/7746887-ai-solutions-engineer |
 | 21 | Cloudgruppen Sverige AB | Customer Success Manager | Göteborg | CV_Einride | Identifierad | 2026-08-07 | https://jobb.cloudgruppen.se/jobs/7753563-customer-success-manager/applications/new?promotion=2005473-arbetsformedlingen |
