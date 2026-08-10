@@ -30,6 +30,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|---|
 | 1 | SEVR (for fintech client) | Customer Success – Fintech | Gothenburg | CV_Einride | Identifierad | 2026-08-07 | https://sevr.teamtailor.com/jobs/7997143-customer-success-fintech |
@@ -48,14 +49,13 @@
 | 14 | Jerrie AB | Customer Success Manager till Videotech, Göteborg | Göteborg | CV_Einride | Identifierad | 2026-08-05 | https://jerrie.se/lediga-jobb/2921-customer-success-manager-till-videotech-goteborg?pnty_src=platsbanken |
 | 15 | PEAB SVERIGE AB | Inköpare | Göteborg | CV_BYGG | Identifierad | 2026-08-05 | https://pages.adway.ai/peab-sweden-ab/20534/goteborg/inkopare |
 | 16 | Workz Sweden AB | Affärsutvecklare till dormakaba | Göteborg | CV | Ansökt | 2026-08-07 | https://karriar.workz.se/jobs/7965921-affarsutvecklare-till-dormakaba |
-| 17 | Vitec Software Group AB (publ) | Teknisk säljare Infometric | Göteborg | CV_Zeppelin | Genererat | 2026-08-05 | https://jobs.vitecsoftware.se/jobs/7951572-teknisk-saljare-infometric/applications/new?promotion=2064864-arbetsformedlingen |
-| 18 | Intensogruppen AB | Teknisk säljare till Göteborg | Göteborg | CV_Zeppelin | Identifierad | 2026-08-05 | https://candidate.masterhelp.se/apply/64f87c79-11e0-47ce-9ebb-61e6e118c976?ps=ams |
-| 19 | Peab Anläggning AB | Entreprenadingenjör | Göteborg | CV_BYGG | Identifierad | 2026-08-07 | https://peab.se/karriar/lediga-tjanster/2026/juli/entreprenadingenjor/ |
-| 20 | ACADEMIC WORK SWEDEN AB | Teknisk Säljare till innovativt techbolag i Göteborg! | Göteborg | CV_Zeppelin | Identifierad | 2026-08-07 | https://www.academicwork.se/lediga-jobb/j/teknisk-saljare-till-innovativt-techbolag-i-goteborg/SDEK67 |
-| 21 | Etraveli Group AB | AI Solutions Engineer | Göteborg | CV_Einride | Identifierad | 2026-08-07 | https://etraveligroup.teamtailor.com/jobs/7746887-ai-solutions-engineer |
-| 22 | Cloudgruppen Sverige AB | Customer Success Manager | Göteborg | CV_Einride | Identifierad | 2026-08-07 | https://jobb.cloudgruppen.se/jobs/7753563-customer-success-manager/applications/new?promotion=2005473-arbetsformedlingen |
-| 23 | Wrknest AB | Teknisk säljare till växande teknikbolag ⚡ | Göteborg | CV_Zeppelin | Identifierad | 2026-08-07 | https://careers.wrknest.se/jobs/7726001-teknisk-saljare-till-vaxande-teknikbolag/applications/new?promotion=1997206-arbetsformedlingen |
-| 24 | Gina Tricot AB | Inköpare | Borås | CV | Identifierad | 2026-08-07 | https://careerssweden.ginatricot.com/jobs/7675393-inkopare/applications/new?promotion=1983666-arbetsformedlingen |
-| 25 | Friday Väst AB | Strategisk Inköpare till fordonsbolag! | Göteborg | CV | Identifierad | 2026-08-07 | https://pnty-apply.ponty-system.se/friday?id=4580&pnty_src=platsbanken |
-| 26 | Securitas | Business Analyst (Client Engagement) | Warsaw, Poland | CV_Einride | Ansökt | 2026-08-07 | https://securitas.teamtailor.com/jobs/7845272-business-analyst-client-engagement |
-| 27 | Rekryteringsgruppen | Digital affärsutvecklare | Stockholm | CV | Ansökt | 2026-08-07 | https://rekryteringsgruppen.teamtailor.com/jobs/7949661-digital-affarsutvecklare |
+| 17 | Intensogruppen AB | Teknisk säljare till Göteborg | Göteborg | CV_Zeppelin | Identifierad | 2026-08-05 | https://candidate.masterhelp.se/apply/64f87c79-11e0-47ce-9ebb-61e6e118c976?ps=ams |
+| 18 | Peab Anläggning AB | Entreprenadingenjör | Göteborg | CV_BYGG | Identifierad | 2026-08-07 | https://peab.se/karriar/lediga-tjanster/2026/juli/entreprenadingenjor/ |
+| 19 | ACADEMIC WORK SWEDEN AB | Teknisk Säljare till innovativt techbolag i Göteborg! | Göteborg | CV_Zeppelin | Identifierad | 2026-08-07 | https://www.academicwork.se/lediga-jobb/j/teknisk-saljare-till-innovativt-techbolag-i-goteborg/SDEK67 |
+| 20 | Etraveli Group AB | AI Solutions Engineer | Göteborg | CV_Einride | Identifierad | 2026-08-07 | https://etraveligroup.teamtailor.com/jobs/7746887-ai-solutions-engineer |
+| 21 | Cloudgruppen Sverige AB | Customer Success Manager | Göteborg | CV_Einride | Identifierad | 2026-08-07 | https://jobb.cloudgruppen.se/jobs/7753563-customer-success-manager/applications/new?promotion=2005473-arbetsformedlingen |
+| 22 | Wrknest AB | Teknisk säljare till växande teknikbolag ⚡ | Göteborg | CV_Zeppelin | Identifierad | 2026-08-07 | https://careers.wrknest.se/jobs/7726001-teknisk-saljare-till-vaxande-teknikbolag/applications/new?promotion=1997206-arbetsformedlingen |
+| 23 | Gina Tricot AB | Inköpare | Borås | CV | Identifierad | 2026-08-07 | https://careerssweden.ginatricot.com/jobs/7675393-inkopare/applications/new?promotion=1983666-arbetsformedlingen |
+| 24 | Friday Väst AB | Strategisk Inköpare till fordonsbolag! | Göteborg | CV | Identifierad | 2026-08-07 | https://pnty-apply.ponty-system.se/friday?id=4580&pnty_src=platsbanken |
+| 25 | Securitas | Business Analyst (Client Engagement) | Warsaw, Poland | CV_Einride | Ansökt | 2026-08-07 | https://securitas.teamtailor.com/jobs/7845272-business-analyst-client-engagement |
+| 26 | Rekryteringsgruppen | Digital affärsutvecklare | Stockholm | CV | Ansökt | 2026-08-07 | https://rekryteringsgruppen.teamtailor.com/jobs/7949661-digital-affarsutvecklare |
