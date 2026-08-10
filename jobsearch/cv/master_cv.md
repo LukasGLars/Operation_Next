@@ -58,6 +58,21 @@ Engineer with a strong analytical and commercial profile. I work best when I get
 
 ---
 
+### ANLAB — Internship, VA Rehabilitation Project (Majorna, Gothenburg)
+*2022*
+
+- Change order (ÄTA) handling, quantity take-offs, and QHSE (KMA) coordination on a VA rehabilitation project in Gothenburg.
+- Received a recommendation letter from site manager Richard Nemcik.
+
+---
+
+### Mark- och Energibyggarna Infra — Internship, Road & Bridge Construction
+*2021*
+
+- Skilled labourer on road and bridge construction projects during engineering studies.
+
+---
+
 ### Svensk Installationspartner / BHG Group — Product Manager & Business Developer
 *2017 – 2021*
 
