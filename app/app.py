@@ -502,6 +502,7 @@ def save_edited():
         folder = _app_folder(company, role)
         _save_docs(folder, cv, cover_letter, "edited")
         _save_meta(folder, company, role)
+        _push_joblist()
         return jsonify({"ok": True, "folder": str(folder.relative_to(ROOT))})
     except Exception as e:
         logging.error(f"Save edited failed: {e}")
