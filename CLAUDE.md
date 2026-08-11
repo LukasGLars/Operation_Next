@@ -2,6 +2,19 @@
 
 Read `MEMORY.md` first. It carries the current state, decisions and gotchas.
 
+## Git workflow (overrides the global branch+PR rule)
+
+Solo repo, no other reviewers — PRs here get merged in the same sitting they're
+opened, so the branch+PR step buys a diff to glance at, not real review.
+
+- Small/safe code changes (bug fixes, docs, config) — push straight to `main`.
+- Riskier changes (auth, credentials, anything that mutates data destructively,
+  changes to the location gate or exclude rules' logic) — still branch + PR,
+  so there's a reviewable diff before it's live.
+- `jobsearch/` content (joblist rows, application docs, skill files) already
+  goes straight to `main` — matches the app's own auto-commit behavior, see
+  Gotchas below.
+
 ## Layout
 - `pipeline/search.py` — finds and validates postings, uses `jobsearch/skill/search_skill.md`
 - `pipeline/jobtech.py` — second source: Arbetsförmedlingen's open JobSearch API
