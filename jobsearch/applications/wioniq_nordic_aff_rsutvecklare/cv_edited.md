@@ -66,7 +66,7 @@ Medgrundar en AI-driven SaaS-plattform för regulatorisk efterlevnad inom medici
 
 **Högskoleingenjör — Yrgo, Göteborg**
 *2020 – 2022*
-
+Kurser inkl. Energieffektivisering
 ---
 
 ## Språk
