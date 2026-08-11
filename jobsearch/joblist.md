@@ -32,6 +32,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|---|
 | 1 | SEVR (for fintech client) | Customer Success – Fintech | Gothenburg | CV_Einride | Identifierad | 2026-08-07 | https://sevr.teamtailor.com/jobs/7997143-customer-success-fintech |
@@ -41,7 +42,7 @@
 | 5 | ADECCO SWEDEN AKTIEBOLAG | Vi söker nu en strategisk inköpare inom IT och HR-tjänster | Göteborg | CV | Identifierad | 2026-08-05 | https://www.adecco.com/sv-se/ansok?zlid=af8b95b6-8a88-4da2-b34d-bdbb9d2b6950&src=ams_direct |
 | 6 | ICOMERA AB | Sales Engineer    – Solution Consultancy & Engineering Connectivity | Göteborg | CV_Zeppelin | Identifierad | 2026-08-05 | https://enfrench-equans.icims.com/jobs/88083/sales-engineer/job?mode=view&mobile=false&width=770&height=500&bga=true&needsRedirect=false&jan1offset=60&jun1offset=120 |
 | 7 | ADECCO SWEDEN AKTIEBOLAG | Strategisk inköpare sökes till vår kund i Göteborg | Göteborg | CV | Identifierad | 2026-08-05 | https://www.adecco.com/sv-se/ansok?zlid=b39f171f-6dc4-4361-b599-38f87d487d42&src=ams_direct |
-| 8 | Oddwork Sweden AB | Teknisk säljare till Profcon // Göteborg | Göteborg | CV_Plymovent | Genererat | 2026-08-11 | https://jobb.oddwork.se/jobs/8031694-teknisk-saljare-till-profcon-goteborg/applications/new?promotion=2090960-arbetsformedlingen |
+| 8 | Oddwork Sweden AB | Teknisk säljare till Profcon // Göteborg | Göteborg | CV_Plymovent | Ansökt | 2026-08-11 | https://jobb.oddwork.se/jobs/8031694-teknisk-saljare-till-profcon-goteborg/applications/new?promotion=2090960-arbetsformedlingen |
 | 9 | Poolia AB | Inköpare inom Indirekt Inköp (IT & HR) | Göteborg | CV | Identifierad | 2026-08-05 | https://karriar.poolia.se/jobs/8030877-inkopare-inom-indirekt-inkop-it-hr |
 | 10 | OnePartnerGroup Jönköping AB | Teknisk säljare till Böttcher Nordic | Göteborg | CV_Zeppelin | Identifierad | 2026-08-05 | https://www.onepartnergroup.se/lediga-jobb/482201 |
 | 11 | Thomas Betong AB | Teknisk säljare Prefab Göteborg | Göteborg | CV_Zeppelin | Ansökt | 2026-08-07 | https://thomasbetong.se/karriar/lediga-tjanster/?rmpage=job&rmjob=463&utm_medium=talentech_publishing&utm_source=jobtip |
