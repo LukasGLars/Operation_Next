@@ -44,8 +44,11 @@ Reject roles that:
 - State travel of roughly 40-50% or more as part of the role.
 - Require hands-on expertise or certification in a specific platform or domain
   the candidate does not have — named ERP/enterprise software (IFS, SAP,
-  Dynamics), RF/IP networking or telecom (cellular, Wi-Fi, antenna solutions),
-  or a science/clinical/technical degree (life science, medicine, biomedical
+  Dynamics), RF/IP networking or telecom (cellular, Wi-Fi, antenna solutions,
+  mobile subscriptions, switchboard/PBX), steel or other named commodity
+  procurement, German language fluency, industry-specific passion the
+  candidate has no background in (e.g. gardening/garden design), or a
+  science/clinical/technical degree (life science, medicine, biomedical
   engineering). Do not reject for tools or domains the candidate does have:
   Python, Excel, CRM, procurement, construction, technical sales,
   AI/automation, or roles merely based at a healthtech/medtech/fintech company
