@@ -3,7 +3,7 @@
 ## What this is
 Automated job search and application pipeline. Finds roles, tracks them in joblist.md, generates tailored CV and cover letter via a Flask UI at localhost:5003.
 
-## Current state (June 2026)
+## Current state (August 2026)
 
 ### Architecture
 - `pipeline/search.py` — finds and validates new job postings, uses `search_skill.md`
@@ -11,7 +11,8 @@ Automated job search and application pipeline. Finds roles, tracks them in jobli
 - `jobsearch/cv/master_cv.md` — single source of truth for all work history and projects (replaced 5 static PDF CV bases)
 - `jobsearch/skill/generation_skill.md` — generation instructions, framing angles, approved reference examples
 - `jobsearch/skill/search_skill.md` — search queries, role filters, location rules
-- `jobsearch/skill/review_skill.md` — review prompt (not yet wired into app, next build task)
+- `jobsearch/skill/review_skill.md` — review prompt, runs automatically as a second pass in `/generate`
+- `pipeline/jobtech.py` — second job source, Arbetsförmedlingen's open JobSearch API
 - `jobsearch/sales_philosophy.md` — loaded into generation prompt for technical sales roles
 
 ### Generation prompt inputs (app.py)
@@ -28,23 +29,16 @@ Automated job search and application pipeline. Finds roles, tracks them in jobli
 - **Language follows job posting** — CV and cover letter both match the language of the posting (was incorrectly hardcoded to Swedish)
 - **Primary target: Einride-like roles** — BA, analyst, AI/automation. BD roles (affärsutvecklare) as secondary with BHG rollout + MedTech as the lead, analytical work as differentiator
 
-## Next build task — Review button
+## Review pass — built, no button
 
-### What it is
-A second Claude pass after generation. User generates, reads the output, clicks Review. A second call re-reads the job posting and rewrites the output to mirror the company's actual need and register.
+Planned as a "Review" button the user would click after generation. It shipped as
+an automatic second Claude call inside `POST /generate` (`app/app.py`), so there is
+no button and no `/review` route. It re-reads the job posting, mirrors the ad's
+register, and naturalises Swedish that otherwise reads like translated English.
+Falls back to the unreviewed draft if the call fails.
 
-### Why
-Generated Swedish reads like translated English — clunky compound nouns, unnatural sentence structure, corporate phrasing. The review pass has one focused job: naturalise the language and reframe the content to answer what the company is actually anxious about, in their own register.
-
-### How to build it
-1. New route in `app/app.py` — `/review` POST endpoint
-2. Inputs: job posting URL (refetch or pass text), current cv, current cover_letter
-3. Reads `review_skill.md` as the instruction
-4. Returns same JSON structure as `/generate`: `{"cv": "...", "cover_letter": "..."}`
-5. New "Review" button in `templates/generate.html` — triggers after generation, replaces content in the same editor panels
-
-### Prompt anchoring
-The review prompt must receive the raw job posting text so it can identify the 2–3 real anxieties behind the role and mirror the ad's register back. See `review_skill.md` for full instruction.
+It also receives the closest matched human edit as a draft/final pair — see
+"Learning from human edits" below.
 
 ## Location filter (August 2026)
 
@@ -140,6 +134,37 @@ Filtering happens in this order, cheapest first:
 `len(queries) + 2`. Queries were also retuned to the region plus explicit remote,
 since Sweden-wide on-site results are discarded by the location gate anyway.
 
+## Notifications (August 2026)
+
+`search.py` records a `run_errors` list and per-stage counts in `results.json`;
+`mailer.py` mails only on new roles or errors. Closed ads are written to the
+joblist as Stängd without a mail, and a clean run with nothing new stays silent.
+
+Silence is only safe because a missing or stale `results.json` counts as an error
+(so a pipeline that dies without crashing still mails) and a hard crash fails the
+Actions job, which notifies separately. Keep both of those intact if this is
+touched.
+
+## Learning from human edits (August 2026)
+
+`_matched_edited_examples()` in `app.py` picks the past application whose role is
+closest to the new one (`_match_similar_role()`, one Claude call over past role
+titles vs. a fixed taxonomy — roles don't cluster into clean buckets) and feeds
+its draft/edited pair into the review pass as the signal for what gets rejected.
+Replaced picking the single newest edit regardless of role: a technical
+field-sales edit has nothing to teach a digital business-development draft —
+wrong register, wrong content.
+
+Matching relies on each application folder's `meta.json`
+(`{"company", "role"}`); a missing file falls back to the folder slug, which
+degrades match quality but doesn't break anything. `meta.json` has gone missing
+more than once for folders with edited docs saved outside the app's own `/save`
+flow — see the project memory / MEMORY history if that recurs; backfill from
+`joblist.md`'s company/role columns.
+
+Only candidates with a saved `cv_edited.md` or `cover_letter_edited.md`
+participate — folders with only `_original.md` files aren't examples yet, they're
+gaps in the training signal until something gets edited and saved back.
+
 ## Pending / known issues
-- Review button not yet built (next session)
-- Silent pipeline failure — mailer sends nothing when no new/closed jobs, can't distinguish from crash
+- Nothing tracked. Next scheduled pipeline run: Wednesdays and Fridays 07:00 CET.
