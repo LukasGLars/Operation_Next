@@ -25,7 +25,7 @@ Kommersiell bakgrund inom B2B-försäljning och affärsutveckling med vana att h
 *2023 – nu*
 
 - Full-cycle B2B-kontohantering mot nordiska distributörer och e-handelspartners inom fordonseftermarknad.
-- Byggt internt AI-verktyg som hjälper backoffice att hantera orders snabbare och bättre, översätta teknisk dokumentation till offert samt en agent som gör att användaren kan "chatta med företaget" för unika insikter.
+- Byggt internt AI-verktyg som hjälper backoffice att hantera orders snabbare och bättre, översätta teknisk dokumentation till offert, samt en agent som gör att användaren kan "chatta med företaget" för unika insikter.
 - Designade en strukturerad datamodell för slitdelar som ökade sökmatchningen med 155 % i Sverige och 203 % i Norge på 12 månader, med minskning av felbeställningar som direkt affärspåverkan.
 
 ### Bygghemma.se / BHG Group — Affärsutvecklare
