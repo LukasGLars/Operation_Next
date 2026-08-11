@@ -431,6 +431,15 @@ def generate():
     if not job_url:
         return jsonify({"error": "No job URL provided"}), 400
 
+    if company and role:
+        folder = _app_folder(company, role)
+        cv_path, cl_path = folder / "cv_original.md", folder / "cover_letter_original.md"
+        if cv_path.exists() and cl_path.exists():
+            return jsonify({
+                "cv": cv_path.read_text(encoding="utf-8"),
+                "cover_letter": cl_path.read_text(encoding="utf-8"),
+            })
+
     client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY", ""))
     try:
         job_posting_text = fetch_job_posting(job_url)
