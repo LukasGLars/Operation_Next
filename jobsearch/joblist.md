@@ -41,6 +41,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -73,5 +74,4 @@
 | 28 | Experis AB | Senior strategisk inköpare inom logistik - Göteborg | Göteborg | CV | Identifierad | 2026-08-14 | https://www.aplitrak.com/?adid=VEFscmlrLjQ4MDI5LjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
 | 29 | ADECCO SWEDEN AKTIEBOLAG | Senior inköpare till storkund i Göteborg | Göteborg | CV | Identifierad | 2026-08-14 | https://www.adecco.com/sv-se/ansok?zlid=62870ee2-a418-42d1-bf53-4ca3275b5913&src=ams_direct |
 | 30 | SJR in Sweden AB | Operativ inköpare till tillverkande industri - Start omgående | Göteborg | CV | Identifierad | 2026-08-14 | https://karriar.sjr.se/jobb/2214/ansokan |
-| 31 | Sibe Construction AB | Erfaren entreprenadingenjör till växande byggföretag | Göteborg | CV_BYGG | Identifierad | 2026-08-14 | https://sibeconstruction.recman.page/job/476754?path=ams&apply_only |
-| 32 | Experis AB | Inköpare/ Upphandlare / Alingsås Energi | Alingsås | CV | Identifierad | 2026-08-14 | https://www.aplitrak.com/?adid=ZWVrZGFoLjE0MjUwLjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
+| 31 | Experis AB | Inköpare/ Upphandlare / Alingsås Energi | Alingsås | CV | Identifierad | 2026-08-14 | https://www.aplitrak.com/?adid=ZWVrZGFoLjE0MjUwLjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
