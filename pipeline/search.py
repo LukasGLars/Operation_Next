@@ -420,10 +420,35 @@ def _strip_page_chrome(soup):
         tag.decompose()
 
 
+_META_REFRESH_RE = re.compile(
+    r'<meta[^>]+http-equiv=["\']refresh["\'][^>]*content=["\'][^;]*;\s*url=[\'"]?([^\'">]+)',
+    re.I,
+)
+
+
+def _meta_refresh_target(html, base_url):
+    """Some ATS trackers (aplitrak.com, used by Experis/Manpower/Jefferson Wells
+    ads) redirect via <meta http-equiv="refresh">, not a real HTTP redirect —
+    requests' allow_redirects never follows it, so the page reads as empty."""
+    match = _META_REFRESH_RE.search(html or "")
+    if not match:
+        return None
+    from urllib.parse import urljoin
+    return urljoin(base_url, match.group(1).strip())
+
+
+def _get_following_meta_refresh(url):
+    r = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
+    redirect = _meta_refresh_target(r.text, r.url)
+    if redirect and redirect != r.url:
+        r = requests.get(redirect, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
+    return r
+
+
 def fetch_page_text(url):
     try:
         from bs4 import BeautifulSoup
-        r = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
+        r = _get_following_meta_refresh(url)
         soup = BeautifulSoup(r.text, "html.parser")
         status = _remote_status(soup)
         suffix = f"\n\nRemote status: {status}" if status else ""
@@ -443,7 +468,7 @@ def visible_page_text(url):
     fetch_page_text discards."""
     try:
         from bs4 import BeautifulSoup
-        r = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
+        r = _get_following_meta_refresh(url)
         soup = BeautifulSoup(r.text, "html.parser")
         _strip_page_chrome(soup)
         return soup.get_text(" ", strip=True)[:6000]
