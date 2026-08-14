@@ -235,9 +235,29 @@ def _extract_jsonld_job(soup) -> str | None:
     return None
 
 
+_META_REFRESH_RE = re.compile(
+    r'<meta[^>]+http-equiv=["\']refresh["\'][^>]*content=["\'][^;]*;\s*url=[\'"]?([^\'">]+)',
+    re.I,
+)
+
+
+def _meta_refresh_target(html, base_url):
+    """Some ATS trackers (aplitrak.com, used by Experis/Manpower/Jefferson Wells
+    ads) redirect via <meta http-equiv="refresh">, not a real HTTP redirect —
+    requests' allow_redirects never follows it, so the page reads as empty."""
+    match = _META_REFRESH_RE.search(html or "")
+    if not match:
+        return None
+    from urllib.parse import urljoin
+    return urljoin(base_url, match.group(1).strip())
+
+
 def fetch_job_posting(url: str) -> str:
     try:
         r = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
+        redirect = _meta_refresh_target(r.text, r.url)
+        if redirect and redirect != r.url:
+            r = requests.get(redirect, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
         soup = BeautifulSoup(r.text, "html.parser")
         jsonld = _extract_jsonld_job(soup)
         if jsonld:
