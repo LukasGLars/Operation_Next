@@ -18,3 +18,4 @@ even if it resurfaces in a later search/JobTech pass.
 | Trafikverket | Kvalificerad inköpare inom entreprenadupphandling | 2026-08-14 | https://trv.heroma.se/prod/trvpp01/externwebbv2/LedigaJobb/EW2PageJobPostingAdvert.aspx?jobpostingid=8354234315932008458 |
 | Gina Tricot AB | Inköpare | 2026-08-14 | https://careerssweden.ginatricot.com/jobs/7675393-inkopare/applications/new?promotion=1983666-arbetsformedlingen |
 | Intensogruppen AB | Teknisk säljare till Göteborg | 2026-08-14 | https://candidate.masterhelp.se/apply/64f87c79-11e0-47ce-9ebb-61e6e118c976?ps=ams |
+| Framtiden i Sverige AB | Junior entreprenadingenjör / Projektkoordinator inom el | 2026-08-14 | https://jobb.framtiden.com/jobs/Careers/35955000196504653 |
