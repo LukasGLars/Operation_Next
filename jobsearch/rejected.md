@@ -13,3 +13,4 @@ even if it resurfaces in a later search/JobTech pass.
 | Etraveli Group AB | AI Solutions Engineer | 2026-08-14 | https://etraveligroup.teamtailor.com/jobs/7746887-ai-solutions-engineer |
 | ACADEMIC WORK SWEDEN AB | Teknisk Säljare till innovativt techbolag i Göteborg! | 2026-08-14 | https://www.academicwork.se/lediga-jobb/j/teknisk-saljare-till-innovativt-techbolag-i-goteborg/SDEK67 |
 | Sibe Construction AB | Erfaren entreprenadingenjör till växande byggföretag | 2026-08-14 | https://sibeconstruction.recman.page/job/476754?path=ams&apply_only |
+| ADECCO SWEDEN AKTIEBOLAG | Senior inköpare till storkund i Göteborg | 2026-08-14 | https://www.adecco.com/sv-se/ansok?zlid=62870ee2-a418-42d1-bf53-4ca3275b5913&src=ams_direct |
