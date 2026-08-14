@@ -51,6 +51,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -69,7 +70,7 @@
 | 14 | Wrknest AB | Teknisk säljare till växande teknikbolag ⚡ | Göteborg | CV_Zeppelin | Stängd | 2026-08-14 | https://careers.wrknest.se/jobs/7726001-teknisk-saljare-till-vaxande-teknikbolag/applications/new?promotion=1997206-arbetsformedlingen |
 | 15 | Securitas | Business Analyst (Client Engagement) | Warsaw, Poland | CV_Einride | Ansökt | 2026-08-07 | https://securitas.teamtailor.com/jobs/7845272-business-analyst-client-engagement |
 | 16 | Rekryteringsgruppen | Digital affärsutvecklare | Stockholm | CV | Ansökt | 2026-08-07 | https://rekryteringsgruppen.teamtailor.com/jobs/7949661-digital-affarsutvecklare |
-| 17 | Wioniq Nordic | Affärsutvecklare till Wioniq, Borås, Jönköping eller Stockholm | Borås | CV | Ansökt | 2026-08-11 | https://jobb.oddwork.se/jobs/7874382-affarsutvecklare-till-wioniq-boras-jonkoping-eller-stockholm |
+| 17 | Wioniq Nordic | Affärsutvecklare till Wioniq, Borås, Jönköping eller Stockholm | Borås | CV | Intervju | 2026-08-14 | https://jobb.oddwork.se/jobs/7874382-affarsutvecklare-till-wioniq-boras-jonkoping-eller-stockholm |
 | 18 | PEAB SVERIGE AB | Entreprenadingenjör | Göteborg | CV_BYGG | Identifierad | 2026-08-12 | https://pages.adway.ai/peab-sweden-ab/20604/goteborg/entreprenadingenjor |
 | 19 | LERNIA BEMANNING AB | Customer Success Specialist / Timeplan / Göteborg | Göteborg | CV_Einride | Identifierad | 2026-08-12 | https://www.lernia.se/jobb/andra-yrken/goteborg-customer-success-specialist-timeplan-goteborg-7856290/ |
 | 20 | Experis AB | Inköpare/ Upphandlare / Alingsås Energi | Alingsås | CV | Genererat | 2026-08-14 | https://www.aplitrak.com/?adid=ZWVrZGFoLjY3NDIxLjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
