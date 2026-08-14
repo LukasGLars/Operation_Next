@@ -11,3 +11,4 @@ even if it resurfaces in a later search/JobTech pass.
 | Friday Väst AB | Strategisk Inköpare till fordonsbolag! | 2026-08-11 | https://pnty-apply.ponty-system.se/friday?id=4580&pnty_src=platsbanken |
 | ICOMERA AB | Sales Engineer – Solution Consultancy & Engineering Connectivity | 2026-08-11 | https://enfrench-equans.icims.com/jobs/88083/sales-engineer/job?mode=view&mobile=false&width=770&height=500&bga=true&needsRedirect=false&jan1offset=60&jun1offset=120 |
 | Etraveli Group AB | AI Solutions Engineer | 2026-08-14 | https://etraveligroup.teamtailor.com/jobs/7746887-ai-solutions-engineer |
+| ACADEMIC WORK SWEDEN AB | Teknisk Säljare till innovativt techbolag i Göteborg! | 2026-08-14 | https://www.academicwork.se/lediga-jobb/j/teknisk-saljare-till-innovativt-techbolag-i-goteborg/SDEK67 |
