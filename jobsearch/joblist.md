@@ -45,6 +45,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -65,13 +66,12 @@
 | 16 | Peab Anläggning AB | Entreprenadingenjör | Göteborg | CV_BYGG | Ansökt | 2026-08-11 | https://peab.se/karriar/lediga-tjanster/2026/juli/entreprenadingenjor/ |
 | 17 | Cloudgruppen Sverige AB | Customer Success Manager | Göteborg | CV_Einride | Identifierad | 2026-08-07 | https://jobb.cloudgruppen.se/jobs/7753563-customer-success-manager/applications/new?promotion=2005473-arbetsformedlingen |
 | 18 | Wrknest AB | Teknisk säljare till växande teknikbolag ⚡ | Göteborg | CV_Zeppelin | Stängd | 2026-08-14 | https://careers.wrknest.se/jobs/7726001-teknisk-saljare-till-vaxande-teknikbolag/applications/new?promotion=1997206-arbetsformedlingen |
-| 19 | Gina Tricot AB | Inköpare | Borås | CV | Identifierad | 2026-08-07 | https://careerssweden.ginatricot.com/jobs/7675393-inkopare/applications/new?promotion=1983666-arbetsformedlingen |
-| 20 | Securitas | Business Analyst (Client Engagement) | Warsaw, Poland | CV_Einride | Ansökt | 2026-08-07 | https://securitas.teamtailor.com/jobs/7845272-business-analyst-client-engagement |
-| 21 | Rekryteringsgruppen | Digital affärsutvecklare | Stockholm | CV | Ansökt | 2026-08-07 | https://rekryteringsgruppen.teamtailor.com/jobs/7949661-digital-affarsutvecklare |
-| 22 | Wioniq Nordic | Affärsutvecklare till Wioniq, Borås, Jönköping eller Stockholm | Borås | CV | Ansökt | 2026-08-11 | https://jobb.oddwork.se/jobs/7874382-affarsutvecklare-till-wioniq-boras-jonkoping-eller-stockholm |
-| 23 | PEAB SVERIGE AB | Entreprenadingenjör | Göteborg | CV_BYGG | Identifierad | 2026-08-12 | https://pages.adway.ai/peab-sweden-ab/20604/goteborg/entreprenadingenjor |
-| 24 | LERNIA BEMANNING AB | Customer Success Specialist / Timeplan / Göteborg | Göteborg | CV_Einride | Identifierad | 2026-08-12 | https://www.lernia.se/jobb/andra-yrken/goteborg-customer-success-specialist-timeplan-goteborg-7856290/ |
-| 25 | Experis AB | Inköpare/ Upphandlare / Alingsås Energi | Alingsås | CV | Identifierad | 2026-08-12 | https://www.aplitrak.com/?adid=ZWVrZGFoLjY3NDIxLjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
-| 26 | FORTIFIKATIONSVERKET | Kalkylingenjör - Göteborg | Göteborg | CV_BYGG | Identifierad | 2026-08-12 | https://web103.reachmee.com/ext/I005/1013/job?site=6&lang=SE&validator=61e84dc0c178c1f5fd4ebfb8b7ac37be&job_id=2448&utm_medium=talentech_publishing&utm_source=jobtip |
-| 27 | SJR in Sweden AB | Operativ inköpare till tillverkande industri - Start omgående | Göteborg | CV | Identifierad | 2026-08-14 | https://karriar.sjr.se/jobb/2214/ansokan |
-| 28 | Experis AB | Inköpare/ Upphandlare / Alingsås Energi | Alingsås | CV | Identifierad | 2026-08-14 | https://www.aplitrak.com/?adid=ZWVrZGFoLjE0MjUwLjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
+| 19 | Securitas | Business Analyst (Client Engagement) | Warsaw, Poland | CV_Einride | Ansökt | 2026-08-07 | https://securitas.teamtailor.com/jobs/7845272-business-analyst-client-engagement |
+| 20 | Rekryteringsgruppen | Digital affärsutvecklare | Stockholm | CV | Ansökt | 2026-08-07 | https://rekryteringsgruppen.teamtailor.com/jobs/7949661-digital-affarsutvecklare |
+| 21 | Wioniq Nordic | Affärsutvecklare till Wioniq, Borås, Jönköping eller Stockholm | Borås | CV | Ansökt | 2026-08-11 | https://jobb.oddwork.se/jobs/7874382-affarsutvecklare-till-wioniq-boras-jonkoping-eller-stockholm |
+| 22 | PEAB SVERIGE AB | Entreprenadingenjör | Göteborg | CV_BYGG | Identifierad | 2026-08-12 | https://pages.adway.ai/peab-sweden-ab/20604/goteborg/entreprenadingenjor |
+| 23 | LERNIA BEMANNING AB | Customer Success Specialist / Timeplan / Göteborg | Göteborg | CV_Einride | Identifierad | 2026-08-12 | https://www.lernia.se/jobb/andra-yrken/goteborg-customer-success-specialist-timeplan-goteborg-7856290/ |
+| 24 | Experis AB | Inköpare/ Upphandlare / Alingsås Energi | Alingsås | CV | Identifierad | 2026-08-12 | https://www.aplitrak.com/?adid=ZWVrZGFoLjY3NDIxLjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
+| 25 | FORTIFIKATIONSVERKET | Kalkylingenjör - Göteborg | Göteborg | CV_BYGG | Identifierad | 2026-08-12 | https://web103.reachmee.com/ext/I005/1013/job?site=6&lang=SE&validator=61e84dc0c178c1f5fd4ebfb8b7ac37be&job_id=2448&utm_medium=talentech_publishing&utm_source=jobtip |
+| 26 | SJR in Sweden AB | Operativ inköpare till tillverkande industri - Start omgående | Göteborg | CV | Identifierad | 2026-08-14 | https://karriar.sjr.se/jobb/2214/ansokan |
+| 27 | Experis AB | Inköpare/ Upphandlare / Alingsås Energi | Alingsås | CV | Identifierad | 2026-08-14 | https://www.aplitrak.com/?adid=ZWVrZGFoLjE0MjUwLjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |

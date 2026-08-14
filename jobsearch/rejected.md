@@ -16,3 +16,4 @@ even if it resurfaces in a later search/JobTech pass.
 | ADECCO SWEDEN AKTIEBOLAG | Senior inköpare till storkund i Göteborg | 2026-08-14 | https://www.adecco.com/sv-se/ansok?zlid=62870ee2-a418-42d1-bf53-4ca3275b5913&src=ams_direct |
 | Experis AB | Senior strategisk inköpare inom logistik - Göteborg | 2026-08-14 | https://www.aplitrak.com/?adid=VEFscmlrLjQ4MDI5LjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
 | Trafikverket | Kvalificerad inköpare inom entreprenadupphandling | 2026-08-14 | https://trv.heroma.se/prod/trvpp01/externwebbv2/LedigaJobb/EW2PageJobPostingAdvert.aspx?jobpostingid=8354234315932008458 |
+| Gina Tricot AB | Inköpare | 2026-08-14 | https://careerssweden.ginatricot.com/jobs/7675393-inkopare/applications/new?promotion=1983666-arbetsformedlingen |
