@@ -199,5 +199,34 @@ Only URL is checked, matching the dedup key `known_urls` already uses — no
 fuzzy company/role matching, so a genuinely new posting from a previously
 rejected employer is unaffected.
 
+## aplitrak.com meta-refresh redirect (fixed 2026-08-14)
+
+Doc generation failed with "No JSON found in response" for an Experis /
+Alingsås Energi role. Root cause: `aplitrak.com` (used by Experis, Manpower,
+Jefferson Wells) wraps the real posting behind a client-side `<meta
+http-equiv="refresh">`, not a real HTTP redirect — `requests` never follows
+it, so `fetch_page_text`/`visible_page_text` (`search.py`) and
+`fetch_job_posting` (`app.py`) all read an empty spinner page. Claude then had
+nothing to work with and replied in prose instead of JSON.
+
+Likely also silently starved the location gate for any aplitrak-sourced ad
+already in the pipeline — an empty page reads as "no location stated" and
+gets dropped rather than evaluated. No way to know how many were lost.
+
+Fix: `_meta_refresh_target()` (duplicated in both files, same pattern as the
+table read/write helpers) parses the `<meta refresh>` target and the three
+fetch functions follow it once before parsing. The stored apply URL in
+`joblist.md` is untouched — only the content-fetching path changed. Covered
+by `tests/test_meta_refresh.py`.
+
+Also confirmed while investigating: rows #20/#23 (both "Experis AB —
+Inköpare/ Upphandlare / Alingsås Energi") were the same underlying job —
+the aplitrak URL embeds a job ref (`13765`) that matched on both, only the
+tracking id differed. Not fixed by this PR; still sitting in the joblist as
+of this writing.
+
 ## Pending / known issues
-- Nothing tracked. Next scheduled pipeline run: Wednesdays and Fridays 07:00 CET.
+- Duplicate row: joblist.md #20 and #23 are the same Experis/Alingsås Energi
+  posting under two aplitrak tracking ids (see above) — one should be
+  deleted (via the app, so it lands in `rejected.md` too).
+- Next scheduled pipeline run: Wednesdays and Fridays 07:00 CET.
