@@ -19,3 +19,4 @@ even if it resurfaces in a later search/JobTech pass.
 | Gina Tricot AB | Inköpare | 2026-08-14 | https://careerssweden.ginatricot.com/jobs/7675393-inkopare/applications/new?promotion=1983666-arbetsformedlingen |
 | Intensogruppen AB | Teknisk säljare till Göteborg | 2026-08-14 | https://candidate.masterhelp.se/apply/64f87c79-11e0-47ce-9ebb-61e6e118c976?ps=ams |
 | Framtiden i Sverige AB | Junior entreprenadingenjör / Projektkoordinator inom el | 2026-08-14 | https://jobb.framtiden.com/jobs/Careers/35955000196504653 |
+| ADECCO SWEDEN AKTIEBOLAG | Strategisk inköpare sökes till vår kund i Göteborg | 2026-08-14 | https://www.adecco.com/sv-se/ansok?zlid=b39f171f-6dc4-4361-b599-38f87d487d42&src=ams_direct |
