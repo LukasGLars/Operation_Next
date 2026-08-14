@@ -95,6 +95,17 @@ QUERIES_PASS1 = [
     "business analyst helt distansarbete Sverige",
     "customer success fully remote Sweden",
     "affärsutvecklare distans Sverige",
+    # Alingsås and Borås are their own labor markets, not Göteborg suburbs —
+    # everything else in COMMUTABLE_PLACES is a Göteborg satellite already
+    # findable under "Göteborg" ad text and JobTech's municipality filter.
+    "business analyst Alingsås",
+    "affärsutvecklare Alingsås",
+    "teknisk säljare Alingsås",
+    "business analyst Borås",
+    "affärsutvecklare Borås",
+    "teknisk säljare Borås",
+    "sales engineer Borås",
+    "customer success manager Borås",
 ]
 
 QUERIES_PASS2 = [
@@ -122,6 +133,8 @@ QUERIES_PASS3 = [
     'site:jobylon.com "customer success" Göteborg',
     'site:greenhouse.io "business analyst" Gothenburg',
     'site:lever.co "business analyst" remote Sweden',
+    'site:teamtailor.com "affärsutvecklare" Borås',
+    'site:teamtailor.com "teknisk säljare" Borås',
 ]
 
 SEARCH_TIMEOUT_SECS = 300
