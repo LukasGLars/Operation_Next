@@ -22,6 +22,8 @@ opened, so the branch+PR step buys a diff to glance at, not real review.
 - `pipeline/mailer.py` — daily digest from `results.json`
 - `app/app.py` — Flask UI on port 5003, generates CV + cover letter, uses `generation_skill.md` then `review_skill.md` as a second pass
 - `jobsearch/cv/master_cv.md` — single source of truth for work history and projects
+- `jobsearch/rejected.md` — URLs manually deleted from the joblist; `pipeline/updater.py`
+  checks this before re-adding a posting so a rejected job can't resurface
 
 ## Tests
 `python -m pytest tests/` — run before claiming anything is done.

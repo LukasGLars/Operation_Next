@@ -173,5 +173,31 @@ unrelated `/generate` call happened to sweep them into its commit — which also
 meant the matched-edited-examples feature above couldn't see them until then.
 Fixed by adding the `_push_joblist()` call to `/save` too.
 
+## Manually rejected jobs resurfaced (fixed 2026-08-14)
+
+Found while auditing the joblist: `update_joblist()`'s dedup only checked
+`known_urls`, built from whatever rows currently sit in `joblist.md`. Once a
+row was manually removed (via the app's `/delete` button, or a manual cleanup
+commit like `b2bc87a`), nothing remembered that it had been rejected — the
+next search/JobTech pass would find the same URL again with nothing to skip
+it. Two postings had round-tripped this way: SEVR "Customer Success –
+Fintech" and Friday Väst "Strategisk Inköpare", both dropped 2026-08-11 as
+dead/mismatched, both back in the list by 2026-08-12/14 under the same job
+IDs.
+
+Fix: `jobsearch/rejected.md`, a markdown table of `Företag | Roll/Typ | Datum
+| URL`, checked by URL in `pipeline/updater.py::load_rejected_urls()` before a
+new row is added (`SKIP (rejected)` in the log, alongside the existing `SKIP
+(duplicate)`). `app/app.py::_delete_job_row` now appends to it automatically
+via `_append_rejected` before removing the row, so clicking delete in the UI
+is enough going forward — no separate step needed. Backfilled with the two
+resurfaced rows plus two more from the same 2026-08-11 cleanup (Poolia AB,
+ICOMERA AB) that hadn't resurfaced yet but are equally liable to. Covered by
+`tests/test_rejected.py`.
+
+Only URL is checked, matching the dedup key `known_urls` already uses — no
+fuzzy company/role matching, so a genuinely new posting from a previously
+rejected employer is unaffected.
+
 ## Pending / known issues
 - Nothing tracked. Next scheduled pipeline run: Wednesdays and Fridays 07:00 CET.

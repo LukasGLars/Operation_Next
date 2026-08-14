@@ -6,11 +6,12 @@ from datetime import datetime, date, timedelta
 from pathlib import Path
 from urllib.parse import urlparse
 
-ROOT         = Path(__file__).parent.parent
-JOBLIST_PATH = ROOT / "jobsearch" / "joblist.md"
-SKILL_PATH   = ROOT / "jobsearch" / "skill" / "SKILL.md"
-RESULTS_PATH = Path(__file__).parent / "results.json"
-ERROR_LOG    = Path(__file__).parent / "error.log"
+ROOT          = Path(__file__).parent.parent
+JOBLIST_PATH  = ROOT / "jobsearch" / "joblist.md"
+REJECTED_PATH = ROOT / "jobsearch" / "rejected.md"
+SKILL_PATH    = ROOT / "jobsearch" / "skill" / "SKILL.md"
+RESULTS_PATH  = Path(__file__).parent / "results.json"
+ERROR_LOG     = Path(__file__).parent / "error.log"
 
 logging.basicConfig(
     filename=ERROR_LOG,
@@ -87,6 +88,21 @@ def parse_table(lines):
         rows.append(row)
 
     return rows, has_datum
+
+
+def load_rejected_urls() -> set:
+    """URLs manually deleted from joblist.md — see jobsearch/rejected.md."""
+    if not REJECTED_PATH.exists():
+        return set()
+    urls = set()
+    for line in REJECTED_PATH.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if not stripped.startswith("|") or stripped.startswith("|---") or stripped.startswith("| Företag"):
+            continue
+        cells = [c.strip() for c in stripped.strip("|").split("|")]
+        if len(cells) >= 4 and cells[3]:
+            urls.add(cells[3])
+    return urls
 
 
 def cv_base_for_role(role_type):
@@ -179,10 +195,14 @@ def update_joblist():
             print(f"  CLOSED: {job.get('company')} → status set to Stängd")
 
     known_urls = {row["URL"].strip() for row in rows}
+    rejected_urls = load_rejected_urls()
     for job in new_jobs:
         url = job.get("url", "").strip()
         if url in known_urls:
             print(f"  SKIP (duplicate): {url}")
+            continue
+        if url in rejected_urls:
+            print(f"  SKIP (rejected): {url}")
             continue
         new_row = {
             "#":        str(len(rows) + 1),

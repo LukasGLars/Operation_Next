@@ -22,6 +22,7 @@ load_dotenv(Path(__file__).parent.parent / ".env")
 
 ROOT          = Path(__file__).parent.parent
 JOBLIST_PATH  = ROOT / "jobsearch" / "joblist.md"
+REJECTED_PATH = ROOT / "jobsearch" / "rejected.md"
 SKILL_PATH       = ROOT / "jobsearch" / "skill" / "generation_skill.md"
 REVIEW_SKILL_PATH = ROOT / "jobsearch" / "skill" / "review_skill.md"
 LETTER_DOCX      = ROOT / "jobsearch" / "letters" / "Lukas_Larsson_Cover_Letter_Einride.docx"
@@ -125,12 +126,30 @@ def _update_job_row(url: str, updates: dict):
     _push_joblist()
 
 
+def _append_rejected(company: str, role: str, url: str):
+    is_new = not REJECTED_PATH.exists()
+    with open(REJECTED_PATH, "a", encoding="utf-8") as f:
+        if is_new:
+            f.write("# Rejected — Operation Next\n\n")
+            f.write("Rows removed via the app's delete button (or manually, during cleanup). "
+                     "The pipeline checks this list by URL and will not re-add a posting that's "
+                     "here, even if it resurfaces in a later search/JobTech pass.\n\n")
+            f.write("| Företag | Roll/Typ | Datum | URL |\n")
+            f.write("|---|---|---|---|\n")
+        cells = [company, role, date.today().isoformat(), url]
+        cells = [str(c).replace("|", "/") for c in cells]
+        f.write("| " + " | ".join(cells) + " |\n")
+
+
 def _delete_job_row(url: str):
     preamble, rows = _parse_joblist_raw()
+    deleted = next((r for r in rows if r.get("URL", "").strip() == url), None)
     rows = [r for r in rows if r.get("URL", "").strip() != url]
     for i, row in enumerate(rows, 1):
         row["#"] = str(i)
     _write_joblist_raw(preamble, rows)
+    if deleted:
+        _append_rejected(deleted.get("Företag", ""), deleted.get("Roll/Typ", ""), url)
     _push_joblist()
 
 
