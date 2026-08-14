@@ -14,6 +14,8 @@ opened, so the branch+PR step buys a diff to glance at, not real review.
 - `jobsearch/` content (joblist rows, application docs, skill files) already
   goes straight to `main` — matches the app's own auto-commit behavior, see
   Gotchas below.
+- Standing merge authorization (2026-08-14): merge clean PRs by default once
+  opened, no need to wait for an explicit "merge it" each time.
 
 ## Layout
 - `pipeline/search.py` — finds and validates postings, uses `jobsearch/skill/search_skill.md`
