@@ -52,6 +52,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -64,7 +65,7 @@
 | 8 | Jerrie AB | Customer Success Manager till Videotech, Göteborg | Göteborg | CV_Einride | Identifierad | 2026-08-05 | https://jerrie.se/lediga-jobb/2921-customer-success-manager-till-videotech-goteborg?pnty_src=platsbanken |
 | 9 | PEAB SVERIGE AB | Inköpare | Göteborg | CV_BYGG | Identifierad | 2026-08-05 | https://pages.adway.ai/peab-sweden-ab/20534/goteborg/inkopare |
 | 10 | Workz Sweden AB | Affärsutvecklare till dormakaba | Göteborg | CV | Ansökt | 2026-08-07 | https://karriar.workz.se/jobs/7965921-affarsutvecklare-till-dormakaba |
-| 11 | Vitec Software Group AB (publ) | Teknisk säljare Infometric | Göteborg | CV_Zeppelin | Stängd | 2026-08-12 | https://jobs.vitecsoftware.se/jobs/7951572-teknisk-saljare-infometric/applications/new?promotion=2064864-arbetsformedlingen |
+| 11 | Vitec Software Group AB (publ) | Teknisk säljare Infometric | Göteborg | CV_Zeppelin | Intervju | 2026-08-17 | https://jobs.vitecsoftware.se/jobs/7951572-teknisk-saljare-infometric/applications/new?promotion=2064864-arbetsformedlingen |
 | 12 | Peab Anläggning AB | Entreprenadingenjör | Göteborg | CV_BYGG | Ansökt | 2026-08-11 | https://peab.se/karriar/lediga-tjanster/2026/juli/entreprenadingenjor/ |
 | 13 | Cloudgruppen Sverige AB | Customer Success Manager | Göteborg | CV_Einride | Identifierad | 2026-08-07 | https://jobb.cloudgruppen.se/jobs/7753563-customer-success-manager/applications/new?promotion=2005473-arbetsformedlingen |
 | 14 | Wrknest AB | Teknisk säljare till växande teknikbolag ⚡ | Göteborg | CV_Zeppelin | Stängd | 2026-08-14 | https://careers.wrknest.se/jobs/7726001-teknisk-saljare-till-vaxande-teknikbolag/applications/new?promotion=1997206-arbetsformedlingen |
