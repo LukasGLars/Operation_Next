@@ -53,6 +53,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -74,7 +75,7 @@
 | 17 | Wioniq Nordic | Affärsutvecklare till Wioniq, Borås, Jönköping eller Stockholm | Borås | CV | Intervju | 2026-08-14 | https://jobb.oddwork.se/jobs/7874382-affarsutvecklare-till-wioniq-boras-jonkoping-eller-stockholm |
 | 18 | PEAB SVERIGE AB | Entreprenadingenjör | Göteborg | CV_BYGG | Identifierad | 2026-08-12 | https://pages.adway.ai/peab-sweden-ab/20604/goteborg/entreprenadingenjor |
 | 19 | LERNIA BEMANNING AB | Customer Success Specialist / Timeplan / Göteborg | Göteborg | CV_Einride | Identifierad | 2026-08-12 | https://www.lernia.se/jobb/andra-yrken/goteborg-customer-success-specialist-timeplan-goteborg-7856290/ |
-| 20 | Experis AB | Inköpare/ Upphandlare / Alingsås Energi | Alingsås | CV | Genererat | 2026-08-14 | https://www.aplitrak.com/?adid=ZWVrZGFoLjY3NDIxLjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
+| 20 | Experis AB | Inköpare/ Upphandlare / Alingsås Energi | Alingsås | CV | Ansökt | 2026-08-17 | https://www.aplitrak.com/?adid=ZWVrZGFoLjY3NDIxLjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
 | 21 | FORTIFIKATIONSVERKET | Kalkylingenjör - Göteborg | Göteborg | CV_BYGG | Identifierad | 2026-08-12 | https://web103.reachmee.com/ext/I005/1013/job?site=6&lang=SE&validator=61e84dc0c178c1f5fd4ebfb8b7ac37be&job_id=2448&utm_medium=talentech_publishing&utm_source=jobtip |
 | 22 | SJR in Sweden AB | Operativ inköpare till tillverkande industri - Start omgående | Göteborg | CV | Identifierad | 2026-08-14 | https://karriar.sjr.se/jobb/2214/ansokan |
 | 23 | Experis AB | Inköpare/ Upphandlare / Alingsås Energi | Alingsås | CV | Identifierad | 2026-08-14 | https://www.aplitrak.com/?adid=ZWVrZGFoLjE0MjUwLjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
