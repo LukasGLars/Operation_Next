@@ -56,12 +56,13 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
 | 2 | HORNBACH BYGGMARKNAD AB | Inköpare till Huvudkontoret | Göteborg | CV | Identifierad | 2026-08-05 | https://karriar.hornbach.se/offer/inkopare-till-huvudkontoret/aadc50ca-d1f1-4605-919a-2ce36bf60e00?jobPipeline=Arbetsformedlingen&utm_source=Arbetformedlingen&showApplicationForm=true |
 | 3 | Kraftsam Rekrytering & Bemanning AB | Teknisk säljare | Göteborg | CV_Zeppelin | Identifierad | 2026-08-05 | https://pnty-apply.ponty-system.se/kraftsam?id=2331&pnty_src=platsbanken |
-| 4 | Oddwork Sweden AB | Teknisk säljare till Profcon // Göteborg | Göteborg | CV_Plymovent | Ansökt | 2026-08-11 | https://jobb.oddwork.se/jobs/8031694-teknisk-saljare-till-profcon-goteborg/applications/new?promotion=2090960-arbetsformedlingen |
+| 4 | Oddwork Sweden AB | Teknisk säljare till Profcon // Göteborg | Göteborg | CV_Plymovent | Intervju | 2026-08-19 | https://jobb.oddwork.se/jobs/8031694-teknisk-saljare-till-profcon-goteborg/applications/new?promotion=2090960-arbetsformedlingen |
 | 5 | Thomas Betong AB | Teknisk säljare Prefab Göteborg | Göteborg | CV_Zeppelin | Ansökt | 2026-08-07 | https://thomasbetong.se/karriar/lediga-tjanster/?rmpage=job&rmjob=463&utm_medium=talentech_publishing&utm_source=jobtip |
 | 6 | AB Effektiv Väst | Buyer – Private Label & Produktutveckling till Mshop | Göteborg | CV | Identifierad | 2026-08-05 | https://effektiv.se/jobb/kontor-administration/goteborg/buyer-private-label-and-produktutveckling-till-mshop-8009874/ |
 | 7 | Jerrie AB | Customer Success Manager till Videotech, Göteborg | Göteborg | CV_Einride | Identifierad | 2026-08-05 | https://jerrie.se/lediga-jobb/2921-customer-success-manager-till-videotech-goteborg?pnty_src=platsbanken |
