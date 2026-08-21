@@ -57,6 +57,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -86,6 +87,7 @@
 | 25 | Bustos Konsulttjänster AB | Inköpare anläggning | Göteborg | CV_BYGG | Identifierad | 2026-08-19 | https://bustoskonsulttjanster-1746019372.teamtailor.com/jobs/8230093-inkopare-anlaggning |
 | 26 | Bustos Konsulttjänster AB | Entreprenadingenör bygg | Göteborg | CV_BYGG | Identifierad | 2026-08-19 | https://bustoskonsulttjanster-1746019372.teamtailor.com/jobs/8230069-entreprenadingenor-bygg |
 | 27 | Bustos Konsulttjänster AB | Entreprenadingenjör anläggning | Göteborg | CV_BYGG | Identifierad | 2026-08-19 | https://bustoskonsulttjanster-1746019372.teamtailor.com/jobs/8229769-entreprenadingenjor-anlaggning |
-| 28 | Needo Recruitment Sthlm AB | Teknisk inköpare till FlexQube! | Mölndal | CV | Identifierad | 2026-08-19 | https://needo.se/lediga-jobb/3256-teknisk-inkopare-till-flexqube/?pnty_src=platsbanken |
+| 28 | Needo Recruitment Sthlm AB | Teknisk inköpare till FlexQube! | Mölndal | CV | Stängd | 2026-08-21 | https://needo.se/lediga-jobb/3256-teknisk-inkopare-till-flexqube/?pnty_src=platsbanken |
 | 29 | Eqwiry AB | Operativ Inköpare - Konsultuppdrag | Göteborg | CV | Identifierad | 2026-08-19 | https://eqwiry-1741099251.teamtailor.com/jobs/7925320-operativ-inkopare-konsultuppdrag |
 | 30 | Eqwiry AB | Strategisk Inköpare – Konsultuppdrag | Göteborg | CV | Identifierad | 2026-08-19 | https://eqwiry-1741099251.teamtailor.com/jobs/7925246-strategisk-inkopare-konsultuppdrag |
+| 31 | Experis AB | Affärskoordinator / Business Analyst / Lyreco / Borås | Borås | CV_Einride | Identifierad | 2026-08-21 | https://www.aplitrak.com/?adid=c3Rha2FoLjEzMDY1LjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
