@@ -58,6 +58,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -70,7 +71,7 @@
 | 8 | PEAB SVERIGE AB | Inköpare | Göteborg | CV_BYGG | Identifierad | 2026-08-05 | https://pages.adway.ai/peab-sweden-ab/20534/goteborg/inkopare |
 | 9 | Workz Sweden AB | Affärsutvecklare till dormakaba | Göteborg | CV | Ansökt | 2026-08-07 | https://karriar.workz.se/jobs/7965921-affarsutvecklare-till-dormakaba |
 | 10 | Vitec Software Group AB (publ) | Teknisk säljare Infometric | Göteborg | CV_Zeppelin | Intervju | 2026-08-17 | https://jobs.vitecsoftware.se/jobs/7951572-teknisk-saljare-infometric/applications/new?promotion=2064864-arbetsformedlingen |
-| 11 | Peab Anläggning AB | Entreprenadingenjör | Göteborg | CV_BYGG | Ansökt | 2026-08-11 | https://peab.se/karriar/lediga-tjanster/2026/juli/entreprenadingenjor/ |
+| 11 | Peab Anläggning AB | Entreprenadingenjör | Göteborg | CV_BYGG | Stängd | 2026-08-26 | https://peab.se/karriar/lediga-tjanster/2026/juli/entreprenadingenjor/ |
 | 12 | Cloudgruppen Sverige AB | Customer Success Manager | Göteborg | CV_Einride | Identifierad | 2026-08-07 | https://jobb.cloudgruppen.se/jobs/7753563-customer-success-manager/applications/new?promotion=2005473-arbetsformedlingen |
 | 13 | Wrknest AB | Teknisk säljare till växande teknikbolag ⚡ | Göteborg | CV_Zeppelin | Stängd | 2026-08-14 | https://careers.wrknest.se/jobs/7726001-teknisk-saljare-till-vaxande-teknikbolag/applications/new?promotion=1997206-arbetsformedlingen |
 | 14 | Securitas | Business Analyst (Client Engagement) | Warsaw, Poland | CV_Einride | Ansökt | 2026-08-07 | https://securitas.teamtailor.com/jobs/7845272-business-analyst-client-engagement |
@@ -91,3 +92,10 @@
 | 29 | Eqwiry AB | Operativ Inköpare - Konsultuppdrag | Göteborg | CV | Identifierad | 2026-08-19 | https://eqwiry-1741099251.teamtailor.com/jobs/7925320-operativ-inkopare-konsultuppdrag |
 | 30 | Eqwiry AB | Strategisk Inköpare – Konsultuppdrag | Göteborg | CV | Identifierad | 2026-08-19 | https://eqwiry-1741099251.teamtailor.com/jobs/7925246-strategisk-inkopare-konsultuppdrag |
 | 31 | Experis AB | Affärskoordinator / Business Analyst / Lyreco / Borås | Borås | CV_Einride | Identifierad | 2026-08-21 | https://www.aplitrak.com/?adid=c3Rha2FoLjEzMDY1LjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
+| 32 | Init Sweden | Team Manager/Affärsutvecklare | Göteborg | CV | Identifierad | 2026-08-26 | https://karriar.initsweden.com/jobs/5789616-team-manager-affarsutvecklare |
+| 33 | GÖTEBORGS KOMMUN | Strategisk inköpare med kategoriledaransvar | Göteborg | CV | Identifierad | 2026-08-26 | https://goteborgsstad.varbi.com/se/what:job/jobID:962766/type:job/where:125/apply:1 |
+| 34 | GÖTEBORGS KOMMUN | Inköpare till Utbildningsförvaltningen | Göteborg | CV | Identifierad | 2026-08-26 | https://goteborgsstad.varbi.com/se/what:job/jobID:962192/type:job/where:125/apply:1 |
+| 35 | NXT Interim Göteborg AB | Business Analyst - Digital Solutions | Göteborg | CV_Einride | Identifierad | 2026-08-26 | https://nxtinterim.recman.page/job/482070?path=ams&apply_only |
+| 36 | SAAB AKTIEBOLAG | Senior Strategic Purchaser | Göteborg | CV | Identifierad | 2026-08-26 | https://www.aplitrak.com/?adid=aC5iamFybmxpbmQuNTUzMzMuMTM3NjVAc2FhYi5hcGxpdHJhay5jb20 |
+| 37 | cilbuper IT AB | Business Analyst | Göteborg | CV_Einride | Identifierad | 2026-08-26 | https://pnty-apply.ponty-system.se/cilbuper?id=555 |
+| 38 | Surgical Science Sweden AB | Product Specialist | Göteborg | CV_Einride | Identifierad | 2026-08-26 | https://careers.surgicalscience.com/job/f5bf3d064cd04672a6149bb9bea16db6?utm_medium=talentech_publishing&utm_source=jobtip_editor |
