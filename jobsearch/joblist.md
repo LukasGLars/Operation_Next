@@ -62,6 +62,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -102,3 +103,8 @@
 | 36 | SAAB AKTIEBOLAG | Senior Strategic Purchaser | Göteborg | CV | Identifierad | 2026-08-26 | https://www.aplitrak.com/?adid=aC5iamFybmxpbmQuNTUzMzMuMTM3NjVAc2FhYi5hcGxpdHJhay5jb20 |
 | 37 | cilbuper IT AB | Business Analyst | Göteborg | CV_Einride | Identifierad | 2026-08-26 | https://pnty-apply.ponty-system.se/cilbuper?id=555 |
 | 38 | Surgical Science Sweden AB | Product Specialist | Göteborg | CV_Einride | Identifierad | 2026-08-26 | https://careers.surgicalscience.com/job/f5bf3d064cd04672a6149bb9bea16db6?utm_medium=talentech_publishing&utm_source=jobtip_editor |
+| 39 | OIO Väst AB | Inköpare | Göteborg | CV | Identifierad | 2026-08-28 | https://pnty-apply.ponty-system.se/oio?id=1278&pnty_src=platsbanken |
+| 40 | GÖTEBORGS KOMMUN | Kalkyl/entreprenadingenjör | Göteborg | CV_BYGG | Identifierad | 2026-08-28 | https://goteborgsstad.varbi.com/se/what:job/jobID:963652/type:job/where:125/apply:1 |
+| 41 | Friday Väst AB | Erfaren strategisk inköpare till tekniskt bolag | Göteborg | CV | Identifierad | 2026-08-28 | https://pnty-apply.ponty-system.se/friday?id=4975&pnty_src=platsbanken |
+| 42 | Bilvision AB | Customer Success Coordinator till Bilvision | Göteborg | CV_Einride | Identifierad | 2026-08-28 | https://career.bilvision.se/jobs/8276688-customer-success-coordinator-till-bilvision/applications/new?promotion=2165710-arbetsformedlingen |
+| 43 | Poolia AB | Senior strategisk inköpare | Göteborg | CV | Identifierad | 2026-08-28 | https://karriar.poolia.se/jobs/8261281-senior-strategisk-inkopare |
