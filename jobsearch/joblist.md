@@ -59,6 +59,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | URL |
 |---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -74,7 +75,7 @@
 | 11 | Peab Anläggning AB | Entreprenadingenjör | Göteborg | CV_BYGG | Stängd | 2026-08-26 | https://peab.se/karriar/lediga-tjanster/2026/juli/entreprenadingenjor/ |
 | 12 | Cloudgruppen Sverige AB | Customer Success Manager | Göteborg | CV_Einride | Identifierad | 2026-08-07 | https://jobb.cloudgruppen.se/jobs/7753563-customer-success-manager/applications/new?promotion=2005473-arbetsformedlingen |
 | 13 | Wrknest AB | Teknisk säljare till växande teknikbolag ⚡ | Göteborg | CV_Zeppelin | Stängd | 2026-08-14 | https://careers.wrknest.se/jobs/7726001-teknisk-saljare-till-vaxande-teknikbolag/applications/new?promotion=1997206-arbetsformedlingen |
-| 14 | Securitas | Business Analyst (Client Engagement) | Warsaw, Poland | CV_Einride | Ansökt | 2026-08-07 | https://securitas.teamtailor.com/jobs/7845272-business-analyst-client-engagement |
+| 14 | Securitas | Business Analyst (Client Engagement) | Warsaw, Poland | CV_Einride | Stängd | 2026-08-28 | https://securitas.teamtailor.com/jobs/7845272-business-analyst-client-engagement |
 | 15 | Rekryteringsgruppen | Digital affärsutvecklare | Stockholm | CV | Ansökt | 2026-08-07 | https://rekryteringsgruppen.teamtailor.com/jobs/7949661-digital-affarsutvecklare |
 | 16 | Wioniq Nordic | Affärsutvecklare till Wioniq, Borås, Jönköping eller Stockholm | Borås | CV | Intervju | 2026-08-14 | https://jobb.oddwork.se/jobs/7874382-affarsutvecklare-till-wioniq-boras-jonkoping-eller-stockholm |
 | 17 | PEAB SVERIGE AB | Entreprenadingenjör | Göteborg | CV_BYGG | Identifierad | 2026-08-12 | https://pages.adway.ai/peab-sweden-ab/20604/goteborg/entreprenadingenjor |
