@@ -24,3 +24,4 @@ even if it resurfaces in a later search/JobTech pass.
 | OnePartnerGroup Jönköping AB | Teknisk säljare till Böttcher Nordic | 2026-08-19 | https://www.onepartnergroup.se/lediga-jobb/482201 |
 | Kraftsam Rekrytering & Bemanning AB | Teknisk säljare | 2026-08-31 | https://pnty-apply.ponty-system.se/kraftsam?id=2331&pnty_src=platsbanken |
 | Jerrie AB | Customer Success Manager till Videotech, Göteborg | 2026-08-31 | https://jerrie.se/lediga-jobb/2921-customer-success-manager-till-videotech-goteborg?pnty_src=platsbanken |
+| Experis AB | Inköpare/ Upphandlare / Alingsås Energi | 2026-08-31 | https://www.aplitrak.com/?adid=ZWVrZGFoLjE0MjUwLjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
