@@ -284,7 +284,19 @@ scraper — Platsbanken renders fine in a browser.
   the run on a `print`.
 
 ## Pending / known issues
-- Duplicate row: joblist.md #20 and #23 are the same Experis/Alingsås Energi
-  posting under two aplitrak tracking ids (see above) — one should be
-  deleted (via the app, so it lands in `rejected.md` too).
+- ~~Duplicate row: the Experis/Alingsås Energi posting under two aplitrak
+  tracking ids~~ — deleted 2026-08-31 via the app; the `Ansökt` row was kept and
+  the `Identifierad` twin is now in `rejected.md`.
+- **Second duplicate pair, not yet resolved:** Experis "Affärskoordinator /
+  Business Analyst / Lyreco / Borås" appears twice, `Ansökt` and `Identifierad`,
+  under two aplitrak tracking ids *and* two different Platsbanken ad ids
+  (31366439, 31370158). Same fix — delete the `Identifierad` one via the app.
+- Row numbers are not stable identifiers. This entry used to name "#20 and #23";
+  both had drifted to different roles by the time anyone acted on it. Record the
+  URL or the aplitrak prefix instead.
+- Deduplication misses these because it keys on (company, role) and URL, and the
+  aplitrak tracking id differs per row while the role string is identical. The
+  stable identifier is the aplitrak local-part prefix — `eekdah`, `stakah` —
+  base64-decoded out of the `adid` query parameter; the trailing 13765 is the
+  customer id and is the same across unrelated employers.
 - Next scheduled pipeline run: Wednesdays and Fridays 07:00 CET.
