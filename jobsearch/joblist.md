@@ -68,6 +68,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | Deadline | Annons | URL |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 |  |  | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -102,7 +103,7 @@
 | 30 | GÖTEBORGS KOMMUN | Inköpare till Utbildningsförvaltningen | Göteborg | CV | Identifierad | 2026-08-26 | 2026-09-08 | https://arbetsformedlingen.se/platsbanken/annonser/31392912 | https://goteborgsstad.varbi.com/se/what:job/jobID:962192/type:job/where:125/apply:1 |
 | 31 | NXT Interim Göteborg AB | Business Analyst - Digital Solutions | Göteborg | CV_Einride | Identifierad | 2026-08-26 |  |  | https://nxtinterim.recman.page/job/482070?path=ams&apply_only |
 | 32 | SAAB AKTIEBOLAG | Senior Strategic Purchaser | Göteborg | CV | Identifierad | 2026-08-26 | 2026-09-07 | https://arbetsformedlingen.se/platsbanken/annonser/31358509 | https://www.aplitrak.com/?adid=aC5iamFybmxpbmQuNTUzMzMuMTM3NjVAc2FhYi5hcGxpdHJhay5jb20 |
-| 33 | cilbuper IT AB | Business Analyst | Göteborg | CV_Einride | Identifierad | 2026-08-26 | 2026-08-31 | https://arbetsformedlingen.se/platsbanken/annonser/31231122 | https://pnty-apply.ponty-system.se/cilbuper?id=555 |
+| 33 | cilbuper IT AB | Business Analyst | Göteborg | CV_Einride | Genererat | 2026-08-31 | 2026-08-31 | https://arbetsformedlingen.se/platsbanken/annonser/31231122 | https://pnty-apply.ponty-system.se/cilbuper?id=555 |
 | 34 | Surgical Science Sweden AB | Product Specialist | Göteborg | CV_Einride | Identifierad | 2026-08-26 |  |  | https://careers.surgicalscience.com/job/f5bf3d064cd04672a6149bb9bea16db6?utm_medium=talentech_publishing&utm_source=jobtip_editor |
 | 35 | OIO Väst AB | Inköpare | Göteborg | CV | Identifierad | 2026-08-28 | 2027-01-01 | https://arbetsformedlingen.se/platsbanken/annonser/31410331 | https://pnty-apply.ponty-system.se/oio?id=1278&pnty_src=platsbanken |
 | 36 | GÖTEBORGS KOMMUN | Kalkyl/entreprenadingenjör | Göteborg | CV_BYGG | Identifierad | 2026-08-28 | 2026-09-13 | https://arbetsformedlingen.se/platsbanken/annonser/31407980 | https://goteborgsstad.varbi.com/se/what:job/jobID:963652/type:job/where:125/apply:1 |
