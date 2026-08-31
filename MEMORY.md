@@ -333,6 +333,41 @@ identifiers in notes. An earlier entry here named "#20 and #23"; by the time it
 was acted on, both pointed at unrelated roles. Record the URL or the aplitrak
 prefix.
 
+## Zero-diff edit examples (2026-08-31)
+
+The review pass learns from the *diff* between its own draft and the human edit:
+`_matched_edited_examples` labels the draft "REJECTED patterns, avoid repeating
+these" and the edit "match this instead". When the two are byte-identical, that
+is an instruction to avoid and copy the same text.
+
+Four of the seventeen saved applications carried such a pair. Two of them —
+`experis_ab_aff_rskoordinator` and `experis_ab_ink_pare` — were zero-diff on
+*both* documents, and the first is "Affärskoordinator / Business Analyst /
+Lyreco", the nearest neighbour to a Business Analyst role. So for the roles most
+often applied for, the matcher was most likely to pick the one example that could
+teach nothing.
+
+**Cause:** `_save_docs` writes both documents on every save. Editing only the CV
+and pressing save minted a cover letter "edit" identical to the draft.
+
+**Fix:** `_save_docs` no longer writes an unchanged document, and deletes a
+previously saved edit that has been reverted. `_edited_stems()` reports only the
+stems that actually differ; it gates both candidate selection and block building,
+so the four pairs already on disk are inert without deleting anything.
+
+Effect on the corpus: 12 candidate folders → 10; cilbuper and oddwork trimmed to
+their real half.
+
+### Decisions worth keeping
+- **An edit with no draft still counts.** `peab_anl_ggning_ab_entreprenadingenj_r`
+  has edited files and no originals — there is no diff to show, but the finished
+  version is still a usable model, and the builder already handles that branch.
+- **Existing zero-diff files are left on disk, not deleted.** The code ignores
+  them, and they are a record that save was pressed. They self-heal on the next
+  save of that application.
+- **`_original` is still never overwritten.** It is the "before" half of the
+  diff; rewriting it on a re-generate would destroy the signal.
+
 ## Pending / known issues
 - ~~Duplicate row: the Experis/Alingsås Energi posting under two aplitrak
   tracking ids~~ — deleted 2026-08-31 via the app; the `Ansökt` row was kept and
