@@ -48,6 +48,7 @@
                 max-width: 180px; overflow: hidden; text-overflow: ellipsis;
                 white-space: nowrap; vertical-align: middle; }
     .url-link:hover { background: #1a1a2e; color: white; border-color: #1a1a2e; }
+    .apply-link { margin-left: 4px; opacity: 0.65; font-size: 0.85em; }
     .datum { font-size: 12px; color: #9ca3af; }
     .btn-delete { background: none; border: none; color: #d1d5db; font-size: 16px;
                   cursor: pointer; padding: 2px 6px; border-radius: 4px;
@@ -72,7 +73,7 @@
       <thead>
         <tr>
           <th>#</th><th>F&#246;retag</th><th>Roll/Typ</th><th>Plats</th>
-          <th>Status</th><th>Datum</th><th>URL</th><th></th>
+          <th>Status</th><th>Datum</th><th>Deadline</th><th>Annons</th><th></th>
         </tr>
       </thead>
       <tbody id="job-table">
@@ -114,10 +115,17 @@
             </select>
           </td>
           <td class="datum">{{ job.get('Datum','') }}</td>
+          <td class="datum">{{ job.get('Deadline','') or '—' }}</td>
           <td>
-            <a class="url-link" href="{{ job.get('URL','') }}" target="_blank"
+            {% set ad = job.get('Annons','') or job.get('URL','') %}
+            <a class="url-link" href="{{ ad }}" target="_blank"
                onclick="event.stopPropagation()"
-               title="{{ job.get('URL','') }}">{{ job.get('URL','') | replace('https://','') | replace('http://','') | truncate(30, true, '…') }}</a>
+               title="{{ ad }}">{{ ad | replace('https://','') | replace('http://','') | truncate(30, true, '…') }}</a>
+            {% if job.get('URL','') and job.get('URL','') != ad %}
+            <a class="url-link apply-link" href="{{ job.get('URL','') }}" target="_blank"
+               onclick="event.stopPropagation()"
+               title="Ans&#246;kningsformul&#228;r: {{ job.get('URL','') }}">Ans&#246;k</a>
+            {% endif %}
           </td>
           <td>
             <button class="btn-delete"
@@ -127,7 +135,7 @@
           </td>
         </tr>
         {% else %}
-        <tr><td colspan="8" class="empty">Inga jobb i joblist.md</td></tr>
+        <tr><td colspan="9" class="empty">Inga jobb i joblist.md</td></tr>
         {% endfor %}
       </tbody>
     </table>
