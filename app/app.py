@@ -50,13 +50,22 @@ def _app_folder(company: str, role: str) -> Path:
 
 
 def _save_docs(folder: Path, cv: str, cover_letter: str, suffix: str):
+    """Saving writes both documents, so editing only the CV used to mint a
+    cover letter "edit" byte-identical to the draft. That pair is worse than no
+    example at all -- see _edited_stems -- so an unchanged document is not
+    written, and a previously saved edit that has been reverted is removed."""
     folder.mkdir(parents=True, exist_ok=True)
-    cv_path = folder / f"cv_{suffix}.md"
-    cl_path = folder / f"cover_letter_{suffix}.md"
-    if not cv_path.exists() or suffix != "original":
-        cv_path.write_text(cv, encoding="utf-8")
-    if not cl_path.exists() or suffix != "original":
-        cl_path.write_text(cover_letter, encoding="utf-8")
+    for stem, text in (("cv", cv), ("cover_letter", cover_letter)):
+        path = folder / f"{stem}_{suffix}.md"
+        if suffix == "original":
+            if not path.exists():
+                path.write_text(text, encoding="utf-8")
+            continue
+        original = folder / f"{stem}_original.md"
+        if original.exists() and original.read_text(encoding="utf-8") == text:
+            path.unlink(missing_ok=True)
+            continue
+        path.write_text(text, encoding="utf-8")
 
 
 def _save_meta(folder: Path, company: str, role: str):
@@ -329,6 +338,27 @@ def _match_similar_role(client, role: str, company: str, candidates: list[str]) 
     return idx if 0 <= idx < len(candidates) else None
 
 
+def _edited_stems(folder: Path) -> list:
+    """Stems in `folder` whose edit actually differs from the draft.
+
+    A byte-identical pair is worse than no example: the block builder labels the
+    draft "REJECTED patterns, avoid repeating these" and the edit "match this
+    instead", so the same text arrives as both. Four of the saved applications
+    carry such a pair, including the closest neighbour to a Business Analyst
+    role -- exactly the example most likely to be picked for one."""
+    stems = []
+    for stem in ("cover_letter", "cv"):
+        edited = folder / f"{stem}_edited.md"
+        if not edited.exists():
+            continue
+        original = folder / f"{stem}_original.md"
+        if (original.exists()
+                and original.read_text(encoding="utf-8") == edited.read_text(encoding="utf-8")):
+            continue
+        stems.append(stem)
+    return stems
+
+
 def _matched_edited_examples(client, company: str, role: str) -> str:
     """Human-approved edit closest to the new role, paired with its AI draft
     where available -- the diff between draft and edit is the clearest
@@ -348,7 +378,7 @@ def _matched_edited_examples(client, company: str, role: str) -> str:
     for folder in sorted(p for p in APPLICATIONS.glob("*") if p.is_dir()):
         if folder == current_folder:
             continue
-        if not ((folder / "cv_edited.md").exists() or (folder / "cover_letter_edited.md").exists()):
+        if not _edited_stems(folder):
             continue
         meta_path = folder / "meta.json"
         if meta_path.exists():
@@ -370,10 +400,10 @@ def _matched_edited_examples(client, company: str, role: str) -> str:
     folder, title = candidates[idx]
 
     blocks = []
-    for label, stem in (("Cover letter", "cover_letter"), ("CV", "cv")):
+    labels = {"cover_letter": "Cover letter", "cv": "CV"}
+    for stem in _edited_stems(folder):
+        label = labels[stem]
         edited_path = folder / f"{stem}_edited.md"
-        if not edited_path.exists():
-            continue
         edited_text = edited_path.read_text(encoding="utf-8")
         original_path = folder / f"{stem}_original.md"
         if original_path.exists():
