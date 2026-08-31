@@ -283,14 +283,63 @@ scraper — Platsbanken renders fine in a browser.
   run by hand on Windows the console is cp1252 and the first `→` or `ä` aborts
   the run on a `print`.
 
+## Cross-run role dedup (2026-08-31)
+
+A full scan of the 40-row list on four keys — aplitrak prefix, Platsbanken ad id,
+company+role, apply-path id — plus fuzzy title matching found exactly one true
+duplicate. The interesting part is why it got in.
+
+Both rows had **identical company and role**, which is supposedly already a dedup
+key. It was not caught because the two dedup passes cover different things and
+neither covers this:
+
+- `jobtech.fetch_candidates` keys on `(company, role)` but only **within a single
+  run** — `seen_roles` is local to the call.
+- `updater.update_joblist` dedups **across runs** but only on **URL**, and the
+  aplitrak tracking id differs per sighting.
+
+The two sightings were seven days apart (08-21 and 08-28), so they were never in
+the same batch, and their URLs differed. Both passes let it through.
+
+`updater.known_role_keys()` now closes it: `(company, role)` checked against the
+rows already in joblist.md, not just against the current batch.
+
+### Decisions worth keeping
+- **Closed rows are excluded from the key set.** If the earlier posting ended, the
+  same role appearing again is a real opening, not a duplicate of a live row.
+  Blocking it would silently hide reposts of jobs that reopened.
+- **Applied rows still block.** `Ansökt`/`Intervju`/`Genererat` are live states.
+- **The key normalises case and whitespace only.** Nothing else is stripped:
+  Bustos advertises "Inköpare bygg" and "Inköpare anläggning" as separate
+  openings, and aggressive normalisation would collapse four real roles into one.
+- **The skip is printed and logged**, unlike the URL and rejected skips. It is
+  the one skip that can be wrong, and a false positive would otherwise be
+  invisible — a genuinely new role would just never appear.
+
+Verified against the live list: 39 rows → 35 live keys, replaying the deleted
+repost is blocked, and zero collisions among existing rows.
+
+### Not duplicates, though they look like it
+Checked and deliberately left alone — #21–24 Bustos (bygg/anläggning ×
+inköpare/entreprenadingenjör, four real roles), #26/#27 Eqwiry (operativ vs
+strategisk), #9/#15 Peab (Peab Anläggning vs Peab Sverige, two ad systems, two
+weeks apart — ambiguous, and #9 is Stängd so it prunes itself), #33/#40 SAAB
+direct vs Poolia agency (different ad ids, deadlines and application channels —
+worth keeping both).
+
+### Gotcha
+Row numbers are renumbered on every delete and prune, so they are useless as
+identifiers in notes. An earlier entry here named "#20 and #23"; by the time it
+was acted on, both pointed at unrelated roles. Record the URL or the aplitrak
+prefix.
+
 ## Pending / known issues
 - ~~Duplicate row: the Experis/Alingsås Energi posting under two aplitrak
   tracking ids~~ — deleted 2026-08-31 via the app; the `Ansökt` row was kept and
   the `Identifierad` twin is now in `rejected.md`.
-- **Second duplicate pair, not yet resolved:** Experis "Affärskoordinator /
-  Business Analyst / Lyreco / Borås" appears twice, `Ansökt` and `Identifierad`,
-  under two aplitrak tracking ids *and* two different Platsbanken ad ids
-  (31366439, 31370158). Same fix — delete the `Identifierad` one via the app.
+- ~~Second duplicate pair: Experis "Affärskoordinator / Business Analyst /
+  Lyreco / Borås"~~ — deleted 2026-08-31, and the hole that let it in is now
+  closed (see "Cross-run role dedup" below).
 - Row numbers are not stable identifiers. This entry used to name "#20 and #23";
   both had drifted to different roles by the time anyone acted on it. Record the
   URL or the aplitrak prefix instead.

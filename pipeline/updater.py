@@ -106,6 +106,33 @@ def load_rejected_urls() -> set:
     return urls
 
 
+def _role_key(company, role):
+    """Company + role, normalised. Case and run-together whitespace differ
+    between runs; nothing else is stripped, because the roles that legitimately
+    share a company differ only in a real word — Bustos advertises "Inköpare
+    bygg" and "Inköpare anläggning" as separate openings."""
+    return (" ".join((company or "").split()).casefold(),
+            " ".join((role or "").split()).casefold())
+
+
+def known_role_keys(rows):
+    """Role keys already in the list, ignoring closed rows.
+
+    jobtech dedups (company, role) within a single run, and updater dedups on
+    URL. Neither catches a role re-advertised under a fresh tracking id a week
+    later: the URL is new, and the two sightings were never in the same batch.
+
+    Closed rows are excluded on purpose. If the earlier posting has ended, the
+    same role appearing again is a real opening rather than a second row for a
+    live one.
+    """
+    return {
+        _role_key(row.get("Företag", ""), row.get("Roll/Typ", ""))
+        for row in rows
+        if row.get("Status", "").strip().lower() != "stängd"
+    }
+
+
 def cv_base_for_role(role_type):
     rt = role_type.lower()
     for keyword, cv in ROLE_CV_MAP.items():
@@ -218,6 +245,7 @@ def update_joblist():
             print(f"  CLOSED: {job.get('company')} → status set to Stängd")
 
     known_urls = {row["URL"].strip() for row in rows}
+    known_roles = known_role_keys(rows)
     rejected_urls = load_rejected_urls()
     for job in new_jobs:
         url = job.get("url", "").strip()
@@ -226,6 +254,14 @@ def update_joblist():
             continue
         if url in rejected_urls:
             print(f"  SKIP (rejected): {url}")
+            continue
+        role_key = _role_key(job.get("company", ""), job.get("role", ""))
+        if role_key in known_roles:
+            # Logged rather than dropped quietly: this is the one skip that can
+            # be wrong, and a false positive would otherwise be invisible.
+            logging.error(f"SKIP (duplicate role): {job.get('company')} — {job.get('role')}")
+            print(f"  SKIP (duplicate role, already in list): "
+                  f"{job.get('company')} — {job.get('role')}")
             continue
         new_row = {
             "#":        str(len(rows) + 1),
@@ -241,6 +277,7 @@ def update_joblist():
         }
         rows.append(new_row)
         known_urls.add(url)
+        known_roles.add(role_key)
         print(f"  ADDED: {new_row['Företag']} — {new_row['Roll/Typ']}")
         if _is_generic_careers_url(url):
             logging.error(f"WARNING: generic careers URL for {new_row['Företag']}: {url}")
