@@ -11,6 +11,10 @@ Two things about the data are worth knowing:
 - Platsbanken's own ad pages are rendered client side. Fetching one returns a
   cookie notice and nothing else, so the employer's apply URL is used instead,
   normalised to the canonical posting page where the ATS path carries the job id.
+  That applies to *fetching* only: the same page renders fine in a browser, so
+  it is kept as `ad_url` for the joblist to link. Two URLs, two jobs — one the
+  pipeline reads, one a human reads. Collapsing them into the apply URL is what
+  made the joblist open application forms with no ad text in sight.
 - The `remote_work` flag does not distinguish hybrid from fully remote. Since a
   hybrid role outside commuting range is not usable, no remote status is
   synthesised here — the ad text is passed through and `location_verdict()` in
@@ -144,6 +148,30 @@ def canonical_url(hit):
     return url
 
 
+def ad_url(hit):
+    """The Platsbanken ad page — the only ad page the API exposes. Useless to
+    fetch (see canonical_url) but readable in a browser, so it is what the
+    joblist links. Employers' own ad pages are not in the response and are not
+    reliably derivable from the apply URL, so no attempt is made to guess one."""
+    return (hit.get("webpage_url") or "").strip()
+
+
+def deadline(hit):
+    """Last day to apply as YYYY-MM-DD, or empty when the ad carries none."""
+    return (hit.get("application_deadline") or "")[:10]
+
+
+def is_open(hit, today=None):
+    """False once the ad is withdrawn or its deadline has passed.
+
+    A missing deadline counts as open: absence is not evidence of expiry, and
+    dropping those would silently lose every ad that never set one."""
+    if hit.get("removed"):
+        return False
+    due = deadline(hit)
+    return not due or due >= (today or date.today().isoformat())
+
+
 def is_relevant(hit):
     headline   = hit.get("headline") or ""
     employer   = (hit.get("employer") or {}).get("name") or ""
@@ -182,6 +210,8 @@ def as_candidate(hit):
         "role":       hit.get("headline", ""),
         "role_type":  (hit.get("occupation") or {}).get("label", ""),
         "url":        url,
+        "ad_url":     ad_url(hit),
+        "deadline":   deadline(hit),
         "location":   address.get("municipality", ""),
         "status":     "Identifierad",
         "date_added": date.today().isoformat(),
@@ -204,6 +234,7 @@ def fetch_candidates(known_urls=(), max_candidates=MAX_CANDIDATES, location_ok=N
     seen_roles = set()          # same role re-advertised under a second ad id
     found = []
     rejected = 0
+    expired = 0
     for query in ROLE_QUERIES:
         for remote in (False, True):
             try:
@@ -212,6 +243,10 @@ def fetch_candidates(known_urls=(), max_candidates=MAX_CANDIDATES, location_ok=N
                 logging.error(f"jobtech search failed ({query}, remote={remote}): {e}")
                 continue
             for hit in hits:
+                # Cheapest gate first: an expired ad is not worth judging.
+                if not is_open(hit):
+                    expired += 1
+                    continue
                 if not is_relevant(hit):
                     continue
                 candidate = as_candidate(hit)
@@ -230,6 +265,8 @@ def fetch_candidates(known_urls=(), max_candidates=MAX_CANDIDATES, location_ok=N
                         continue
                 found.append(candidate)
 
+    if expired:
+        print(f"  JobTech: {expired} hit(s) skipped — withdrawn or past deadline")
     if rejected:
         print(f"  JobTech: {rejected} candidate(s) rejected on location")
     found.sort(key=lambda c: c.get("_posted", ""), reverse=True)
