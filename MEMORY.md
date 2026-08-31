@@ -115,9 +115,11 @@ Filtering happens in this order, cheapest first:
 - Unquoted free text is useless: `product specialist` returns 271 hits including
   "HR-specialist" and "Legitimerad Läkare"; `"product specialist"` returns 2.
 - Platsbanken's own ad pages are client-side rendered — fetching one returns a
-  cookie notice, ~379 characters. Never use `webpage_url` as the joblist URL; use
+  cookie notice, ~379 characters. Never *fetch* `webpage_url`; the pipeline reads
   the employer apply URL, normalised to the posting page where the ATS path
   carries the id. Query-string ids (recman, ponty) must be kept intact.
+  This is about fetching only — `webpage_url` renders fine in a browser and is
+  now kept as the `Annons` column. See "Ad URL vs apply URL" below.
 - `remote_work` in the API does not distinguish hybrid from fully remote, so no
   remote status is synthesised — the ad text is passed through and
   `location_verdict` stays the only place that decides.
@@ -224,6 +226,62 @@ Inköpare/ Upphandlare / Alingsås Energi") were the same underlying job —
 the aplitrak URL embeds a job ref (`13765`) that matched on both, only the
 tracking id differed. Not fixed by this PR; still sitting in the joblist as
 of this writing.
+
+## Ad URL vs apply URL, and ad expiry (2026-08-31)
+
+Symptom: clicking a role in the joblist opened a bare application form — name,
+e-mail, CV upload — with no ad text anywhere. You could not read what you were
+applying for. Separately, ads stayed in the list long after their deadline.
+
+One cause for both: `jobtech.py` stored exactly one URL per job, the apply link,
+and read nothing about expiry. `webpage_url` and `application_deadline` were in
+every API response and both discarded.
+
+The apply-link choice was deliberate (see the JobTech gotchas above) but
+over-applied. It conflated two different needs: the URL the *pipeline fetches*
+for ad text, which must be the employer page, and the URL a *human clicks* to
+read the ad, which wants the ad page. The cookie-notice problem only affects the
+scraper — Platsbanken renders fine in a browser.
+
+### Shape
+- `jobtech.ad_url()` / `jobtech.deadline()` / `jobtech.is_open()`.
+- Two new joblist columns, `Annons` and `Deadline`. **`URL` keeps its exact
+  meaning** — it is the identity key for dedup, `rejected.md`, status updates and
+  `closed_jobs`, so repointing it would break continuity with every existing row
+  and every rejected URL. `URL` also stays the last column; some readers take it
+  positionally.
+- `is_open()` gates hits before relevance in `fetch_candidates` — cheapest first,
+  and an expired ad is not worth judging.
+- `updater.close_expired()` flips past-deadline rows to `Stängd`, which hands
+  them to the existing 30-day `Stängd` prune rather than adding a second
+  deletion path. It skips rows already `Stängd`, otherwise `Datum` would be
+  bumped every run and the prune could never reach them.
+- UI: the title links `Annons` (falling back to `URL` for rows without one), with
+  a small "Ansök" chip for the form.
+
+### Decisions worth keeping
+- **A missing deadline counts as open.** Absence is not evidence of expiry;
+  dropping those would lose every ad that never set one.
+- **The closing day itself is still open.** `due >= today`, not `>`.
+- **The backfill never deletes.** `pipeline/backfill_ads.py` is a one-off that
+  fills the columns on pre-existing rows; a row it cannot match is left alone and
+  printed. A no-match does not mean expired — web-search-sourced rows were never
+  in Platsbanken at all, and a live ad can miss on query drift or the per-query
+  limit. It filled 18 of 41 rows; the other 23 are listed on the run.
+
+### Gotchas found the hard way
+- **The employer's own ad page can carry a stale deadline.** cilbuper's page said
+  3 Aug; the API said 31 Aug and the form was still live. Platsbanken is the
+  authoritative date — do not trust the scraped page.
+- The employer's ad page is *not* in the API and is not derivable from the apply
+  URL. `Annons` is the Platsbanken page, which carries the full ad text.
+- `tests/fixtures/jobtech_search.json` predated both fields. Their deadlines are
+  pinned to 2099 rather than restored to the real recorded values: the real ones
+  have all passed, and a fixture that expires fails the suite on a date rather
+  than on a change.
+- `backfill_ads.py` reconfigures stdout to UTF-8. The scheduled run is UTF-8, but
+  run by hand on Windows the console is cp1252 and the first `→` or `ä` aborts
+  the run on a `print`.
 
 ## Pending / known issues
 - Duplicate row: joblist.md #20 and #23 are the same Experis/Alingsås Energi

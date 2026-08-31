@@ -50,7 +50,8 @@ _GENERIC_TERMINALS = {
 # ── Markdown table parser / writer ─────────────────────────
 
 HEADERS_WITHOUT_DATUM = ["#", "Företag", "Roll/Typ", "Plats", "CV-bas", "Status", "URL"]
-HEADERS_WITH_DATUM    = ["#", "Företag", "Roll/Typ", "Plats", "CV-bas", "Status", "Datum", "URL"]
+HEADERS_WITH_DATUM    = ["#", "Företag", "Roll/Typ", "Plats", "CV-bas", "Status", "Datum",
+                         "Deadline", "Annons", "URL"]
 
 
 def _is_generic_careers_url(url: str) -> bool:
@@ -113,6 +114,26 @@ def cv_base_for_role(role_type):
     return "CV"
 
 
+def close_expired(rows, today=None):
+    """Mark rows whose application deadline has passed as Stängd, in place.
+
+    Closing rather than deleting hands them to the 30-day Stängd prune below, so
+    an expired role stays visible for a while instead of vanishing the morning
+    after its deadline. A blank Deadline is left alone — rows added before the
+    column existed have no deadline to judge, and an unknown one is not an
+    expired one.
+    """
+    today = today or TODAY
+    closed = 0
+    for row in rows:
+        due = row.get("Deadline", "").strip()
+        if due and due < today and row.get("Status", "").strip().lower() != "stängd":
+            row["Status"] = "Stängd"
+            row["Datum"]  = today
+            closed += 1
+    return closed
+
+
 def write_table(rows):
     headers = HEADERS_WITH_DATUM
     sep = "|" + "|".join("---" for _ in headers) + "|"
@@ -128,6 +149,8 @@ def write_table(rows):
             row.get("CV-bas", ""),
             row.get("Status", ""),
             row.get("Datum", TODAY),
+            row.get("Deadline", ""),
+            row.get("Annons", ""),
             row.get("URL", ""),
         ]
         # A literal "|" in any field (e.g. a role title copied from a site that
@@ -212,6 +235,8 @@ def update_joblist():
             "CV-bas":   job.get("cv_base") or cv_base_for_role(job.get("role_type", "")),
             "Status":   "Identifierad",
             "Datum":    TODAY,
+            "Deadline": job.get("deadline", ""),
+            "Annons":   job.get("ad_url") or url,
             "URL":      url,
         }
         rows.append(new_row)
@@ -220,6 +245,10 @@ def update_joblist():
         if _is_generic_careers_url(url):
             logging.error(f"WARNING: generic careers URL for {new_row['Företag']}: {url}")
             print(f"  WARNING: URL looks like a careers page, not a specific posting — {url}")
+
+    closed_on_deadline = close_expired(rows)
+    if closed_on_deadline:
+        print(f"  {closed_on_deadline} row(s) past deadline → Stängd")
 
     cutoff = (date.today() - timedelta(days=30)).isoformat()
     before = len(rows)

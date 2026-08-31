@@ -38,6 +38,53 @@ def test_query_string_id_is_preserved():
         assert "id=" in jobtech.canonical_url(hit_by_employer(employer))
 
 
+def test_candidate_links_the_ad_not_the_apply_form():
+    """The two URLs are different jobs: `url` is fetched by the pipeline and
+    applied through, `ad_url` is what a human opens to read the ad. Collapsing
+    them is what made the joblist open bare application forms."""
+    candidate = jobtech.as_candidate(hit_by_employer("cilbuper IT AB"))
+    assert candidate["url"] == "https://pnty-apply.ponty-system.se/cilbuper?id=555"
+    assert candidate["ad_url"] == "https://arbetsformedlingen.se/platsbanken/annonser/31231122"
+
+
+def test_ad_url_is_empty_when_the_hit_has_no_webpage():
+    hit = dict(hit_by_employer("Nexer AB"))
+    hit["webpage_url"] = None
+    assert jobtech.ad_url(hit) == ""
+
+
+def test_deadline_is_truncated_to_a_date():
+    assert jobtech.deadline({"application_deadline": "2026-09-12T23:59:59"}) == "2026-09-12"
+    assert jobtech.deadline({"application_deadline": None}) == ""
+    assert jobtech.deadline({}) == ""
+
+
+def test_expired_and_withdrawn_ads_are_not_open():
+    today = "2026-08-31"
+    assert jobtech.is_open({"application_deadline": "2026-09-12T23:59:59"}, today)
+    assert jobtech.is_open({"application_deadline": "2026-08-31T23:59:59"}, today),         "the closing day itself is still open"
+    assert not jobtech.is_open({"application_deadline": "2026-08-03T23:59:59"}, today)
+    assert not jobtech.is_open({"removed": True}, today)
+
+
+def test_missing_deadline_counts_as_open():
+    """Absence is not evidence of expiry — dropping these would lose every ad
+    that never set a deadline."""
+    assert jobtech.is_open({}, "2026-08-31")
+    assert jobtech.is_open({"application_deadline": None}, "2026-08-31")
+
+
+def test_fetch_candidates_drops_expired_hits(monkeypatch):
+    live = hit_by_employer("Nexer AB")
+    stale = json.loads(json.dumps(hit_by_employer("cilbuper IT AB")))
+    stale["application_deadline"] = "2020-01-01T23:59:59"
+    monkeypatch.setattr(jobtech, "ROLE_QUERIES", ['"business analyst"'])
+    monkeypatch.setattr(jobtech, "_search", lambda query, remote=False, limit=25: [live, stale])
+
+    urls = [c["url"] for c in jobtech.fetch_candidates()]
+    assert urls == [jobtech.canonical_url(live)]
+
+
 def test_candidate_carries_structured_location():
     candidate = jobtech.as_candidate(hit_by_employer("Nexer AB"))
     assert candidate["location"] == "Göteborg"
