@@ -23,3 +23,4 @@ even if it resurfaces in a later search/JobTech pass.
 | ADECCO SWEDEN AKTIEBOLAG | Vi söker nu en strategisk inköpare inom IT och HR-tjänster | 2026-08-14 | https://www.adecco.com/sv-se/ansok?zlid=af8b95b6-8a88-4da2-b34d-bdbb9d2b6950&src=ams_direct |
 | OnePartnerGroup Jönköping AB | Teknisk säljare till Böttcher Nordic | 2026-08-19 | https://www.onepartnergroup.se/lediga-jobb/482201 |
 | Kraftsam Rekrytering & Bemanning AB | Teknisk säljare | 2026-08-31 | https://pnty-apply.ponty-system.se/kraftsam?id=2331&pnty_src=platsbanken |
+| Jerrie AB | Customer Success Manager till Videotech, Göteborg | 2026-08-31 | https://jerrie.se/lediga-jobb/2921-customer-success-manager-till-videotech-goteborg?pnty_src=platsbanken |
