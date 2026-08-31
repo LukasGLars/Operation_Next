@@ -22,3 +22,4 @@ even if it resurfaces in a later search/JobTech pass.
 | ADECCO SWEDEN AKTIEBOLAG | Strategisk inköpare sökes till vår kund i Göteborg | 2026-08-14 | https://www.adecco.com/sv-se/ansok?zlid=b39f171f-6dc4-4361-b599-38f87d487d42&src=ams_direct |
 | ADECCO SWEDEN AKTIEBOLAG | Vi söker nu en strategisk inköpare inom IT och HR-tjänster | 2026-08-14 | https://www.adecco.com/sv-se/ansok?zlid=af8b95b6-8a88-4da2-b34d-bdbb9d2b6950&src=ams_direct |
 | OnePartnerGroup Jönköping AB | Teknisk säljare till Böttcher Nordic | 2026-08-19 | https://www.onepartnergroup.se/lediga-jobb/482201 |
+| Kraftsam Rekrytering & Bemanning AB | Teknisk säljare | 2026-08-31 | https://pnty-apply.ponty-system.se/kraftsam?id=2331&pnty_src=platsbanken |
