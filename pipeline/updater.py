@@ -6,6 +6,11 @@ from datetime import datetime, date, timedelta
 from pathlib import Path
 from urllib.parse import urlparse
 
+try:                                  # run as a script from pipeline/
+    import relevance
+except ImportError:                   # imported as pipeline.updater (tests, CI)
+    from pipeline import relevance
+
 ROOT          = Path(__file__).parent.parent
 JOBLIST_PATH  = ROOT / "jobsearch" / "joblist.md"
 REJECTED_PATH = ROOT / "jobsearch" / "rejected.md"
@@ -161,6 +166,44 @@ def close_expired(rows, today=None):
     return closed
 
 
+PROTECTED_STATUSES = {"ansökt", "intervju"}
+
+
+def recheck_dead_ads(rows, fetch, today=None):
+    """Re-fetch live rows and mark withdrawn postings as Stängd, in place.
+
+    Liveness was only ever checked when a row was inserted, so an ad pulled a
+    week later sat as Identifierad indefinitely — three rows were in that state
+    when this was written, none of them with a Deadline for `close_expired` to
+    catch.
+
+    `Ansökt` and `Intervju` are never touched. A pulled ad is the *expected*
+    state once you are in a process — the UK Portservice posting (row #1) reads
+    "jobbet tillsatt" while the candidate is at final stage — so closing on it
+    would delete exactly the rows that matter most.
+    """
+    today = today or TODAY
+    closed = 0
+    for row in rows:
+        status = row.get("Status", "").strip().lower()
+        if status == "stängd" or status in PROTECTED_STATUSES:
+            continue
+        url = row.get("URL", "").strip()
+        if not url:
+            continue
+        try:
+            dead, reason = relevance.is_dead_ad(fetch(url))
+        except Exception as e:                       # a fetch failure is not evidence
+            logging.error(f"recheck_dead_ads fetch failed for {url}: {e}")
+            continue
+        if dead:
+            row["Status"] = "Stängd"
+            row["Datum"]  = today
+            closed += 1
+            print(f"  DEAD: {row.get('Företag')} — {reason} → Stängd")
+    return closed
+
+
 def write_table(rows):
     headers = HEADERS_WITH_DATUM
     sep = "|" + "|".join("---" for _ in headers) + "|"
@@ -282,6 +325,14 @@ def update_joblist():
         if _is_generic_careers_url(url):
             logging.error(f"WARNING: generic careers URL for {new_row['Företag']}: {url}")
             print(f"  WARNING: URL looks like a careers page, not a specific posting — {url}")
+
+    try:
+        from pipeline.search import fetch_page_text as _fetch
+    except ImportError:
+        from search import fetch_page_text as _fetch
+    dead_closed = recheck_dead_ads(rows, _fetch)
+    if dead_closed:
+        print(f"  {dead_closed} row(s) with withdrawn ads → Stängd")
 
     closed_on_deadline = close_expired(rows)
     if closed_on_deadline:
