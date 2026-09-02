@@ -69,6 +69,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | Deadline | Annons | URL |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 |  |  | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -77,13 +78,13 @@
 | 4 | Thomas Betong AB | Teknisk säljare Prefab Göteborg | Göteborg | CV_Zeppelin | Ansökt | 2026-08-07 |  |  | https://thomasbetong.se/karriar/lediga-tjanster/?rmpage=job&rmjob=463&utm_medium=talentech_publishing&utm_source=jobtip |
 | 5 | AB Effektiv Väst | Buyer – Private Label & Produktutveckling till Mshop | Göteborg | CV | Identifierad | 2026-08-05 |  |  | https://effektiv.se/jobb/kontor-administration/goteborg/buyer-private-label-and-produktutveckling-till-mshop-8009874/ |
 | 6 | PEAB SVERIGE AB | Inköpare | Göteborg | CV_BYGG | Identifierad | 2026-08-05 |  |  | https://pages.adway.ai/peab-sweden-ab/20534/goteborg/inkopare |
-| 7 | Workz Sweden AB | Affärsutvecklare till dormakaba | Göteborg | CV | Ansökt | 2026-08-07 |  |  | https://karriar.workz.se/jobs/7965921-affarsutvecklare-till-dormakaba |
+| 7 | Workz Sweden AB | Affärsutvecklare till dormakaba | Göteborg | CV | Stängd | 2026-09-02 |  |  | https://karriar.workz.se/jobs/7965921-affarsutvecklare-till-dormakaba |
 | 8 | Vitec Software Group AB (publ) | Teknisk säljare Infometric | Göteborg | CV_Zeppelin | Intervju | 2026-08-17 |  |  | https://jobs.vitecsoftware.se/jobs/7951572-teknisk-saljare-infometric/applications/new?promotion=2064864-arbetsformedlingen |
 | 9 | Peab Anläggning AB | Entreprenadingenjör | Göteborg | CV_BYGG | Stängd | 2026-08-26 |  |  | https://peab.se/karriar/lediga-tjanster/2026/juli/entreprenadingenjor/ |
 | 10 | Cloudgruppen Sverige AB | Customer Success Manager | Göteborg | CV_Einride | Identifierad | 2026-08-07 | 2026-11-15 | https://arbetsformedlingen.se/platsbanken/annonser/31051679 | https://jobb.cloudgruppen.se/jobs/7753563-customer-success-manager/applications/new?promotion=2005473-arbetsformedlingen |
 | 11 | Wrknest AB | Teknisk säljare till växande teknikbolag ⚡ | Göteborg | CV_Zeppelin | Stängd | 2026-08-14 |  |  | https://careers.wrknest.se/jobs/7726001-teknisk-saljare-till-vaxande-teknikbolag/applications/new?promotion=1997206-arbetsformedlingen |
 | 12 | Securitas | Business Analyst (Client Engagement) | Warsaw, Poland | CV_Einride | Stängd | 2026-08-28 |  |  | https://securitas.teamtailor.com/jobs/7845272-business-analyst-client-engagement |
-| 13 | Rekryteringsgruppen | Digital affärsutvecklare | Stockholm | CV | Ansökt | 2026-08-07 |  |  | https://rekryteringsgruppen.teamtailor.com/jobs/7949661-digital-affarsutvecklare |
+| 13 | Rekryteringsgruppen | Digital affärsutvecklare | Stockholm | CV | Stängd | 2026-09-02 |  |  | https://rekryteringsgruppen.teamtailor.com/jobs/7949661-digital-affarsutvecklare |
 | 14 | Wioniq Nordic | Affärsutvecklare till Wioniq, Borås, Jönköping eller Stockholm | Borås | CV | Intervju | 2026-08-14 |  |  | https://jobb.oddwork.se/jobs/7874382-affarsutvecklare-till-wioniq-boras-jonkoping-eller-stockholm |
 | 15 | PEAB SVERIGE AB | Entreprenadingenjör | Göteborg | CV_BYGG | Identifierad | 2026-08-12 |  |  | https://pages.adway.ai/peab-sweden-ab/20604/goteborg/entreprenadingenjor |
 | 16 | LERNIA BEMANNING AB | Customer Success Specialist / Timeplan / Göteborg | Göteborg | CV_Einride | Identifierad | 2026-08-12 |  |  | https://www.lernia.se/jobb/andra-yrken/goteborg-customer-success-specialist-timeplan-goteborg-7856290/ |
@@ -103,10 +104,13 @@
 | 30 | GÖTEBORGS KOMMUN | Inköpare till Utbildningsförvaltningen | Göteborg | CV | Identifierad | 2026-08-26 | 2026-09-08 | https://arbetsformedlingen.se/platsbanken/annonser/31392912 | https://goteborgsstad.varbi.com/se/what:job/jobID:962192/type:job/where:125/apply:1 |
 | 31 | NXT Interim Göteborg AB | Business Analyst - Digital Solutions | Göteborg | CV_Einride | Identifierad | 2026-08-26 |  |  | https://nxtinterim.recman.page/job/482070?path=ams&apply_only |
 | 32 | SAAB AKTIEBOLAG | Senior Strategic Purchaser | Göteborg | CV | Identifierad | 2026-08-26 | 2026-09-07 | https://arbetsformedlingen.se/platsbanken/annonser/31358509 | https://www.aplitrak.com/?adid=aC5iamFybmxpbmQuNTUzMzMuMTM3NjVAc2FhYi5hcGxpdHJhay5jb20 |
-| 33 | cilbuper IT AB | Business Analyst | Göteborg | CV_Einride | Genererat | 2026-08-31 | 2026-08-31 | https://arbetsformedlingen.se/platsbanken/annonser/31231122 | https://pnty-apply.ponty-system.se/cilbuper?id=555 |
+| 33 | cilbuper IT AB | Business Analyst | Göteborg | CV_Einride | Stängd | 2026-09-02 | 2026-08-31 | https://arbetsformedlingen.se/platsbanken/annonser/31231122 | https://pnty-apply.ponty-system.se/cilbuper?id=555 |
 | 34 | Surgical Science Sweden AB | Product Specialist | Göteborg | CV_Einride | Identifierad | 2026-08-26 |  |  | https://careers.surgicalscience.com/job/f5bf3d064cd04672a6149bb9bea16db6?utm_medium=talentech_publishing&utm_source=jobtip_editor |
 | 35 | OIO Väst AB | Inköpare | Göteborg | CV | Identifierad | 2026-08-28 | 2027-01-01 | https://arbetsformedlingen.se/platsbanken/annonser/31410331 | https://pnty-apply.ponty-system.se/oio?id=1278&pnty_src=platsbanken |
 | 36 | GÖTEBORGS KOMMUN | Kalkyl/entreprenadingenjör | Göteborg | CV_BYGG | Identifierad | 2026-08-28 | 2026-09-13 | https://arbetsformedlingen.se/platsbanken/annonser/31407980 | https://goteborgsstad.varbi.com/se/what:job/jobID:963652/type:job/where:125/apply:1 |
 | 37 | Friday Väst AB | Erfaren strategisk inköpare till tekniskt bolag | Göteborg | CV | Identifierad | 2026-08-28 | 2026-09-30 | https://arbetsformedlingen.se/platsbanken/annonser/31406201 | https://pnty-apply.ponty-system.se/friday?id=4975&pnty_src=platsbanken |
 | 38 | Bilvision AB | Customer Success Coordinator till Bilvision | Göteborg | CV_Einride | Identifierad | 2026-08-28 | 2027-02-23 | https://arbetsformedlingen.se/platsbanken/annonser/31405376 | https://career.bilvision.se/jobs/8276688-customer-success-coordinator-till-bilvision/applications/new?promotion=2165710-arbetsformedlingen |
-| 39 | Poolia AB | Senior strategisk inköpare | Göteborg | CV | Identifierad | 2026-08-28 | 2026-08-31 | https://arbetsformedlingen.se/platsbanken/annonser/31390648 | https://karriar.poolia.se/jobs/8261281-senior-strategisk-inkopare |
+| 39 | Poolia AB | Senior strategisk inköpare | Göteborg | CV | Stängd | 2026-09-02 | 2026-08-31 | https://arbetsformedlingen.se/platsbanken/annonser/31390648 | https://karriar.poolia.se/jobs/8261281-senior-strategisk-inkopare |
+| 40 | DFDS Professionals | Customer Success Manager – Supply Chain & Logistics | Gothenburg | CV_Einride | Identifierad | 2026-09-02 |  | https://dfdsprofessionals.teamtailor.com/jobs/7467589-customer-success-manager-supply-chain-logistics | https://dfdsprofessionals.teamtailor.com/jobs/7467589-customer-success-manager-supply-chain-logistics |
+| 41 | Sibe Construction AB | Entreprenadingenjör - Anläggning | Göteborg | CV_BYGG | Identifierad | 2026-09-02 | 2026-09-15 | https://arbetsformedlingen.se/platsbanken/annonser/31421793 | https://sibeconstruction.recman.page/job/485833?path=ams&apply_only |
+| 42 | Arena Personal Sverige AB | Sales Engineer till WAM Scandinavia | Göteborg | CV_Zeppelin | Identifierad | 2026-09-02 | 2026-09-30 | https://arbetsformedlingen.se/platsbanken/annonser/31342433 | https://karriar.arenapersonal.com/jobs/8047922-sales-engineer-till-wam-scandinavia/applications/new?promotion=2141244-arbetsformedlingen |
