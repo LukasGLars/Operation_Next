@@ -70,6 +70,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | Deadline | Annons | URL |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 |  |  | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -91,7 +92,7 @@
 | 17 | Experis AB | Inköpare/ Upphandlare / Alingsås Energi | Alingsås | CV | Ansökt | 2026-08-17 |  |  | https://www.aplitrak.com/?adid=ZWVrZGFoLjY3NDIxLjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
 | 18 | FORTIFIKATIONSVERKET | Kalkylingenjör - Göteborg | Göteborg | CV_BYGG | Identifierad | 2026-08-12 |  |  | https://web103.reachmee.com/ext/I005/1013/job?site=6&lang=SE&validator=61e84dc0c178c1f5fd4ebfb8b7ac37be&job_id=2448&utm_medium=talentech_publishing&utm_source=jobtip |
 | 19 | SJR in Sweden AB | Operativ inköpare till tillverkande industri - Start omgående | Göteborg | CV | Identifierad | 2026-08-14 |  |  | https://karriar.sjr.se/jobb/2214/ansokan |
-| 20 | Experis AB | Affärskoordinator / Business Analyst / Lyreco / Borås | Borås | CV_Einride | Ansökt | 2026-08-28 | 2026-09-19 | https://arbetsformedlingen.se/platsbanken/annonser/31366439 | https://www.aplitrak.com/?adid=c3Rha2FoLjMzMjc3LjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
+| 20 | Experis AB | Affärskoordinator / Business Analyst / Lyreco / Borås | Borås | CV_Einride | Stängd | 2026-09-02 | 2026-09-19 | https://arbetsformedlingen.se/platsbanken/annonser/31366439 | https://www.aplitrak.com/?adid=c3Rha2FoLjMzMjc3LjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
 | 21 | Bustos Konsulttjänster AB | Inköpare bygg | Göteborg | CV_BYGG | Identifierad | 2026-08-19 | 2026-09-11 | https://arbetsformedlingen.se/platsbanken/annonser/31361177 | https://bustoskonsulttjanster-1746019372.teamtailor.com/jobs/8230120-inkopare-bygg |
 | 22 | Bustos Konsulttjänster AB | Inköpare anläggning | Göteborg | CV_BYGG | Identifierad | 2026-08-19 | 2026-09-11 | https://arbetsformedlingen.se/platsbanken/annonser/31361143 | https://bustoskonsulttjanster-1746019372.teamtailor.com/jobs/8230093-inkopare-anlaggning |
 | 23 | Bustos Konsulttjänster AB | Entreprenadingenör bygg | Göteborg | CV_BYGG | Identifierad | 2026-08-19 | 2026-09-11 | https://arbetsformedlingen.se/platsbanken/annonser/31361149 | https://bustoskonsulttjanster-1746019372.teamtailor.com/jobs/8230069-entreprenadingenor-bygg |
