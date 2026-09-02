@@ -54,6 +54,27 @@ Reject roles that:
   AI/automation, or roles merely based at a healthtech/medtech/fintech company
   without those specific requirements.
 
+### Relevance gate (enforced in code)
+`pipeline/relevance.py` enforces these after the location gate. The skill text
+steers the search model; the code is what actually rejects.
+- **Dead ads** — withdrawn or filled postings never enter the list, and existing
+  rows are re-checked each run. `Ansökt` and `Intervju` rows are exempt: a
+  pulled ad is the expected state once you are in a process.
+- **Senior/strategic procurement** — reject when the *title* says senior /
+  erfaren / strategisk, or the ad states 4+ years. Seniority is fine everywhere
+  else; the candidate converts in technical sales regardless of stated level.
+- **LOU / offentlig upphandling** as an actual duty.
+- **Real security clearance** — säkerhetsprövning, säkerhetsskyddslagen,
+  svenskt medborgarskap. *Not* registerkontroll or belastningsregister: those
+  are background checks run on whoever is hired, not a gate on applying.
+- **Degree above level** — civilingenjör / MSc. Högskoleingenjör is fine.
+
+Every one of these matches on the job title or an explicit number, never a bare
+keyword in the body, and any match inside a sentence containing *gärna*,
+*meriterande*, *ett plus* or *fördel om* is void — that is a preference, not a
+requirement. Body-keyword matching without that check had a 46% false-positive
+rate against the live joblist.
+
 ## Location Rules
 - Primary target: roles within a maximum 40 minute commute from Alingsås —
   Alingsås, Göteborg, Partille, Lerum, Mölndal, Mölnlycke, Härryda, Landvetter,

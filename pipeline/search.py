@@ -11,9 +11,10 @@ from pathlib import Path
 
 try:                                  # run as a script from pipeline/
     import jobtech
+    import relevance
     from llm_json import TruncatedResponse, parse_json_array
 except ImportError:                   # imported as pipeline.search (tests, CI)
-    from pipeline import jobtech
+    from pipeline import jobtech, relevance
     from pipeline.llm_json import TruncatedResponse, parse_json_array
 
 ROOT               = Path(__file__).parent.parent
@@ -834,6 +835,29 @@ def search_new_jobs():
         in_range.append(candidate)
     if reachable:
         print(f"  In range: {len(in_range)}/{len(reachable)} (location filter)")
+
+    # Stage 1.6 — relevance gate. Both sources land here: JobTech candidates are
+    # merged into raw_candidates above, so this covers them too. Runs before the
+    # batched Claude call so an unwinnable role costs nothing to reject.
+    relevant = []
+    for candidate in in_range:
+        page_text = candidate.get("_page_text") or ""
+        dead, dead_reason = relevance.is_dead_ad(page_text)
+        if dead:
+            logging.error(f"SKIP (dead — {dead_reason}): {candidate['url']}")
+            print(f"  SKIP (dead — {dead_reason}): {candidate.get('company')}")
+            continue
+        ok, reason = relevance.relevance_verdict(
+            candidate.get("role", ""), candidate.get("company", ""), page_text
+        )
+        if not ok:
+            logging.error(f"SKIP (relevance — {reason}): {candidate['url']}")
+            print(f"  SKIP (relevance — {reason}): {candidate.get('company')}")
+            continue
+        relevant.append(candidate)
+    if in_range:
+        print(f"  Relevant: {len(relevant)}/{len(in_range)} (relevance filter)")
+    in_range = relevant
 
     # Stage 2 — batched quality validation
     new_jobs = []

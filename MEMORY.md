@@ -368,6 +368,67 @@ their real half.
 - **`_original` is still never overwritten.** It is the "before" half of the
   diff; rewriting it on a re-generate would destroy the signal.
 
+## Relevance gate (2026-09-02)
+
+### Why
+An audit of the 42-row list found it had drifted off target. Live rows were 34%
+inköp and 28% bygg against **one** Business Analyst row — while all four
+`Intervju` rows were teknisk säljare or affärsutvecklare. The category that
+converts was 16% of the list; the two that never have were 62%.
+
+Cause is mechanical, not judgement: `search_skill.md` weights all 22
+include-keywords equally, and JobTech/Platsbanken is the volume source.
+"Inköpare" is a high-volume Swedish taxonomy occupation, "business analyst"
+barely exists as an ad headline, so the highest-supply keyword wins.
+
+### What was built
+`pipeline/relevance.py` — five rules, run as stage 1.6 between the location gate
+and the batched Claude validation. Both sources pass through it (JobTech
+candidates merge into `raw_candidates` before stage 1). Plus
+`updater.recheck_dead_ads()` for rows already in the list.
+
+### The one thing to keep
+**Match on the title or an explicit number, never a bare body keyword.** The
+first draft matched body keywords and had a **46% false-positive rate** — 6 of
+13 flagged rows were fine. Every false positive was a preference sentence:
+"du har *gärna* utbildning inom inköp", "*meriterande* om du har erfarenhet av
+kategoristyrt inköp", "vi ser *gärna* att du har erfarenhet av LOU". `_soft_wish`
+voids those. Verify any new rule the same way — print the matched sentence, do
+not trust the count.
+
+### Decisions worth keeping
+- **`Ansökt`/`Intervju` are exempt from the dead-ad check.** A pulled ad is the
+  *expected* state once you are in a process — row #1 (Platsa/UK Portservice)
+  reads "jobbet tillsatt" while at final stage. Closing on it would delete
+  exactly the rows that matter most.
+- **Seniority gates only procurement.** Explicit user call: they convert in
+  technical sales regardless of stated level, so "Senior Sales Engineer" passes.
+- **Högskoleingenjör passes; civilingenjör/MSc does not.** Also the user's call.
+- **registerkontroll ≠ säkerhetsprövning.** Background check on hire, not a gate
+  on applying. Cost four Göteborgs Kommun roles before this was separated out.
+- **A year range reports its floor.** "3–7 års" accepts 3, so it is not a gate.
+- **Dead rows are set `Stängd`, not deleted**, handing them to the existing
+  30-day prune rather than adding a second deletion path — same reasoning as
+  `close_expired`.
+
+### The purge that came with it
+42 rows → 32. Seven relevance failures went to `rejected.md` (Bustos ×2 at
+*minst fem års*, Eqwiry Strategisk, Göteborgs Kommun ×2, SAAB Senior Strategic
+Purchaser, Friday Väst Erfaren strategisk). Three dead ads were deleted outright
+(PEAB ×2, Fortifikationsverket) rather than rejected — a repost from those
+employers is a genuine new opening, not a resurfacing.
+
+### Still open
+The **mix** problem is not solved. This gate removes unwinnable roles; it does
+not stop procurement and bygg out-supplying the target categories on the next
+run. That needs keyword weighting or a per-category cap in the JobTech pass, and
+a `Fit` score column — neither is built. Note the evidence base is thin: 4
+interviews, and only 1 of 11 inköp rows was ever actually applied to.
+
+### Correcting an earlier read
+Agency-brokered ads are **not** a drag and must not be filtered out — 3 of the 4
+interviews came through them (Platsa, Oddwork ×2). Only Vitec was direct.
+
 ## Pending / known issues
 - ~~Duplicate row: the Experis/Alingsås Energi posting under two aplitrak
   tracking ids~~ — deleted 2026-08-31 via the app; the `Ansökt` row was kept and

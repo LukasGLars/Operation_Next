@@ -26,3 +26,10 @@ even if it resurfaces in a later search/JobTech pass.
 | Jerrie AB | Customer Success Manager till Videotech, Göteborg | 2026-08-31 | https://jerrie.se/lediga-jobb/2921-customer-success-manager-till-videotech-goteborg?pnty_src=platsbanken |
 | Experis AB | Inköpare/ Upphandlare / Alingsås Energi | 2026-08-31 | https://www.aplitrak.com/?adid=ZWVrZGFoLjE0MjUwLjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
 | Experis AB | Affärskoordinator / Business Analyst / Lyreco / Borås | 2026-08-31 | https://www.aplitrak.com/?adid=c3Rha2FoLjEzMDY1LjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
+| Bustos Konsulttjänster AB | Inköpare bygg | 2026-09-02 | https://bustoskonsulttjanster-1746019372.teamtailor.com/jobs/8230120-inkopare-bygg |
+| Bustos Konsulttjänster AB | Inköpare anläggning | 2026-09-02 | https://bustoskonsulttjanster-1746019372.teamtailor.com/jobs/8230093-inkopare-anlaggning |
+| Eqwiry AB | Strategisk Inköpare – Konsultuppdrag | 2026-09-02 | https://eqwiry-1741099251.teamtailor.com/jobs/7925246-strategisk-inkopare-konsultuppdrag |
+| GÖTEBORGS KOMMUN | Strategisk inköpare med kategoriledaransvar | 2026-09-02 | https://goteborgsstad.varbi.com/se/what:job/jobID:962766/type:job/where:125/apply:1 |
+| GÖTEBORGS KOMMUN | Inköpare till Utbildningsförvaltningen | 2026-09-02 | https://goteborgsstad.varbi.com/se/what:job/jobID:962192/type:job/where:125/apply:1 |
+| SAAB AKTIEBOLAG | Senior Strategic Purchaser | 2026-09-02 | https://www.aplitrak.com/?adid=aC5iamFybmxpbmQuNTUzMzMuMTM3NjVAc2FhYi5hcGxpdHJhay5jb20 |
+| Friday Väst AB | Erfaren strategisk inköpare till tekniskt bolag | 2026-09-02 | https://pnty-apply.ponty-system.se/friday?id=4975&pnty_src=platsbanken |
