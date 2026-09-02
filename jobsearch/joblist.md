@@ -71,6 +71,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | Deadline | Annons | URL |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 |  |  | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -100,7 +101,7 @@
 | 25 | Needo Recruitment Sthlm AB | Teknisk inköpare till FlexQube! | Mölndal | CV | Stängd | 2026-08-21 | 2026-11-02 | https://arbetsformedlingen.se/platsbanken/annonser/31358633 | https://needo.se/lediga-jobb/3256-teknisk-inkopare-till-flexqube/?pnty_src=platsbanken |
 | 26 | Eqwiry AB | Operativ Inköpare - Konsultuppdrag | Göteborg | CV | Identifierad | 2026-08-19 |  |  | https://eqwiry-1741099251.teamtailor.com/jobs/7925320-operativ-inkopare-konsultuppdrag |
 | 27 | Eqwiry AB | Strategisk Inköpare – Konsultuppdrag | Göteborg | CV | Identifierad | 2026-08-19 |  |  | https://eqwiry-1741099251.teamtailor.com/jobs/7925246-strategisk-inkopare-konsultuppdrag |
-| 28 | Init Sweden | Team Manager/Affärsutvecklare | Göteborg | CV | Identifierad | 2026-08-26 |  |  | https://karriar.initsweden.com/jobs/5789616-team-manager-affarsutvecklare |
+| 28 | Init Sweden | Team Manager/Affärsutvecklare | Göteborg | CV | Stängd | 2026-09-02 |  |  | https://karriar.initsweden.com/jobs/5789616-team-manager-affarsutvecklare |
 | 29 | GÖTEBORGS KOMMUN | Strategisk inköpare med kategoriledaransvar | Göteborg | CV | Identifierad | 2026-08-26 | 2026-09-08 | https://arbetsformedlingen.se/platsbanken/annonser/31395770 | https://goteborgsstad.varbi.com/se/what:job/jobID:962766/type:job/where:125/apply:1 |
 | 30 | GÖTEBORGS KOMMUN | Inköpare till Utbildningsförvaltningen | Göteborg | CV | Identifierad | 2026-08-26 | 2026-09-08 | https://arbetsformedlingen.se/platsbanken/annonser/31392912 | https://goteborgsstad.varbi.com/se/what:job/jobID:962192/type:job/where:125/apply:1 |
 | 31 | NXT Interim Göteborg AB | Business Analyst - Digital Solutions | Göteborg | CV_Einride | Identifierad | 2026-08-26 |  |  | https://nxtinterim.recman.page/job/482070?path=ams&apply_only |
