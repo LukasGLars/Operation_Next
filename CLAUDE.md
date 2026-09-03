@@ -100,9 +100,12 @@ stripped before `results.json` is written.
   `adid` is opaque and differs on every sighting of the same job. Both copies of
   `canonical_url` — `app/app.py` and `pipeline/updater.py` — must agree;
   `tests/test_canonical_url.py` asserts it.
-- `Avslag` is a terminal status: the row stays visible but is written to
-  `rejected.md` at once, and `recheck_dead_ads`/`close_expired` skip it
-  (`CLOSED_STATUSES`) so the outcome isn't overwritten with `Stängd`.
+- `Avslag` (they said no) and `Ej kvalificerad` (you don't meet a stated
+  requirement) are terminal statuses: the row stays visible but is written to
+  `rejected.md` at once, and `recheck_dead_ads`/`close_expired` skip them
+  (`CLOSED_STATUSES`) so the outcome isn't overwritten with `Stängd`. Adding
+  another one means both `app.app.TERMINAL_STATUSES` and
+  `updater.CLOSED_STATUSES`, plus the badge and `<option>` in `index.html`.
 - The 30-day prune appends what it drops to `rejected.md`. Without that the URL
   left `known_urls` and the next pass re-added the posting as Identifierad.
 - `update_joblist()` returns early when a pass found nothing, so the prune, the
