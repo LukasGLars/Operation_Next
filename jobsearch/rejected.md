@@ -39,3 +39,4 @@ even if it resurfaces in a later search/JobTech pass.
 | Experis AB | Affärskoordinator / Business Analyst / Lyreco / Borås | 2026-09-03 | https://www.aplitrak.com/?adid=c3Rha2FoLjMzMjc3LjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
 | Wrknest AB | Teknisk säljare till växande teknikbolag ⚡ | 2026-09-03 | https://careers.wrknest.se/jobs/7726001-teknisk-saljare-till-vaxande-teknikbolag/applications/new?promotion=1997206-arbetsformedlingen |
 | Rekryteringsgruppen | Digital affärsutvecklare | 2026-09-03 | https://rekryteringsgruppen.teamtailor.com/jobs/7949661-digital-affarsutvecklare |
+| Arena Personal Sverige AB | Sales Engineer till WAM Scandinavia | 2026-09-03 | https://karriar.arenapersonal.com/jobs/8047922-sales-engineer-till-wam-scandinavia/applications/new?promotion=2141244-arbetsformedlingen |

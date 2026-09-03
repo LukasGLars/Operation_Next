@@ -80,6 +80,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | Deadline | Annons | URL |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 |  |  | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -107,4 +108,3 @@
 | 23 | Poolia AB | Senior strategisk inköpare | Göteborg | CV | Stängd | 2026-09-02 | 2026-08-31 | https://arbetsformedlingen.se/platsbanken/annonser/31390648 | https://karriar.poolia.se/jobs/8261281-senior-strategisk-inkopare |
 | 24 | DFDS Professionals | Customer Success Manager – Supply Chain & Logistics | Gothenburg | CV_Einride | Identifierad | 2026-09-02 |  | https://dfdsprofessionals.teamtailor.com/jobs/7467589-customer-success-manager-supply-chain-logistics | https://dfdsprofessionals.teamtailor.com/jobs/7467589-customer-success-manager-supply-chain-logistics |
 | 25 | Sibe Construction AB | Entreprenadingenjör - Anläggning | Göteborg | CV_BYGG | Identifierad | 2026-09-02 | 2026-09-15 | https://arbetsformedlingen.se/platsbanken/annonser/31421793 | https://sibeconstruction.recman.page/job/485833?path=ams&apply_only |
-| 26 | Arena Personal Sverige AB | Sales Engineer till WAM Scandinavia | Lidköping | CV_Zeppelin | Identifierad | 2026-09-02 | 2026-09-30 | https://karriar.arenapersonal.com/jobs/8047922-sales-engineer-till-wam-scandinavia | https://karriar.arenapersonal.com/jobs/8047922-sales-engineer-till-wam-scandinavia/applications/new?promotion=2141244-arbetsformedlingen |
