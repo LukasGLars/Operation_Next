@@ -41,3 +41,4 @@ even if it resurfaces in a later search/JobTech pass.
 | Rekryteringsgruppen | Digital affärsutvecklare | 2026-09-03 | https://rekryteringsgruppen.teamtailor.com/jobs/7949661-digital-affarsutvecklare |
 | Arena Personal Sverige AB | Sales Engineer till WAM Scandinavia | 2026-09-03 | https://karriar.arenapersonal.com/jobs/8047922-sales-engineer-till-wam-scandinavia/applications/new?promotion=2141244-arbetsformedlingen |
 | Poolia AB | Senior strategisk inköpare | 2026-09-03 | https://karriar.poolia.se/jobs/8261281-senior-strategisk-inkopare |
+| Needo Recruitment Sthlm AB | Teknisk inköpare till FlexQube! | 2026-09-03 | https://needo.se/lediga-jobb/3256-teknisk-inkopare-till-flexqube/?pnty_src=platsbanken |
