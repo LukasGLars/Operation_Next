@@ -96,19 +96,93 @@ def parse_table(lines):
     return rows, has_datum
 
 
-def load_rejected_urls() -> set:
-    """URLs manually deleted from joblist.md — see jobsearch/rejected.md."""
+_TEAMTAILOR_APPLY_RE = re.compile(r"(/jobs/[^/?#]+)/applications/new\b.*$", re.I)
+
+_TRACKING_PARAMS = {"promotion", "utm_source", "utm_medium", "utm_campaign",
+                    "utm_term", "utm_content", "gh_src", "source", "ref"}
+
+
+def canonical_url(url: str) -> str:
+    """Identity of a posting, for matching one sighting against another.
+
+    Second copy of app.app.canonical_url -- see tests/test_canonical_url.py,
+    which asserts the two agree, same arrangement as _meta_refresh_target.
+
+    The same ad reaches the list under several spellings: the apply form or the
+    ad page, with or without a promotion/utm tag, http or https, www or not. A
+    rejected job re-advertised under a fresh tag used to slip past the exact
+    string comparison and land back in the joblist -- see the Experis row that
+    came back under a second aplitrak adid.
+
+    aplitrak's adid is opaque and carries no stable job id, so canonicalisation
+    cannot catch those; the company+role key in the caller is what does."""
+    from urllib.parse import parse_qsl, urlencode, urlsplit
+
+    if not url:
+        return ""
+    parts = urlsplit(_TEAMTAILOR_APPLY_RE.sub(r"\1", url.strip()))
+    netloc = parts.netloc.casefold()
+    if netloc.startswith("www."):
+        netloc = netloc[4:]
+    query = urlencode([(k, v) for k, v in parse_qsl(parts.query)
+                       if k.casefold() not in _TRACKING_PARAMS])
+    path = parts.path.rstrip("/").casefold()
+    return netloc + path + ("?" + query if query else "")
+
+
+def _rejected_rows() -> list:
+    """(company, role, url) for every row in jobsearch/rejected.md."""
     if not REJECTED_PATH.exists():
-        return set()
-    urls = set()
+        return []
+    out = []
     for line in REJECTED_PATH.read_text(encoding="utf-8").splitlines():
         stripped = line.strip()
         if not stripped.startswith("|") or stripped.startswith("|---") or stripped.startswith("| Företag"):
             continue
         cells = [c.strip() for c in stripped.strip("|").split("|")]
         if len(cells) >= 4 and cells[3]:
-            urls.add(cells[3])
-    return urls
+            out.append((cells[0], cells[1], cells[3]))
+    return out
+
+
+def load_rejected_urls() -> set:
+    """Canonical URLs manually deleted from joblist.md — see jobsearch/rejected.md."""
+    return {canonical_url(url) for _, _, url in _rejected_rows()}
+
+
+def append_rejected(rows) -> int:
+    """Record joblist rows in rejected.md so the pipeline will not re-add them.
+    Rows already listed (by canonical URL) are skipped, so a repeated run does
+    not grow the file."""
+    rows = [r for r in rows if r.get("URL", "").strip()]
+    if not rows:
+        return 0
+    seen = load_rejected_urls()
+    new = [r for r in rows if canonical_url(r["URL"]) not in seen]
+    if not new:
+        return 0
+    is_new_file = not REJECTED_PATH.exists()
+    with open(REJECTED_PATH, "a", encoding="utf-8") as f:
+        if is_new_file:
+            f.write("# Rejected — Operation Next\n\n")
+            f.write("| Företag | Roll/Typ | Datum | URL |\n")
+            f.write("|---|---|---|---|\n")
+        for row in new:
+            cells = [row.get("Företag", ""), row.get("Roll/Typ", ""), TODAY,
+                     row.get("URL", "").strip()]
+            f.write("| " + " | ".join(str(c).replace("|", "/") for c in cells) + " |\n")
+    return len(new)
+
+
+def load_rejected_role_keys() -> set:
+    """Company+role of rejected postings.
+
+    Needed because opaque tracking URLs (aplitrak's adid) give the same job a
+    different address on every sighting, so the URL check alone cannot hold it
+    out -- an Experis role deleted in August came back a week later under a new
+    adid. Blocks a genuine re-advert of the same title by the same company,
+    which is the same trade-off known_role_keys already makes for live rows."""
+    return {_role_key(company, role) for company, role, _ in _rejected_rows()}
 
 
 def _role_key(company, role):
@@ -159,7 +233,7 @@ def close_expired(rows, today=None):
     closed = 0
     for row in rows:
         due = row.get("Deadline", "").strip()
-        if due and due < today and row.get("Status", "").strip().lower() != "stängd":
+        if due and due < today and row.get("Status", "").strip().lower() not in CLOSED_STATUSES:
             row["Status"] = "Stängd"
             row["Datum"]  = today
             closed += 1
@@ -167,6 +241,10 @@ def close_expired(rows, today=None):
 
 
 PROTECTED_STATUSES = {"ansökt", "intervju"}
+
+# Terminal outcomes. Nothing the pipeline learns about the ad can improve on
+# them, and overwriting Avslag with Stängd would lose the fact that they said no.
+CLOSED_STATUSES = {"stängd", "avslag"}
 
 
 def recheck_dead_ads(rows, fetch, today=None):
@@ -186,7 +264,7 @@ def recheck_dead_ads(rows, fetch, today=None):
     closed = 0
     for row in rows:
         status = row.get("Status", "").strip().lower()
-        if status == "stängd" or status in PROTECTED_STATUSES:
+        if status in CLOSED_STATUSES or status in PROTECTED_STATUSES:
             continue
         url = row.get("URL", "").strip()
         if not url:
@@ -287,18 +365,23 @@ def update_joblist():
             rows[url_index[url]]["Datum"]  = TODAY
             print(f"  CLOSED: {job.get('company')} → status set to Stängd")
 
-    known_urls = {row["URL"].strip() for row in rows}
+    known_urls = {canonical_url(row["URL"]) for row in rows}
     known_roles = known_role_keys(rows)
     rejected_urls = load_rejected_urls()
+    rejected_roles = load_rejected_role_keys()
     for job in new_jobs:
         url = job.get("url", "").strip()
-        if url in known_urls:
+        canon = canonical_url(url)
+        if canon in known_urls:
             print(f"  SKIP (duplicate): {url}")
             continue
-        if url in rejected_urls:
+        if canon in rejected_urls:
             print(f"  SKIP (rejected): {url}")
             continue
         role_key = _role_key(job.get("company", ""), job.get("role", ""))
+        if role_key in rejected_roles:
+            print(f"  SKIP (rejected role): {job.get('company')} — {job.get('role')}")
+            continue
         if role_key in known_roles:
             # Logged rather than dropped quietly: this is the one skip that can
             # be wrong, and a false positive would otherwise be invisible.
@@ -319,7 +402,7 @@ def update_joblist():
             "URL":      url,
         }
         rows.append(new_row)
-        known_urls.add(url)
+        known_urls.add(canon)
         known_roles.add(role_key)
         print(f"  ADDED: {new_row['Företag']} — {new_row['Roll/Typ']}")
         if _is_generic_careers_url(url):
@@ -339,15 +422,20 @@ def update_joblist():
         print(f"  {closed_on_deadline} row(s) past deadline → Stängd")
 
     cutoff = (date.today() - timedelta(days=30)).isoformat()
-    before = len(rows)
-    rows = [
-        r for r in rows
-        if not (r.get("Status", "").lower() == "stängd"
-                and r.get("Datum", TODAY) < cutoff)
-    ]
-    removed = before - len(rows)
-    if removed:
-        print(f"  Pruned {removed} stale Stängd row(s)")
+
+    def _is_stale(row):
+        return (row.get("Status", "").strip().casefold() in CLOSED_STATUSES
+                and row.get("Datum", TODAY) < cutoff)
+
+    pruned = [r for r in rows if _is_stale(r)]
+    rows = [r for r in rows if not _is_stale(r)]
+    if pruned:
+        # Pruning used to drop the row and nothing else, so the URL left
+        # known_urls and the next pass was free to re-add the same posting as
+        # Identifierad. Recording it on the way out is what makes the removal
+        # stick.
+        append_rejected(pruned)
+        print(f"  Pruned {len(pruned)} stale Stängd/Avslag row(s) → rejected.md")
 
     for i, row in enumerate(rows, 1):
         row["#"] = str(i)
