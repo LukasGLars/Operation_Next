@@ -35,3 +35,4 @@ even if it resurfaces in a later search/JobTech pass.
 | Friday Väst AB | Erfaren strategisk inköpare till tekniskt bolag | 2026-09-02 | https://pnty-apply.ponty-system.se/friday?id=4975&pnty_src=platsbanken |
 | Workz Sweden AB | Affärsutvecklare till dormakaba | 2026-09-03 | https://karriar.workz.se/jobs/7965921-affarsutvecklare-till-dormakaba |
 | Peab Anläggning AB | Entreprenadingenjör | 2026-09-03 | https://peab.se/karriar/lediga-tjanster/2026/juli/entreprenadingenjor/ |
+| Securitas | Business Analyst (Client Engagement) | 2026-09-03 | https://securitas.teamtailor.com/jobs/7845272-business-analyst-client-engagement |
