@@ -7,11 +7,18 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from app.app import _status_rank  # noqa: E402
 
 
-def test_order_is_intervju_ansokt_genererat_identifierad_other_stangd():
+def test_order_is_intervju_ansokt_genererat_identifierad_avslag_other_stangd():
     ranks = [_status_rank(s) for s in
-              ["Intervju", "Ansökt", "Genererat", "Identifierad", "Nagot annat", "Stängd"]]
+              ["Intervju", "Ansökt", "Genererat", "Identifierad", "Avslag",
+               "Nagot annat", "Stängd"]]
     assert ranks == sorted(ranks)
-    assert len(set(ranks)) == 6
+    assert len(set(ranks)) == 7
+
+
+def test_avslag_sorts_below_every_live_row_but_above_stangd():
+    for live in ("Intervju", "Ansökt", "Genererat", "Identifierad"):
+        assert _status_rank(live) < _status_rank("Avslag")
+    assert _status_rank("Avslag") < _status_rank("Stängd")
 
 
 def test_ansokt_without_diacritic_ranks_same_as_with():

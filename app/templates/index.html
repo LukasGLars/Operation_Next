@@ -37,7 +37,10 @@
     .status-genererat    { background: #f3e8ff; color: #7e22ce; }
     .status-intervju     { background: #fce7f3; color: #be185d; }
     .status-stängd       { background: #f3f4f6; color: #9ca3af; }
+    .status-avslag       { background: #fee2e2; color: #b91c1c; }
     .status-other        { background: #fef3c7; color: #92400e; }
+    tr.job-row[data-status*="avslag"] .company,
+    tr.job-row[data-status*="avslag"] .role { opacity: 0.55; }
     .status-select { border: none; background: transparent; font-size: 12px;
                       font-weight: 500; cursor: pointer; padding: 3px 4px;
                       border-radius: 6px; color: inherit; }
@@ -55,6 +58,19 @@
                   transition: color 0.15s; line-height: 1; }
     .btn-delete:hover { color: #e11d48; }
     .empty { text-align: center; padding: 60px; color: #9ca3af; font-size: 14px; }
+    .bulkbar { display: none; align-items: center; gap: 12px; margin-bottom: 12px;
+               padding: 10px 16px; background: #1a1a2e; color: white;
+               border-radius: 8px; font-size: 13px; }
+    .bulkbar.visible { display: flex; }
+    .bulkbar .spacer { flex: 1; }
+    .btn-bulk { background: #e11d48; border: none; color: white; font-size: 13px;
+                font-weight: 500; padding: 6px 14px; border-radius: 6px; cursor: pointer; }
+    .btn-bulk:hover { background: #be123c; }
+    .btn-bulk[disabled] { opacity: 0.5; cursor: default; }
+    .btn-clear { background: none; border: none; color: white; opacity: 0.6;
+                 font-size: 13px; cursor: pointer; text-decoration: underline; }
+    .pick { width: 34px; text-align: center; }
+    .pick input { cursor: pointer; }
   </style>
 </head>
 <body>
@@ -68,10 +84,17 @@
 
 <div class="container">
   <div class="filters" id="filters"></div>
+  <div class="bulkbar" id="bulkbar">
+    <span id="bulk-count">0 markerade</span>
+    <span class="spacer"></span>
+    <button class="btn-clear" onclick="clearPicks()">Avmarkera</button>
+    <button class="btn-bulk" id="btn-bulk" onclick="deleteSelected()">Ta bort valda</button>
+  </div>
   <div class="card">
     <table>
       <thead>
         <tr>
+          <th class="pick"><input type="checkbox" id="pick-all" onclick="toggleAll(this)"></th>
           <th>#</th><th>F&#246;retag</th><th>Roll/Typ</th><th>Plats</th>
           <th>Status</th><th>Datum</th><th>Deadline</th><th>Annons</th><th></th>
         </tr>
@@ -85,6 +108,10 @@
             data-cvbase="{{ job.get('CV-bas','CV_Einride') }}"
             data-url="{{ job.get('URL','') }}"
             data-location="{{ job.get('Plats','') }}">
+          <td class="pick">
+            <input type="checkbox" class="pick-box" value="{{ job.get('URL','') }}"
+                   onclick="event.stopPropagation()" onchange="refreshPicks()">
+          </td>
           <td class="datum">{{ job.get('#','') }}</td>
           <td><div class="company">{{ job.get('Företag','') }}</div></td>
           <td class="role">{{ job.get('Roll/Typ','') }}</td>
@@ -101,6 +128,8 @@
               <span class="status-badge status-ansökt">{{ job.get('Status','') }}</span>
             {% elif 'stängd' in st %}
               <span class="status-badge status-stängd">St&#228;ngd</span>
+            {% elif 'avslag' in st %}
+              <span class="status-badge status-avslag">Avslag</span>
             {% else %}
               <span class="status-badge status-other">{{ job.get('Status','') }}</span>
             {% endif %}
@@ -111,6 +140,7 @@
               <option value="Genererat">Genererat</option>
               <option value="Ansökt">Ans&#246;kt</option>
               <option value="Intervju">Intervju</option>
+              <option value="Avslag">Avslag</option>
               <option value="Stängd">St&#228;ngd</option>
             </select>
           </td>
@@ -135,7 +165,7 @@
           </td>
         </tr>
         {% else %}
-        <tr><td colspan="9" class="empty">Inga jobb i joblist.md</td></tr>
+        <tr><td colspan="10" class="empty">Inga jobb i joblist.md</td></tr>
         {% endfor %}
       </tbody>
     </table>
@@ -171,6 +201,7 @@
       rows.forEach(function(r) {
         r.style.display = (s === "alla" || r.dataset.status === s) ? "" : "none";
       });
+      clearPicks();  // a hidden row must never stay armed for bulk delete
     });
     filtersEl.appendChild(btn);
   });
@@ -187,6 +218,62 @@
       window.location.href = "/generate?" + p.toString();
     });
   });
+
+  function pickedBoxes() {
+    return Array.prototype.slice.call(document.querySelectorAll(".pick-box"))
+      .filter(function(b) { return b.checked; });
+  }
+
+  function refreshPicks() {
+    var n = pickedBoxes().length;
+    document.getElementById("bulk-count").textContent =
+      n + (n === 1 ? " markerad" : " markerade");
+    document.getElementById("bulkbar").classList.toggle("visible", n > 0);
+  }
+
+  function toggleAll(master) {
+    // Only rows the active filter leaves visible -- ticking the header box
+    // while filtered on one status must not sweep up the hidden rows too.
+    document.querySelectorAll(".pick-box").forEach(function(b) {
+      if (b.closest("tr").style.display !== "none") b.checked = master.checked;
+    });
+    refreshPicks();
+  }
+
+  function clearPicks() {
+    document.querySelectorAll(".pick-box").forEach(function(b) { b.checked = false; });
+    var master = document.getElementById("pick-all");
+    if (master) master.checked = false;
+    refreshPicks();
+  }
+
+  function deleteSelected() {
+    var boxes = pickedBoxes();
+    if (!boxes.length) return;
+    var urls = boxes.map(function(b) { return b.value; });
+    if (!confirm("Ta bort " + urls.length +
+                 (urls.length === 1 ? " jobb" : " jobb") + " från listan?")) return;
+    var btn = document.getElementById("btn-bulk");
+    btn.disabled = true;
+    fetch("/delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ urls: urls }),
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.ok) {
+        window.location.reload();
+      } else {
+        alert("Kunde inte ta bort: " + (data.error || "okänt fel"));
+        btn.disabled = false;
+      }
+    })
+    .catch(function(e) {
+      alert("Fel: " + e.message);
+      btn.disabled = false;
+    });
+  }
 
   function updateStatus(e, sel) {
     e.stopPropagation();
