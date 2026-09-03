@@ -95,3 +95,9 @@ stripped before `results.json` is written.
 - `fetch_page_text` returns JSON-LD when present, which drops page chrome. Some
   ATS pages carry the location or work model only in that chrome — hence the
   `visible_page_text` fallback in the location gate.
+- Platsbanken publishes the Teamtailor *apply form* URL
+  (`/jobs/<slug>/applications/new?promotion=...`), not the ad. That page has the
+  cookie banner and the form fields, no ad text, so anything generated from it is
+  written off the job title alone. `app.py:_ad_page_url` trims it back to
+  `/jobs/<slug>` before fetching. `pipeline/search.py:fetch_page_text` does not
+  yet do this — the relevance gate still reads such rows off the form page.
