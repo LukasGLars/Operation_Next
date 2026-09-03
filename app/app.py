@@ -199,19 +199,31 @@ _STATUS_ORDER = [
 ]
 
 
+# Statuses that end a job's life. The row stays on screen, but the posting is
+# written to rejected.md at once so no later pass can offer it again.
+TERMINAL_STATUSES = ("avslag", "ej kvalificerad")
+
+
+def _is_terminal(status) -> bool:
+    return any(t in (status or "").casefold() for t in TERMINAL_STATUSES)
+
+
 def _status_rank(status):
     """Furthest-along-in-the-process first; unrecognized statuses sort just
-    before Stängd rather than at either extreme. Avslag is an outcome, not a
-    stage, so it sits below every live row but above a withdrawn ad."""
+    before Stängd rather than at either extreme. Avslag and Ej kvalificerad are
+    outcomes, not stages, so they sit below every live row but above a withdrawn
+    ad — Avslag first, since it means you at least applied."""
     s = (status or "").lower()
     for i, keys in enumerate(_STATUS_ORDER):
         if any(k in s for k in keys):
             return i
     if "stängd" in s:
-        return len(_STATUS_ORDER) + 2
+        return len(_STATUS_ORDER) + 3
     if "avslag" in s:
         return len(_STATUS_ORDER)
-    return len(_STATUS_ORDER) + 1
+    if "ej kvalificerad" in s:
+        return len(_STATUS_ORDER) + 1
+    return len(_STATUS_ORDER) + 2
 
 
 def read_docx_text(path: Path) -> str:
@@ -641,11 +653,12 @@ def update_status():
     if not url or not status:
         return jsonify({"error": "url and status required"}), 400
     try:
-        # Avslag keeps the row visible -- you want to see what came back no --
-        # but the posting is done with, so it is recorded as rejected now
-        # rather than when the 30-day prune drops it. Appending before the
-        # update keeps both files in the one commit _push_joblist makes.
-        if "avslag" in status.casefold():
+        # A terminal status keeps the row visible -- you want to see what came
+        # back no, and what you ruled yourself out of -- but the posting is done
+        # with, so it is recorded as rejected now rather than when the 30-day
+        # prune drops it. Appending before the update keeps both files in the
+        # one commit _push_joblist makes.
+        if _is_terminal(status):
             row = next((r for r in parse_joblist()
                         if r.get("URL", "").strip() == url), {})
             _append_rejected(row.get("Företag", ""), row.get("Roll/Typ", ""), url)

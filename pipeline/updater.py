@@ -243,8 +243,10 @@ def close_expired(rows, today=None):
 PROTECTED_STATUSES = {"ansökt", "intervju"}
 
 # Terminal outcomes. Nothing the pipeline learns about the ad can improve on
-# them, and overwriting Avslag with Stängd would lose the fact that they said no.
-CLOSED_STATUSES = {"stängd", "avslag"}
+# them: overwriting Avslag with Stängd would lose the fact that they said no,
+# and Ej kvalificerad is a judgement about the candidate, not the ad — the
+# posting can stay live for months without that changing.
+CLOSED_STATUSES = {"stängd", "avslag", "ej kvalificerad"}
 
 
 def recheck_dead_ads(rows, fetch, today=None):

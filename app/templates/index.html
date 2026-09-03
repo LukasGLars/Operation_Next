@@ -38,9 +38,12 @@
     .status-intervju     { background: #fce7f3; color: #be185d; }
     .status-stängd       { background: #f3f4f6; color: #9ca3af; }
     .status-avslag       { background: #fee2e2; color: #b91c1c; }
+    .status-ejkval       { background: #e2e8f0; color: #475569; }
     .status-other        { background: #fef3c7; color: #92400e; }
     tr.job-row[data-status*="avslag"] .company,
-    tr.job-row[data-status*="avslag"] .role { opacity: 0.55; }
+    tr.job-row[data-status*="avslag"] .role,
+    tr.job-row[data-status*="ej kvalificerad"] .company,
+    tr.job-row[data-status*="ej kvalificerad"] .role { opacity: 0.55; }
     .status-select { border: none; background: transparent; font-size: 12px;
                       font-weight: 500; cursor: pointer; padding: 3px 4px;
                       border-radius: 6px; color: inherit; }
@@ -130,6 +133,8 @@
               <span class="status-badge status-stängd">St&#228;ngd</span>
             {% elif 'avslag' in st %}
               <span class="status-badge status-avslag">Avslag</span>
+            {% elif 'ej kvalificerad' in st %}
+              <span class="status-badge status-ejkval">Ej kvalificerad</span>
             {% else %}
               <span class="status-badge status-other">{{ job.get('Status','') }}</span>
             {% endif %}
@@ -141,6 +146,7 @@
               <option value="Ansökt">Ans&#246;kt</option>
               <option value="Intervju">Intervju</option>
               <option value="Avslag">Avslag</option>
+              <option value="Ej kvalificerad">Ej kvalificerad</option>
               <option value="Stängd">St&#228;ngd</option>
             </select>
           </td>

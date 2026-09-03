@@ -7,18 +7,25 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from app.app import _status_rank  # noqa: E402
 
 
-def test_order_is_intervju_ansokt_genererat_identifierad_avslag_other_stangd():
+def test_order_runs_live_then_outcomes_then_stangd():
     ranks = [_status_rank(s) for s in
               ["Intervju", "Ansökt", "Genererat", "Identifierad", "Avslag",
-               "Nagot annat", "Stängd"]]
+               "Ej kvalificerad", "Nagot annat", "Stängd"]]
     assert ranks == sorted(ranks)
-    assert len(set(ranks)) == 7
+    assert len(set(ranks)) == 8
 
 
-def test_avslag_sorts_below_every_live_row_but_above_stangd():
-    for live in ("Intervju", "Ansökt", "Genererat", "Identifierad"):
-        assert _status_rank(live) < _status_rank("Avslag")
-    assert _status_rank("Avslag") < _status_rank("Stängd")
+def test_outcomes_sort_below_every_live_row_but_above_stangd():
+    for outcome in ("Avslag", "Ej kvalificerad"):
+        for live in ("Intervju", "Ansökt", "Genererat", "Identifierad"):
+            assert _status_rank(live) < _status_rank(outcome)
+        assert _status_rank(outcome) < _status_rank("Stängd")
+
+
+def test_avslag_outranks_ej_kvalificerad():
+    """Avslag means you applied and heard back; Ej kvalificerad means you never
+    applied, so it is the less far-along of the two."""
+    assert _status_rank("Avslag") < _status_rank("Ej kvalificerad")
 
 
 def test_ansokt_without_diacritic_ranks_same_as_with():

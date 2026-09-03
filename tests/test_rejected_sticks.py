@@ -112,6 +112,36 @@ def test_pruned_avslag_row_is_recorded_too(tmp_path, monkeypatch):
     assert updater.canonical_url("https://vitec.example/jobs/1") in updater.load_rejected_urls()
 
 
+def test_pruned_ej_kvalificerad_row_is_recorded_too(tmp_path, monkeypatch):
+    stale = (date.today() - timedelta(days=45)).isoformat()
+    joblist, _ = _wire(
+        tmp_path, monkeypatch,
+        joblist_rows=f"| 1 | Surgical Science | Product Specialist | Göteborg | CV | "
+                     f"Ej kvalificerad | {stale} |  | "
+                     f"https://ss.example/jobs/1 | https://ss.example/jobs/1 |\n",
+        new_jobs=[FILLER],
+    )
+    updater.update_joblist()
+    assert _urls(joblist) == {FILLER["url"]}
+    assert updater.canonical_url("https://ss.example/jobs/1") in updater.load_rejected_urls()
+
+
+def test_ej_kvalificerad_row_is_not_reopened_by_the_dead_ad_recheck(tmp_path, monkeypatch):
+    """The ad stays live for months; that says nothing about whether the
+    candidate qualifies, so the recheck must leave the row alone."""
+    joblist, _ = _wire(
+        tmp_path, monkeypatch,
+        joblist_rows=f"| 1 | Surgical Science | Product Specialist | Göteborg | CV | "
+                     f"Ej kvalificerad | {date.today().isoformat()} |  | "
+                     f"https://ss.example/jobs/1 | https://ss.example/jobs/1 |\n",
+        new_jobs=[FILLER],
+    )
+    updater.update_joblist()
+    rows, _ = updater.parse_table(joblist.read_text(encoding="utf-8").splitlines())
+    row = next(r for r in rows if r["URL"] == "https://ss.example/jobs/1")
+    assert row["Status"] == "Ej kvalificerad"
+
+
 def test_recent_closed_row_is_left_alone(tmp_path, monkeypatch):
     joblist, _ = _wire(
         tmp_path, monkeypatch,

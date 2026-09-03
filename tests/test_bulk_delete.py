@@ -70,14 +70,18 @@ def test_empty_selection_does_nothing(tmp_path, monkeypatch):
     assert pushes == []
 
 
-def test_avslag_keeps_the_row_but_records_it(tmp_path, monkeypatch):
+import pytest  # noqa: E402
+
+
+@pytest.mark.parametrize("status", ["Avslag", "Ej kvalificerad"])
+def test_terminal_status_keeps_the_row_but_records_it(tmp_path, monkeypatch, status):
     joblist, rejected, _ = _wire(tmp_path, monkeypatch)
     client = appmod.app.test_client()
-    res = client.post("/status", json={"url": "https://c.example/3", "status": "Avslag"})
+    res = client.post("/status", json={"url": "https://c.example/3", "status": status})
     assert res.get_json() == {"ok": True}
 
     rows = {r["URL"]: r for r in appmod.parse_joblist()}
-    assert rows["https://c.example/3"]["Status"] == "Avslag", "row stays in the list"
+    assert rows["https://c.example/3"]["Status"] == status, "row stays in the list"
     assert "https://c.example/3" in rejected.read_text(encoding="utf-8")
 
 
