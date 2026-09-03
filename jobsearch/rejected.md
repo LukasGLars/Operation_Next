@@ -42,3 +42,4 @@ even if it resurfaces in a later search/JobTech pass.
 | Arena Personal Sverige AB | Sales Engineer till WAM Scandinavia | 2026-09-03 | https://karriar.arenapersonal.com/jobs/8047922-sales-engineer-till-wam-scandinavia/applications/new?promotion=2141244-arbetsformedlingen |
 | Poolia AB | Senior strategisk inköpare | 2026-09-03 | https://karriar.poolia.se/jobs/8261281-senior-strategisk-inkopare |
 | Needo Recruitment Sthlm AB | Teknisk inköpare till FlexQube! | 2026-09-03 | https://needo.se/lediga-jobb/3256-teknisk-inkopare-till-flexqube/?pnty_src=platsbanken |
+| Init Sweden | Team Manager/Affärsutvecklare | 2026-09-03 | https://karriar.initsweden.com/jobs/5789616-team-manager-affarsutvecklare |
