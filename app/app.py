@@ -263,9 +263,21 @@ def _meta_refresh_target(html, base_url):
     return urljoin(base_url, match.group(1).strip())
 
 
+_TEAMTAILOR_APPLY_RE = re.compile(r"(/jobs/[^/?#]+)/applications/new\b.*$", re.I)
+
+
+def _ad_page_url(url: str) -> str:
+    """Joblist URLs picked up from Platsbanken are Teamtailor apply-form deep
+    links (.../applications/new?promotion=...). That page carries the cookie
+    banner and the form fields but not the ad text, so generating from it means
+    writing off the job title alone. The parent /jobs/<slug> page serves the
+    posting as JSON-LD."""
+    return _TEAMTAILOR_APPLY_RE.sub(r"\1", url)
+
+
 def fetch_job_posting(url: str) -> str:
     try:
-        r = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
+        r = requests.get(_ad_page_url(url), timeout=15, headers={"User-Agent": "Mozilla/5.0"})
         redirect = _meta_refresh_target(r.text, r.url)
         if redirect and redirect != r.url:
             r = requests.get(redirect, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
