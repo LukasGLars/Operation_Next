@@ -44,3 +44,4 @@ even if it resurfaces in a later search/JobTech pass.
 | Needo Recruitment Sthlm AB | Teknisk inköpare till FlexQube! | 2026-09-03 | https://needo.se/lediga-jobb/3256-teknisk-inkopare-till-flexqube/?pnty_src=platsbanken |
 | Init Sweden | Team Manager/Affärsutvecklare | 2026-09-03 | https://karriar.initsweden.com/jobs/5789616-team-manager-affarsutvecklare |
 | NXT Interim Göteborg AB | Business Analyst - Digital Solutions | 2026-09-03 | https://nxtinterim.recman.page/job/482070?path=ams&apply_only |
+| cilbuper IT AB | Business Analyst | 2026-09-03 | https://pnty-apply.ponty-system.se/cilbuper?id=555 |
