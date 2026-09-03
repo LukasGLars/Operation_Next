@@ -152,16 +152,25 @@ def _append_rejected(company: str, role: str, url: str):
         f.write("| " + " | ".join(cells) + " |\n")
 
 
-def _delete_job_row(url: str):
+def _delete_job_rows(urls: list):
+    """Delete one or more rows in a single rewrite. Marking several rows and
+    clearing them in one click is one joblist write and one push, not one per
+    row -- each push is a commit, and a row-at-a-time loop raced the app's own
+    auto-commit when the list was long."""
+    wanted = {u.strip() for u in urls if u and u.strip()}
+    if not wanted:
+        return 0
     preamble, rows = _parse_joblist_raw()
-    deleted = next((r for r in rows if r.get("URL", "").strip() == url), None)
-    rows = [r for r in rows if r.get("URL", "").strip() != url]
+    deleted = [r for r in rows if r.get("URL", "").strip() in wanted]
+    rows = [r for r in rows if r.get("URL", "").strip() not in wanted]
     for i, row in enumerate(rows, 1):
         row["#"] = str(i)
     _write_joblist_raw(preamble, rows)
-    if deleted:
-        _append_rejected(deleted.get("Företag", ""), deleted.get("Roll/Typ", ""), url)
+    for row in deleted:
+        _append_rejected(row.get("Företag", ""), row.get("Roll/Typ", ""),
+                         row.get("URL", "").strip())
     _push_joblist()
+    return len(deleted)
 
 
 def _push_joblist():
@@ -192,14 +201,17 @@ _STATUS_ORDER = [
 
 def _status_rank(status):
     """Furthest-along-in-the-process first; unrecognized statuses sort just
-    before Stängd rather than at either extreme."""
+    before Stängd rather than at either extreme. Avslag is an outcome, not a
+    stage, so it sits below every live row but above a withdrawn ad."""
     s = (status or "").lower()
     for i, keys in enumerate(_STATUS_ORDER):
         if any(k in s for k in keys):
             return i
     if "stängd" in s:
-        return len(_STATUS_ORDER) + 1
-    return len(_STATUS_ORDER)
+        return len(_STATUS_ORDER) + 2
+    if "avslag" in s:
+        return len(_STATUS_ORDER)
+    return len(_STATUS_ORDER) + 1
 
 
 def read_docx_text(path: Path) -> str:
@@ -273,6 +285,35 @@ def _ad_page_url(url: str) -> str:
     writing off the job title alone. The parent /jobs/<slug> page serves the
     posting as JSON-LD."""
     return _TEAMTAILOR_APPLY_RE.sub(r"\1", url)
+
+
+_TRACKING_PARAMS = {"promotion", "utm_source", "utm_medium", "utm_campaign",
+                    "utm_term", "utm_content", "gh_src", "source", "ref"}
+
+
+def canonical_url(url: str) -> str:
+    """Identity of a posting, for matching one sighting against another.
+
+    The same ad reaches the list under several spellings: the apply form or the
+    ad page, with or without a promotion/utm tag, http or https, www or not. A
+    rejected job re-advertised under a fresh tag used to slip past the exact
+    string comparison and land back in the joblist -- see the Experis row that
+    came back under a second aplitrak adid.
+
+    aplitrak's adid is opaque and carries no stable job id, so canonicalisation
+    cannot catch those; the company+role key in the caller is what does."""
+    from urllib.parse import parse_qsl, urlencode, urlsplit
+
+    if not url:
+        return ""
+    parts = urlsplit(_ad_page_url(url.strip()))
+    netloc = parts.netloc.casefold()
+    if netloc.startswith("www."):
+        netloc = netloc[4:]
+    query = urlencode([(k, v) for k, v in parse_qsl(parts.query)
+                       if k.casefold() not in _TRACKING_PARAMS])
+    path = parts.path.rstrip("/").casefold()
+    return netloc + path + ("?" + query if query else "")
 
 
 def fetch_job_posting(url: str) -> str:
@@ -600,6 +641,14 @@ def update_status():
     if not url or not status:
         return jsonify({"error": "url and status required"}), 400
     try:
+        # Avslag keeps the row visible -- you want to see what came back no --
+        # but the posting is done with, so it is recorded as rejected now
+        # rather than when the 30-day prune drops it. Appending before the
+        # update keeps both files in the one commit _push_joblist makes.
+        if "avslag" in status.casefold():
+            row = next((r for r in parse_joblist()
+                        if r.get("URL", "").strip() == url), {})
+            _append_rejected(row.get("Företag", ""), row.get("Roll/Typ", ""), url)
         _update_job_row(url, {"Status": status, "Datum": date.today().isoformat()})
         return jsonify({"ok": True})
     except Exception as e:
@@ -610,12 +659,13 @@ def update_status():
 @app.route("/delete", methods=["POST"])
 def delete_job():
     data = request.get_json()
-    url  = (data.get("url") or "").strip()
-    if not url:
+    urls = data.get("urls") or ([data["url"]] if data.get("url") else [])
+    urls = [u.strip() for u in urls if u and u.strip()]
+    if not urls:
         return jsonify({"error": "url required"}), 400
     try:
-        _delete_job_row(url)
-        return jsonify({"ok": True})
+        deleted = _delete_job_rows(urls)
+        return jsonify({"ok": True, "deleted": deleted})
     except Exception as e:
         logging.error(f"Delete failed: {e}")
         return jsonify({"error": str(e)}), 500

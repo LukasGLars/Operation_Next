@@ -95,6 +95,18 @@ stripped before `results.json` is written.
 - `fetch_page_text` returns JSON-LD when present, which drops page chrome. Some
   ATS pages carry the location or work model only in that chrome — hence the
   `visible_page_text` fallback in the location gate.
+- Rejection is matched on `canonical_url()` (apply-form suffix and
+  promotion/utm tags stripped) **and** on company+role, because aplitrak's
+  `adid` is opaque and differs on every sighting of the same job. Both copies of
+  `canonical_url` — `app/app.py` and `pipeline/updater.py` — must agree;
+  `tests/test_canonical_url.py` asserts it.
+- `Avslag` is a terminal status: the row stays visible but is written to
+  `rejected.md` at once, and `recheck_dead_ads`/`close_expired` skip it
+  (`CLOSED_STATUSES`) so the outcome isn't overwritten with `Stängd`.
+- The 30-day prune appends what it drops to `rejected.md`. Without that the URL
+  left `known_urls` and the next pass re-added the posting as Identifierad.
+- `update_joblist()` returns early when a pass found nothing, so the prune, the
+  deadline check and the dead-ad recheck only run on a pass with results.
 - Platsbanken publishes the Teamtailor *apply form* URL
   (`/jobs/<slug>/applications/new?promotion=...`), not the ad. That page has the
   cookie banner and the form fields, no ad text, so anything generated from it is

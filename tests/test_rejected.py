@@ -19,7 +19,7 @@ def test_load_rejected_urls_parses_table(tmp_path, monkeypatch):
         encoding="utf-8",
     )
     monkeypatch.setattr(updater, "REJECTED_PATH", rejected)
-    assert updater.load_rejected_urls() == {"https://sevr.example/jobs/1"}
+    assert updater.load_rejected_urls() == {"sevr.example/jobs/1"}
 
 
 def test_load_rejected_urls_missing_file_returns_empty_set(tmp_path, monkeypatch):
