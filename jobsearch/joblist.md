@@ -81,6 +81,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | Deadline | Annons | URL |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 |  |  | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -105,6 +106,5 @@
 | 20 | OIO Väst AB | Inköpare | Göteborg | CV | Identifierad | 2026-08-28 | 2027-01-01 | https://arbetsformedlingen.se/platsbanken/annonser/31410331 | https://pnty-apply.ponty-system.se/oio?id=1278&pnty_src=platsbanken |
 | 21 | GÖTEBORGS KOMMUN | Kalkyl/entreprenadingenjör | Göteborg | CV_BYGG | Identifierad | 2026-08-28 | 2026-09-13 | https://arbetsformedlingen.se/platsbanken/annonser/31407980 | https://goteborgsstad.varbi.com/se/what:job/jobID:963652/type:job/where:125/apply:1 |
 | 22 | Bilvision AB | Customer Success Coordinator till Bilvision | Göteborg | CV_Einride | Identifierad | 2026-08-28 | 2027-02-23 | https://arbetsformedlingen.se/platsbanken/annonser/31405376 | https://career.bilvision.se/jobs/8276688-customer-success-coordinator-till-bilvision/applications/new?promotion=2165710-arbetsformedlingen |
-| 23 | Poolia AB | Senior strategisk inköpare | Göteborg | CV | Stängd | 2026-09-02 | 2026-08-31 | https://arbetsformedlingen.se/platsbanken/annonser/31390648 | https://karriar.poolia.se/jobs/8261281-senior-strategisk-inkopare |
-| 24 | DFDS Professionals | Customer Success Manager – Supply Chain & Logistics | Gothenburg | CV_Einride | Identifierad | 2026-09-02 |  | https://dfdsprofessionals.teamtailor.com/jobs/7467589-customer-success-manager-supply-chain-logistics | https://dfdsprofessionals.teamtailor.com/jobs/7467589-customer-success-manager-supply-chain-logistics |
-| 25 | Sibe Construction AB | Entreprenadingenjör - Anläggning | Göteborg | CV_BYGG | Identifierad | 2026-09-02 | 2026-09-15 | https://arbetsformedlingen.se/platsbanken/annonser/31421793 | https://sibeconstruction.recman.page/job/485833?path=ams&apply_only |
+| 23 | DFDS Professionals | Customer Success Manager – Supply Chain & Logistics | Gothenburg | CV_Einride | Identifierad | 2026-09-02 |  | https://dfdsprofessionals.teamtailor.com/jobs/7467589-customer-success-manager-supply-chain-logistics | https://dfdsprofessionals.teamtailor.com/jobs/7467589-customer-success-manager-supply-chain-logistics |
+| 24 | Sibe Construction AB | Entreprenadingenjör - Anläggning | Göteborg | CV_BYGG | Identifierad | 2026-09-02 | 2026-09-15 | https://arbetsformedlingen.se/platsbanken/annonser/31421793 | https://sibeconstruction.recman.page/job/485833?path=ams&apply_only |
