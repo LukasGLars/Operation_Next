@@ -36,3 +36,4 @@ even if it resurfaces in a later search/JobTech pass.
 | Workz Sweden AB | Affärsutvecklare till dormakaba | 2026-09-03 | https://karriar.workz.se/jobs/7965921-affarsutvecklare-till-dormakaba |
 | Peab Anläggning AB | Entreprenadingenjör | 2026-09-03 | https://peab.se/karriar/lediga-tjanster/2026/juli/entreprenadingenjor/ |
 | Securitas | Business Analyst (Client Engagement) | 2026-09-03 | https://securitas.teamtailor.com/jobs/7845272-business-analyst-client-engagement |
+| Experis AB | Affärskoordinator / Business Analyst / Lyreco / Borås | 2026-09-03 | https://www.aplitrak.com/?adid=c3Rha2FoLjMzMjc3LjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
