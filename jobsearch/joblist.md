@@ -73,6 +73,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | Deadline | Annons | URL |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 |  |  | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -98,7 +99,7 @@
 | 21 | Eqwiry AB | Operativ Inköpare - Konsultuppdrag | Göteborg | CV | Identifierad | 2026-08-19 |  |  | https://eqwiry-1741099251.teamtailor.com/jobs/7925320-operativ-inkopare-konsultuppdrag |
 | 22 | Init Sweden | Team Manager/Affärsutvecklare | Göteborg | CV | Stängd | 2026-09-02 |  |  | https://karriar.initsweden.com/jobs/5789616-team-manager-affarsutvecklare |
 | 23 | NXT Interim Göteborg AB | Business Analyst - Digital Solutions | Göteborg | CV_Einride | Stängd | 2026-09-03 |  |  | https://nxtinterim.recman.page/job/482070?path=ams&apply_only |
-| 24 | cilbuper IT AB | Business Analyst | Göteborg | CV_Einride | Stängd | 2026-09-02 | 2026-08-31 | https://arbetsformedlingen.se/platsbanken/annonser/31231122 | https://pnty-apply.ponty-system.se/cilbuper?id=555 |
+| 24 | cilbuper IT AB | Business Analyst | Göteborg | CV_Einride | Stängd | 2026-09-03 | 2026-08-31 | https://arbetsformedlingen.se/platsbanken/annonser/31231122 | https://pnty-apply.ponty-system.se/cilbuper?id=555 |
 | 25 | Surgical Science Sweden AB | Product Specialist | Göteborg | CV_Einride | Identifierad | 2026-08-26 |  |  | https://careers.surgicalscience.com/job/f5bf3d064cd04672a6149bb9bea16db6?utm_medium=talentech_publishing&utm_source=jobtip_editor |
 | 26 | OIO Väst AB | Inköpare | Göteborg | CV | Identifierad | 2026-08-28 | 2027-01-01 | https://arbetsformedlingen.se/platsbanken/annonser/31410331 | https://pnty-apply.ponty-system.se/oio?id=1278&pnty_src=platsbanken |
 | 27 | GÖTEBORGS KOMMUN | Kalkyl/entreprenadingenjör | Göteborg | CV_BYGG | Identifierad | 2026-08-28 | 2026-09-13 | https://arbetsformedlingen.se/platsbanken/annonser/31407980 | https://goteborgsstad.varbi.com/se/what:job/jobID:963652/type:job/where:125/apply:1 |
