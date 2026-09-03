@@ -38,3 +38,4 @@ even if it resurfaces in a later search/JobTech pass.
 | Securitas | Business Analyst (Client Engagement) | 2026-09-03 | https://securitas.teamtailor.com/jobs/7845272-business-analyst-client-engagement |
 | Experis AB | Affärskoordinator / Business Analyst / Lyreco / Borås | 2026-09-03 | https://www.aplitrak.com/?adid=c3Rha2FoLjMzMjc3LjEzNzY1QG1hbnBvd2VyZ3JvdXBub3JkaWNzLmFwbGl0cmFrLmNvbQ |
 | Wrknest AB | Teknisk säljare till växande teknikbolag ⚡ | 2026-09-03 | https://careers.wrknest.se/jobs/7726001-teknisk-saljare-till-vaxande-teknikbolag/applications/new?promotion=1997206-arbetsformedlingen |
+| Rekryteringsgruppen | Digital affärsutvecklare | 2026-09-03 | https://rekryteringsgruppen.teamtailor.com/jobs/7949661-digital-affarsutvecklare |
