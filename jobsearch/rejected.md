@@ -45,3 +45,4 @@ even if it resurfaces in a later search/JobTech pass.
 | Init Sweden | Team Manager/Affärsutvecklare | 2026-09-03 | https://karriar.initsweden.com/jobs/5789616-team-manager-affarsutvecklare |
 | NXT Interim Göteborg AB | Business Analyst - Digital Solutions | 2026-09-03 | https://nxtinterim.recman.page/job/482070?path=ams&apply_only |
 | cilbuper IT AB | Business Analyst | 2026-09-03 | https://pnty-apply.ponty-system.se/cilbuper?id=555 |
+| Surgical Science Sweden AB | Product Specialist | 2026-09-03 | https://careers.surgicalscience.com/job/f5bf3d064cd04672a6149bb9bea16db6?utm_medium=talentech_publishing&utm_source=jobtip_editor |
