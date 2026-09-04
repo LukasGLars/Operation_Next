@@ -93,6 +93,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | Deadline | Annons | URL |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 |  |  | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -114,3 +115,4 @@
 | 17 | Bilvision AB | Customer Success Coordinator till Bilvision | Göteborg | CV_Einride | Identifierad | 2026-08-28 | 2027-02-23 | https://arbetsformedlingen.se/platsbanken/annonser/31405376 | https://career.bilvision.se/jobs/8276688-customer-success-coordinator-till-bilvision/applications/new?promotion=2165710-arbetsformedlingen |
 | 18 | DFDS Professionals | Customer Success Manager – Supply Chain & Logistics | Gothenburg | CV_Einride | Identifierad | 2026-09-02 |  | https://dfdsprofessionals.teamtailor.com/jobs/7467589-customer-success-manager-supply-chain-logistics | https://dfdsprofessionals.teamtailor.com/jobs/7467589-customer-success-manager-supply-chain-logistics |
 | 19 | Sibe Construction AB | Entreprenadingenjör - Anläggning | Göteborg | CV_BYGG | Identifierad | 2026-09-02 | 2026-09-15 | https://arbetsformedlingen.se/platsbanken/annonser/31421793 | https://sibeconstruction.recman.page/job/485833?path=ams&apply_only |
+| 20 | Prowork Göteborg AB | Entreprenadingenjör / Platschef Bygg – kortare uppdrag i Göteborg | Göteborg | CV_BYGG | Identifierad | 2026-09-04 | 2026-10-02 | https://arbetsformedlingen.se/platsbanken/annonser/31428949 | https://prowork.recman.page/job/486022?path=ams&apply_only |
