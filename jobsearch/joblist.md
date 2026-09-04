@@ -94,6 +94,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Status | Datum | Deadline | Annons | URL |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | Intervju | 2026-08-07 |  |  | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -116,3 +117,5 @@
 | 18 | DFDS Professionals | Customer Success Manager – Supply Chain & Logistics | Gothenburg | CV_Einride | Identifierad | 2026-09-02 |  | https://dfdsprofessionals.teamtailor.com/jobs/7467589-customer-success-manager-supply-chain-logistics | https://dfdsprofessionals.teamtailor.com/jobs/7467589-customer-success-manager-supply-chain-logistics |
 | 19 | Sibe Construction AB | Entreprenadingenjör - Anläggning | Göteborg | CV_BYGG | Identifierad | 2026-09-02 | 2026-09-15 | https://arbetsformedlingen.se/platsbanken/annonser/31421793 | https://sibeconstruction.recman.page/job/485833?path=ams&apply_only |
 | 20 | Prowork Göteborg AB | Entreprenadingenjör / Platschef Bygg – kortare uppdrag i Göteborg | Göteborg | CV_BYGG | Identifierad | 2026-09-04 | 2026-10-02 | https://arbetsformedlingen.se/platsbanken/annonser/31428949 | https://prowork.recman.page/job/486022?path=ams&apply_only |
+| 21 | Jurek Recruitment & Consulting AB | Inside Sales Engineer till KUKA Nordic | Göteborg | CV_Zeppelin | Identifierad | 2026-09-04 | 2027-03-03 | https://arbetsformedlingen.se/platsbanken/annonser/31436874 | https://jobb.jurek.se/jobs/8298706-inside-sales-engineer-till-kuka-nordic/applications/new?promotion=2178766-arbetsformedlingen |
+| 22 | Avaron AB | Kravanalytiker / Business Analyst | Göteborg | CV_Einride | Identifierad | 2026-09-04 | 2026-09-08 | https://arbetsformedlingen.se/platsbanken/annonser/31428597 | https://jobs.avaron.se/jobs/8308943-kravanalytiker-business-analyst/applications/new?promotion=2175074-arbetsformedlingen |
