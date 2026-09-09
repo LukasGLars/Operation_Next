@@ -377,7 +377,14 @@ def _build_doc_content(cv_base: str, job_url: str, job_posting_text: str) -> lis
         "\n\nCover letter tone reference (match this tone and length):\n" + cover_letter_text
     )
     dynamic_text = (
-        "\n\nJob posting URL: " + job_url +
+        # Sits in the dynamic half deliberately: cv_base varies per job, so
+        # putting it in the cached static block would invalidate the cache on
+        # every call. Until now it was accepted as a parameter and dropped —
+        # Claude got the whole Framing Angle table and had to infer which row
+        # applied from the posting alone.
+        "\n\nFraming angle for this role: " + (cv_base or "CV") +
+        ". Apply the matching row of the Framing Angle table above.\n" +
+        "\nJob posting URL: " + job_url +
         "\nJob posting content:\n" + job_posting_text +
         '\n\nGenerate a full tailored CV and cover letter for this role, in the SAME LANGUAGE\n'
         'as the job posting above (English posting -> English CV; Swedish posting -> Swedish CV;\n'
