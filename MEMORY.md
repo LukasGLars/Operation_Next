@@ -429,6 +429,89 @@ interviews, and only 1 of 11 inköp rows was ever actually applied to.
 Agency-brokered ads are **not** a drag and must not be filtered out — 3 of the 4
 interviews came through them (Platsa, Oddwork ×2). Only Vitec was direct.
 
+## Occupation-group search (2026-09-09)
+
+### Why
+The list had drifted off the only category that converts. All four `Intervju`
+rows are teknisk säljare or affärsutvecklare; exactly **1 of 15** open rows was.
+Inköp and bygg were two-thirds of the live list and have produced 1 application
+and 0 interviews across 16 rows ever.
+
+The apply rate is the sharper signal, and it is independent of employer
+behaviour: 11 inköp rows ever, 1 applied to; 5 bygg rows, 0 applied to. The
+pipeline was not failing at the interview stage, it was filling the list with
+rows that never got opened.
+
+### The finding
+`ROLE_QUERIES` free-text matches the **headline string**. Ads carry an
+Arbetsförmedlingen taxonomy classification that the pipeline was ignoring
+entirely. Measured live over the commutable ring:
+
+| Category | Free text finds | Occupation group holds |
+|---|---|---|
+| Sales / BD (Företagssäljare `oXSW_fbY_XrY`) | 10 | **149** |
+| Bygg/anläggning (`thZP_oR7_WrY`) | 11 | **48** |
+| Inköp | 15 | 25 |
+
+About 8% of the convertible market was visible. The widening is self-correcting
+on the mix: inköp is already near-saturated, so it barely grows while sales
+grows 15x. **Nothing had to be filtered out to fix the mix.**
+
+### Decisions worth keeping
+- **`_ROLE_INCLUDE` is skipped for group hits.** The group *is* the relevance
+  signal. Requiring a role word in the headline too discards 116 of 126 —
+  "Regionsäljare" and ABB "Account Manager – Project Sales" carry none.
+- **The churn filter replaces it for those hits.** Företagssäljare holds
+  door-knocking and commission sales, roughly a third of the group. Those ads
+  ask a question instead of naming a job ("Är du redo att ta plats som säljare i
+  Bollebygd?"), so `_HEADLINE_EXCLUDE` never caught them — it looks for job
+  titles that aren't there. `_SALES_CHURN` matches the question phrasing.
+- **The cap is now the weakest link.** 182 candidates → 60, sorted newest-first,
+  which is arbitrary with respect to quality. Raising it further just moves the
+  problem. This is what the fit score is for.
+- **Occupation groups came from the ads, not the taxonomy API.** Querying
+  `taxonomy.api.jobtechdev.se` by label returned 2105 unfiltered concepts. The
+  reliable route is to search for a role you know converts and read
+  `occupation_group.concept_id` off the hits.
+
+### Gotcha: tests reached the live API
+Three existing tests stubbed `_search` and monkeypatched `ROLE_QUERIES` only, so
+the new group sweep called the real API from inside the suite — one returned 60
+candidates where the assert wanted 1. Any new fetch path needs pinning off in
+those stubs (`OCCUPATION_GROUPS = {}`), or the suite silently goes online.
+
+### Teamtailor on a customer domain — a live row was wrongly closed
+`jobb.karisma.se` is Teamtailor without a `teamtailor.com` host, so
+`_PATH_ID_HOSTS` missed it and `canonical_url` returned the **apply form**. An
+apply form has no ad text, `recheck_dead_ads` reads that as withdrawn, and it
+set a live row to `Stängd` during the import below. `_TEAMTAILOR_APPLY` now
+matches the path shape (`/jobs/<id>-<slug>/applications/new`) instead of the
+host. FlexIQ was closed the same run for a different reason — its own careers
+page is JS-rendered and returns 241 chars. **That one is not fixed**: it will be
+re-closed on the next run that touches it.
+
+### The import that came with it
+23 rows added to joblist.md (22 → 45) from a curated sweep of both groups.
+Dedup and `rejected.md` did their job unprompted: Oddwork/Profcon was skipped as
+a duplicate of the live `Intervju` row, and Kraftsam, Arena Personal and a Sibe
+entreprenadingenjör were skipped as previously rejected.
+
+Closing soonest at time of writing: ABB Account Manager/Sales Specialist
+(09-12), Recruit Partner KAM hydraulik (09-13), NCC Anbudsingenjör Betong
+(09-20), the four Sibe roles (09-21).
+
+### Still open — the fit score
+Designed, not built. Four axes: Category 35 / Technical content 25 /
+Requirement gap 25 / Evidence match 15, anchored on real rows from this list
+(Oddwork 90, a kommun inköp row 25, Verisure door-knock 5) so scores actually
+spread instead of clustering at 78. **It must order the list, never filter it** —
+same reasoning as the relevance gate's 46% false-positive lesson.
+
+Validation is available today and costs nothing: score the existing rows and
+require all four `Intervju` rows in the top quartile. A rubric over-fitted to
+technical sales pushes Wioniq (affärsutvecklare) out, which is the point — the
+test catches it before it touches a live run.
+
 ## Pending / known issues
 - ~~Duplicate row: the Experis/Alingsås Energi posting under two aplitrak
   tracking ids~~ — deleted 2026-08-31 via the app; the `Ansökt` row was kept and
