@@ -578,6 +578,49 @@ when a gate is present, if it ever matters.
 rows are never re-judged. A persisted score cache was considered and dropped —
 it needs a committed file plus a workflow change to save pennies.
 
+## Evidence-first drafting (2026-09-09, v0.8.0)
+
+### What changed
+`_matched_edited_examples` used to run only before the **review** pass, so every
+draft was written generically and then corrected toward a past application. It
+now runs before the **draft**, matched once and reused for the review.
+
+The Framing Angle table (`cv_base`) is now a **fallback**, used only when nothing
+matched. Where a real edited application exists it is better evidence: technical
+sales has four (Oddwork, Platsa, Vitec, Thomas Betong) against seven generic
+words in the table. The prior earns its place in construction and kalkyl, which
+have one example between them.
+
+### Outcome is a tiebreak and must stay one
+Examples from rows that reached `Intervju` carry a `[reached interview]` marker,
+but the prompt says explicitly that a closer match without the marker beats a
+more distant one with it. **A well-performing example of the wrong shape teaches
+worse than a rejected one of the right shape** — if a new role is closest to
+Thomas Betong (`Ansökt`), that is still the example to use. Do not promote
+outcome above similarity.
+
+### Found on the way: cv_base was never reaching the model
+It was computed by the judge, stored on the row, sent with the generate request,
+passed into `_build_doc_content` — and never used. Claude got the whole five-row
+table and inferred which row applied from the posting. Fixed in the same session
+(`51d6c93`). Every application before today was written without it.
+
+`master_cv.md` contains no mention of "Zeppelin" — the five CV bases are labels
+for framing angles, not templates. The PDF bases were retired long ago; the names
+outlived the files. Renaming them to what they mean was considered and not done.
+
+### Prompt-cache rule for this file
+Anything that varies per job — examples, `cv_base`, the posting — belongs in the
+**dynamic** half of `_build_doc_content`. The static half carries the skill, the
+master CV, the sales philosophy and the tone reference under `cache_control`;
+putting a per-job value there invalidates all of it on every generation.
+
+### Gotcha: the scheduled run races your merges
+The 07:00 Wednesday run executed before v0.6.1 merged, so it closed the Karisma
+row on the JS-rendered-page bug that had just been fixed, and added five rows
+under the old code. If you fix pipeline behaviour mid-day, check what the
+morning run did before trusting the list.
+
 ## Pending / known issues
 - ~~Duplicate row: the Experis/Alingsås Energi posting under two aplitrak
   tracking ids~~ — deleted 2026-08-31 via the app; the `Ansökt` row was kept and
