@@ -8,8 +8,15 @@ import json
 import logging
 import os
 import re
+import sys
 from datetime import date
 from pathlib import Path
+
+# Run as `python app/app.py` and sys.path[0] is app/, not the repo root, so
+# `from pipeline import ...` fails with ModuleNotFoundError before Flask ever
+# starts. The tests import app.app with the root already on the path, so they
+# do not see it — tests/test_app_runs_as_a_script.py covers this instead.
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import anthropic
 import requests
