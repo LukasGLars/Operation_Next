@@ -78,6 +78,7 @@ def test_fetch_candidates_drops_expired_hits(monkeypatch):
     live = hit_by_employer("Nexer AB")
     stale = json.loads(json.dumps(hit_by_employer("cilbuper IT AB")))
     stale["application_deadline"] = "2020-01-01T23:59:59"
+    monkeypatch.setattr(jobtech, "OCCUPATION_GROUPS", {})
     monkeypatch.setattr(jobtech, "ROLE_QUERIES", ['"business analyst"'])
     monkeypatch.setattr(jobtech, "_search", lambda query, remote=False, limit=25: [live, stale])
 
@@ -128,6 +129,7 @@ def test_support_and_consulting_roles_are_excluded():
 
 
 def test_fetch_candidates_skips_known_urls(monkeypatch):
+    monkeypatch.setattr(jobtech, "OCCUPATION_GROUPS", {})
     monkeypatch.setattr(jobtech, "ROLE_QUERIES", ["business analyst"])
     monkeypatch.setattr(jobtech, "_search", lambda query, remote=False, limit=25: HITS)
     known = [jobtech.canonical_url(hit_by_employer("Nexer AB"))]
@@ -140,6 +142,7 @@ def test_fetch_candidates_skips_known_urls(monkeypatch):
 
 
 def test_fetch_candidates_caps_and_sorts_newest_first(monkeypatch):
+    monkeypatch.setattr(jobtech, "OCCUPATION_GROUPS", {})
     monkeypatch.setattr(jobtech, "ROLE_QUERIES", ["business analyst"])
     monkeypatch.setattr(jobtech, "_search", lambda query, remote=False, limit=25: HITS)
 
@@ -167,6 +170,7 @@ def test_same_role_advertised_twice_is_deduplicated(monkeypatch):
     hit = hit_by_employer("Nexer AB")
     twin = json.loads(json.dumps(hit))
     twin["application_details"]["url"] = "https://nexergroup.teamtailor.com/jobs/9999999-other-id"
+    monkeypatch.setattr(jobtech, "OCCUPATION_GROUPS", {})
     monkeypatch.setattr(jobtech, "ROLE_QUERIES", ['"business analyst"'])
     monkeypatch.setattr(jobtech, "_search", lambda query, remote=False, limit=25: [hit, twin])
 
@@ -176,6 +180,7 @@ def test_same_role_advertised_twice_is_deduplicated(monkeypatch):
 def test_location_gate_runs_before_the_cap(monkeypatch):
     """Otherwise the nationwide remote pass fills the cap with roles the gate
     would reject downstream anyway."""
+    monkeypatch.setattr(jobtech, "OCCUPATION_GROUPS", {})
     monkeypatch.setattr(jobtech, "ROLE_QUERIES", ['"business analyst"'])
     monkeypatch.setattr(jobtech, "_search", lambda query, remote=False, limit=25: HITS)
 
@@ -190,3 +195,57 @@ def test_judge_fit_passes_through_without_api_key(monkeypatch):
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     candidates = [jobtech.as_candidate(hit_by_employer("Nexer AB"))]
     assert jobtech.judge_fit(candidates, "role filters here") == candidates
+
+
+def _hit(headline, employer="Acme AB"):
+    return {"headline": headline, "employer": {"name": employer}}
+
+
+def test_group_hits_skip_the_headline_role_requirement():
+    """The occupation group is the relevance signal. "Regionsäljare" carries no
+    _ROLE_INCLUDE word and is exactly the kind of ad the group sweep is for."""
+    hit = _hit("Regionsäljare")
+    assert not jobtech.is_relevant(hit)
+    assert jobtech.is_relevant(hit, from_group=True)
+
+
+def test_group_hits_still_obey_every_exclude():
+    assert not jobtech.is_relevant(_hit("Kundservicemedarbetare"), from_group=True)
+    assert not jobtech.is_relevant(_hit("Business Analyst", employer="Accenture AB"),
+                                   from_group=True)
+
+
+def test_churn_sales_is_filtered_out_of_the_group():
+    """Företagssäljare holds door-knocking and commission churn alongside the
+    real technical sales roles, and those ads ask a question instead of naming
+    a job — so only a headline filter catches them."""
+    for headline in ["Är du redo att ta plats som säljare i Bollebygd?",
+                     "Vill du utvecklas, tävla och tjäna bra?",
+                     "Ta nästa steg i din utveckling inom försäljning",
+                     "Säljare sökes — inga förkunskaper krävs"]:
+        assert not jobtech.is_relevant(_hit(headline), from_group=True), headline
+    for headline in ["Account Manager / Sales Specialist – Project Sales",
+                     "Teknisk säljare till Heidelberg Materials",
+                     "Regionsäljare"]:
+        assert jobtech.is_relevant(_hit(headline), from_group=True), headline
+
+
+def test_teamtailor_apply_form_is_trimmed_on_a_customer_domain():
+    """jobb.karisma.se is Teamtailor on the customer's own domain, so the host
+    list misses it and the apply form — which has no ad text — is what gets
+    fetched. That read as a withdrawn posting and closed a live row."""
+    hit = {"application_details": {"url":
+        "https://jobb.karisma.se/jobs/7597765-teknisk-saljare-proav"
+        "/applications/new?promotion=1954684-arbetsformedlingen"}}
+    assert jobtech.canonical_url(hit) ==         "https://jobb.karisma.se/jobs/7597765-teknisk-saljare-proav"
+
+
+def test_group_sweep_runs_alongside_the_role_queries(monkeypatch):
+    monkeypatch.setattr(jobtech, "ROLE_QUERIES", ['"business analyst"'])
+    monkeypatch.setattr(jobtech, "OCCUPATION_GROUPS", {"Företagssäljare": "oXSW_fbY_XrY"})
+    monkeypatch.setattr(jobtech, "_search",
+                        lambda q, remote=False, limit=25: [hit_by_employer("Nexer AB")])
+    monkeypatch.setattr(jobtech, "_search_group",
+                        lambda g, remote=False, limit=100: [hit_by_employer("cilbuper IT AB")])
+    companies = {c["company"] for c in jobtech.fetch_candidates()}
+    assert companies == {"Nexer AB", "cilbuper IT AB"}
