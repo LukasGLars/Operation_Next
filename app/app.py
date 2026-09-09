@@ -16,6 +16,8 @@ import requests
 from bs4 import BeautifulSoup
 from docx import Document
 from dotenv import load_dotenv
+
+from pipeline import fitscore
 from flask import Flask, jsonify, render_template, request
 
 load_dotenv(Path(__file__).parent.parent / ".env")
@@ -30,7 +32,7 @@ APPLICATIONS     = ROOT / "jobsearch" / "applications"
 MASTER_CV        = ROOT / "jobsearch" / "cv" / "master_cv.md"
 SALES_PHILOSOPHY = ROOT / "jobsearch" / "sales_philosophy.md"
 
-_HEADERS = ["#", "Företag", "Roll/Typ", "Plats", "CV-bas", "Fit", "Status", "Datum",
+_HEADERS = ["#", "Företag", "Roll/Typ", "Plats", "CV-bas", "Fit", "Fit-delar", "Status", "Datum",
             "Deadline", "Annons", "URL"]
 
 app = Flask(__name__)
@@ -117,7 +119,7 @@ def _write_joblist_raw(preamble, rows):
         cells = [
             row.get("#", ""), row.get("Företag", ""), row.get("Roll/Typ", ""),
             row.get("Plats", "—"), row.get("CV-bas", ""), row.get("Fit", ""),
-            row.get("Status", ""),
+            row.get("Fit-delar", ""), row.get("Status", ""),
             row.get("Datum", today), row.get("Deadline", ""),
             row.get("Annons", ""), row.get("URL", ""),
         ]
@@ -189,6 +191,8 @@ def _push_joblist():
 
 def parse_joblist():
     _, rows = _parse_joblist_raw()
+    for row in rows:
+        row["Fit-forklaring"] = fitscore.explain(row.get("Fit-delar", ""))
     return rows
 
 

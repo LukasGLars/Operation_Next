@@ -68,3 +68,26 @@ def test_the_table_round_trips_a_score_and_leaves_old_rows_blank():
     rows, _ = updater.parse_table(updater.write_table([scored, legacy]).splitlines())
     assert rows[0]["Fit"] == "90" and rows[0]["URL"] == "https://a"
     assert rows[1]["Fit"] == "" and rows[1]["URL"] == "https://b"
+
+
+def test_axes_are_stored_and_read_back_in_order():
+    verdict = {"axes": {"category": 35, "technical": 25, "requirement": 18, "evidence": 12}}
+    assert fitscore.axes_string(verdict) == "35/25/18/12"
+    assert fitscore.explain("35/25/18/12") ==         "category 35, technical 25, requirement 18, evidence 12"
+
+
+def test_a_missing_or_malformed_breakdown_explains_nothing():
+    """Better an empty tooltip than a confidently mislabelled one."""
+    assert fitscore.axes_string({"score": 90}) == ""
+    assert fitscore.axes_string({}) == ""
+    assert fitscore.explain("") == ""
+    assert fitscore.explain("35/25") == ""
+    assert fitscore.explain("a/b/c/d") == "category a, technical b, requirement c, evidence d"
+
+
+def test_the_breakdown_survives_a_table_round_trip():
+    row = {"#": "1", "Företag": "ABB", "Roll/Typ": "AM", "Fit": "90",
+           "Fit-delar": "35/25/18/12", "Status": "Identifierad", "URL": "https://a"}
+    rows, _ = updater.parse_table(updater.write_table([row]).splitlines())
+    assert rows[0]["Fit-delar"] == "35/25/18/12"
+    assert rows[0]["URL"] == "https://a"
