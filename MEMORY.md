@@ -486,9 +486,27 @@ those stubs (`OCCUPATION_GROUPS = {}`), or the suite silently goes online.
 apply form has no ad text, `recheck_dead_ads` reads that as withdrawn, and it
 set a live row to `Stängd` during the import below. `_TEAMTAILOR_APPLY` now
 matches the path shape (`/jobs/<id>-<slug>/applications/new`) instead of the
-host. FlexIQ was closed the same run for a different reason — its own careers
-page is JS-rendered and returns 241 chars. **That one is not fixed**: it will be
-re-closed on the next run that touches it.
+host.
+
+FlexIQ was closed the same run for a different reason — its own careers page is
+JS-rendered and returns 241 chars, which `is_dead_ad` read as a pulled posting.
+Fixed in v0.6.1: **an unreadable page is only evidence when nothing else claims
+the ad is open.** `recheck_dead_ads` passes `deadline_ahead` from the row, so a
+future deadline survives an unreadable fetch — the same principle `is_open()`
+applies to a missing deadline. Nothing lingers, because `close_expired` still
+closes the row on its deadline; the worst case is a dead ad sitting until a date
+it already has, instead of a live role silently vanishing. Positive evidence is
+checked first, so a stub that says "jobbet tillsatt" still closes regardless of
+any deadline. Verified against the live list: 0 of 45 rows closed, where two
+were being closed before.
+
+### Gotcha: one print could destroy a whole run
+Printing `→` on a Windows cp1252 console raises `UnicodeEncodeError`, and in
+`update_joblist` that lands *after* every row is built but *before* the table is
+written — the entire pass is lost with nothing saved. It cost one import that
+had already done all its work. `search.py` and `updater.py` now reconfigure
+stdout/stderr to UTF-8 at import. The scheduled run is `ubuntu-latest` and was
+never affected; this only ever hit hand-runs on Windows.
 
 ### The import that came with it
 23 rows added to joblist.md (22 → 45) from a curated sweep of both groups.
