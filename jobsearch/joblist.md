@@ -99,6 +99,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Fit | Fit-delar | Status | Datum | Deadline | Annons | URL |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | 89 | 35/22/20/12 | Intervju | 2026-08-07 |  |  | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -123,7 +124,7 @@
 | 20 | Prowork Göteborg AB | Entreprenadingenjör / Platschef Bygg – kortare uppdrag i Göteborg | Göteborg | CV_BYGG | 54 | 12/12/20/10 | Identifierad | 2026-09-04 | 2026-10-02 | https://arbetsformedlingen.se/platsbanken/annonser/31428949 | https://prowork.recman.page/job/486022?path=ams&apply_only |
 | 21 | Jurek Recruitment & Consulting AB | Inside Sales Engineer till KUKA Nordic | Göteborg | CV_Zeppelin | 89 | 33/23/20/13 | Identifierad | 2026-09-04 | 2027-03-03 | https://arbetsformedlingen.se/platsbanken/annonser/31436874 | https://jobb.jurek.se/jobs/8298706-inside-sales-engineer-till-kuka-nordic/applications/new?promotion=2178766-arbetsformedlingen |
 | 22 | Avaron AB | Kravanalytiker / Business Analyst | Göteborg | CV_Einride | 58 | 18/12/18/10 | Ej kvalificerad | 2026-09-07 | 2026-09-08 | https://arbetsformedlingen.se/platsbanken/annonser/31428597 | https://jobs.avaron.se/jobs/8308943-kravanalytiker-business-analyst/applications/new?promotion=2175074-arbetsformedlingen |
-| 23 | ABB AB | Account Manager / Sales Specialist – Project Sales | Mölndal | CV_Zeppelin | 86 | 33/22/19/12 | Genererat | 2026-09-09 | 2026-09-12 | https://arbetsformedlingen.se/platsbanken/annonser/31367048 | https://careers.abb/global/en/job/JR00034054/Account-Manager-Sales-Specialist-Project-Sales-for-Automation-and-Electrification |
+| 23 | ABB AB | Account Manager / Sales Specialist – Project Sales | Mölndal | CV_Zeppelin | 86 | 33/22/19/12 | Stängd | 2026-09-09 | 2026-09-12 | https://arbetsformedlingen.se/platsbanken/annonser/31367048 | https://careers.abb/global/en/job/JR00034054/Account-Manager-Sales-Specialist-Project-Sales-for-Automation-and-Electrification |
 | 24 | Recruit Partner Nordic AB | Key Account Manager med hydraulikkunskap | Göteborg | CV_Zeppelin | 70 | 30/20/10/10 | Identifierad | 2026-09-09 | 2026-09-13 | https://arbetsformedlingen.se/platsbanken/annonser/31352056 | https://www.engage2ace.se/jobs/8219967-key-account-manager-med-hydraulikkunskap/applications/new?promotion=2144759-arbetsformedlingen |
 | 25 | 2Complete AB | Account Manager – Industri, Metall och Materialflöden | Göteborg | CV_Zeppelin | 56 | 22/8/18/8 | Identifierad | 2026-09-09 | 2026-09-22 | https://arbetsformedlingen.se/platsbanken/annonser/31244510 | https://apply.recman.page/job_post.php?id=481892&apply_only&sub_id=1019&path=ams |
 | 26 | Kraftsam Rekrytering & Bemanning AB | Key Account Manager inom El Laddningsbranchen | Göteborg | CV_Zeppelin | 84 | 32/20/20/12 | Identifierad | 2026-09-09 | 2026-09-28 | https://arbetsformedlingen.se/platsbanken/annonser/31408550 | https://pnty-apply.ponty-system.se/kraftsam?id=2481&pnty_src=platsbanken |
