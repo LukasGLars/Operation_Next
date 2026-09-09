@@ -30,7 +30,7 @@ APPLICATIONS     = ROOT / "jobsearch" / "applications"
 MASTER_CV        = ROOT / "jobsearch" / "cv" / "master_cv.md"
 SALES_PHILOSOPHY = ROOT / "jobsearch" / "sales_philosophy.md"
 
-_HEADERS = ["#", "Företag", "Roll/Typ", "Plats", "CV-bas", "Status", "Datum",
+_HEADERS = ["#", "Företag", "Roll/Typ", "Plats", "CV-bas", "Fit", "Status", "Datum",
             "Deadline", "Annons", "URL"]
 
 app = Flask(__name__)
@@ -116,7 +116,8 @@ def _write_joblist_raw(preamble, rows):
     for row in rows:
         cells = [
             row.get("#", ""), row.get("Företag", ""), row.get("Roll/Typ", ""),
-            row.get("Plats", "—"), row.get("CV-bas", ""), row.get("Status", ""),
+            row.get("Plats", "—"), row.get("CV-bas", ""), row.get("Fit", ""),
+            row.get("Status", ""),
             row.get("Datum", today), row.get("Deadline", ""),
             row.get("Annons", ""), row.get("URL", ""),
         ]

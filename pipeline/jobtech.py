@@ -33,17 +33,20 @@ import requests
 
 try:                                  # run as a script from pipeline/
     from llm_json import TruncatedResponse, parse_json_array
+    import fitscore
 except ImportError:                   # imported as pipeline.jobtech (tests, CI)
     from pipeline.llm_json import TruncatedResponse, parse_json_array
+    from pipeline import fitscore
 
 SEARCH_API = "https://jobsearch.api.jobtechdev.se/search"
 MODEL = "claude-sonnet-4-6"
 PER_QUERY_LIMIT = 25
 GROUP_PAGE_LIMIT = 100
-# The occupation-group sweep returns roughly ten times what the role queries
-# did, and the cap is applied newest-first after every gate. Kept low enough
-# that judging stays six chunks, not sixty.
-MAX_CANDIDATES = 60
+# A safety valve against a runaway sweep, not a cost control: judging every one
+# of ~180 candidates costs about $0.28. It used to bind at 60 and cut on
+# publication date, which is why an ABB technical sales role lost its place to a
+# warehouse ad posted a day later. Fit ordering replaces that — see fitscore.py.
+MAX_CANDIDATES = 250
 
 # Same reason as the validation call in search.py: one request for 30 candidates
 # truncates its verdict array, and a truncated array meant every candidate passed
@@ -357,9 +360,15 @@ def _judge_chunk(candidates, skill_content, errors=None):
         "filters. A role fits only if it matches an include keyword and breaks no "
         "exclude rule. Prefer precision over recall. Keep each reason under 12 "
         "words.\n\n"
+        f"{fitscore.RUBRIC}\n\n"
+        "Score every role, including ones you judge unfit — `fit` decides what is "
+        "on the list, `score` decides where on it.\n\n"
         f"{items}\n\n"
-        "Return a JSON array with one object per role in the same order:\n"
-        '[{"index": 1, "fit": true, "cv_base": "CV_Einride", "reason": "..."}]'
+        "Return a JSON array with one object per role in the same order. Every "
+        "object must carry axes and score:\n"
+        '[{"index": 1, "fit": true, "cv_base": "CV_Einride", "reason": "...", '
+        '"axes": {"category": 35, "technical": 25, "requirement": 18, '
+        '"evidence": 12}, "score": 90}]'
     )
 
     try:
@@ -406,5 +415,10 @@ def judge_fit(candidates, skill_content, errors=None):
                 continue
             if verdict and verdict.get("cv_base"):
                 candidate["cv_base"] = verdict["cv_base"]
+            # An unjudged candidate scores 0 and sorts last, but is still kept —
+            # a failed chunk must cost position, never presence.
+            candidate["fit"] = fitscore.from_verdict(verdict)
             kept.append(candidate)
+
+    kept.sort(key=lambda c: c.get("fit", 0), reverse=True)
     return kept
