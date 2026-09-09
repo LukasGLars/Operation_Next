@@ -74,6 +74,10 @@
                  font-size: 13px; cursor: pointer; text-decoration: underline; }
     .pick { width: 34px; text-align: center; }
     .pick input { cursor: pointer; }
+    td.fit { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+    td.fit.hi  { color: #15803d; }
+    td.fit.mid { color: #a16207; }
+    td.fit.lo  { color: #9ca3af; font-weight: 400; }
   </style>
 </head>
 <body>
@@ -99,6 +103,7 @@
         <tr>
           <th class="pick"><input type="checkbox" id="pick-all" onclick="toggleAll(this)"></th>
           <th>#</th><th>F&#246;retag</th><th>Roll/Typ</th><th>Plats</th>
+          <th>Fit</th>
           <th>Status</th><th>Datum</th><th>Deadline</th><th>Annons</th><th></th>
         </tr>
       </thead>
@@ -119,6 +124,7 @@
           <td><div class="company">{{ job.get('Företag','') }}</div></td>
           <td class="role">{{ job.get('Roll/Typ','') }}</td>
           <td class="datum">{{ job.get('Plats','') }}</td>
+          <td class="fit {% set f = job.get('Fit','') %}{% if f and f|int >= 80 %}hi{% elif f and f|int >= 60 %}mid{% else %}lo{% endif %}">{{ f or '—' }}</td>
           <td>
             {% set st = job.get('Status','') | lower %}
             {% if 'identifierad' in st %}

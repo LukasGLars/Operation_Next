@@ -209,6 +209,16 @@ def _is_terminal(status) -> bool:
     return any(t in (status or "").casefold() for t in TERMINAL_STATUSES)
 
 
+def _fit_of(job):
+    """0 for a blank or unparseable Fit. Blank means "never scored", which is
+    not the same as "scored badly" — but at the bottom of its status group is
+    the honest place for a row nobody has assessed."""
+    try:
+        return int((job.get("Fit") or "").strip())
+    except ValueError:
+        return 0
+
+
 def _status_rank(status):
     """Furthest-along-in-the-process first; unrecognized statuses sort just
     before Stängd rather than at either extreme. Avslag and Ej kvalificerad are
@@ -543,7 +553,10 @@ def auto_pull():
 @app.route("/")
 def index():
     jobs = parse_joblist()
-    jobs.sort(key=lambda j: _status_rank(j.get("Status", "")))
+    # Status first — an Intervju row stays at the top whatever it scores — then
+    # fit within each status, so the rows worth opening are the ones on screen.
+    # Unscored rows sort to the bottom of their group rather than the top.
+    jobs.sort(key=lambda j: (_status_rank(j.get("Status", "")), -_fit_of(j)))
     return render_template("index.html", jobs=jobs)
 
 
