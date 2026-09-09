@@ -39,7 +39,11 @@ except ImportError:                   # imported as pipeline.jobtech (tests, CI)
 SEARCH_API = "https://jobsearch.api.jobtechdev.se/search"
 MODEL = "claude-sonnet-4-6"
 PER_QUERY_LIMIT = 25
-MAX_CANDIDATES = 30
+GROUP_PAGE_LIMIT = 100
+# The occupation-group sweep returns roughly ten times what the role queries
+# did, and the cap is applied newest-first after every gate. Kept low enough
+# that judging stays six chunks, not sixty.
+MAX_CANDIDATES = 60
 
 # Same reason as the validation call in search.py: one request for 30 candidates
 # truncates its verdict array, and a truncated array meant every candidate passed
@@ -68,6 +72,26 @@ COMMUTABLE_MUNICIPALITY_IDS = {
 # free text matches every term separately: an unquoted "product specialist"
 # returns 271 hits including "HR-specialist" and "Legitimerad Läkare", a quoted
 # one returns 2.
+# Taxonomy occupation groups. Free text only matches the headline string, so
+# "teknisk säljare" finds 10 open roles in the commutable ring while the group
+# Arbetsförmedlingen files those same ads under holds 149. The group is the
+# relevance signal here, which is why _ROLE_INCLUDE is not applied to these.
+OCCUPATION_GROUPS = {
+    "Företagssäljare":                              "oXSW_fbY_XrY",
+    "Ingenjörer och tekniker inom bygg och anläggning": "thZP_oR7_WrY",
+}
+
+# Företagssäljare is also where door-knocking and commission churn live, and
+# that is roughly a third of the group. The role queries never surfaced these
+# because such ads do not put a job title in the headline — they ask a question.
+_SALES_CHURN = re.compile(
+    r"(provision|dörrförsäljning|fältsäljare|eventsäljare|butiksdemonstrat|"
+    r"tävla och tjäna|tjäna bra|utan erfarenhet|inga förkunskaper|"
+    r"vill du utvecklas|är du redo|ta chansen|ta nästa steg i din|"
+    r"dags att göra något nytt|ta plats)",
+    re.I,
+)
+
 ROLE_QUERIES = [
     '"business analyst"',
     '"affärsanalytiker"',
@@ -122,6 +146,12 @@ _PATH_ID_HOSTS = re.compile(
     re.I,
 )
 
+# Teamtailor customers front the ATS on their own domain (jobb.karisma.se),
+# where the host regex above does not reach. The path shape is the reliable
+# tell. Without this the apply form is what gets fetched, and an apply form
+# has no ad text — the dead-ad check reads it as a withdrawn posting.
+_TEAMTAILOR_APPLY = re.compile(r"/jobs/\d+-[^/]+/applications?/new/?$", re.I)
+
 
 def _search(query, remote=False, limit=PER_QUERY_LIMIT):
     params = {"q": query, "limit": limit, "sort": "pubdate-desc"}
@@ -135,6 +165,28 @@ def _search(query, remote=False, limit=PER_QUERY_LIMIT):
     return r.json().get("hits", [])
 
 
+def _search_group(group_id, remote=False, limit=GROUP_PAGE_LIMIT):
+    """Every ad filed under one taxonomy occupation group, paged out. Unlike the
+    role queries this is not a text match, so there is no cap per page worth
+    tuning — the group is finite and the whole of it is wanted."""
+    hits, offset = [], 0
+    while True:
+        params = {"occupation-group": group_id, "limit": limit, "offset": offset,
+                  "sort": "pubdate-desc"}
+        if remote:
+            params["remote"] = "true"
+        else:
+            params["municipality"] = list(COMMUTABLE_MUNICIPALITY_IDS.values())
+        r = requests.get(SEARCH_API, params=params, timeout=25,
+                         headers={"accept": "application/json"})
+        r.raise_for_status()
+        page = r.json()
+        hits.extend(page.get("hits", []))
+        offset += limit
+        if offset >= page.get("total", {}).get("value", 0) or not page.get("hits"):
+            return hits
+
+
 def canonical_url(hit):
     """The employer's apply URL, normalised to the posting page when possible.
     Empty when the ad is applied to through Arbetsförmedlingen — there is no
@@ -142,7 +194,7 @@ def canonical_url(hit):
     url = ((hit.get("application_details") or {}).get("url") or "").strip()
     if not url:
         return ""
-    if _PATH_ID_HOSTS.search(url):
+    if _PATH_ID_HOSTS.search(url) or _TEAMTAILOR_APPLY.search(url.split("?")[0]):
         url = url.split("?")[0]
         url = re.sub(r"/applications?/new/?$", "", url)
     return url
@@ -172,12 +224,19 @@ def is_open(hit, today=None):
     return not due or due >= (today or date.today().isoformat())
 
 
-def is_relevant(hit):
+def is_relevant(hit, from_group=False):
+    """`from_group` is set for hits pulled by occupation group. Those have
+    already been classified into a relevant occupation by Arbetsförmedlingen,
+    so requiring a role word in the headline as well throws away 116 of 126 —
+    "Regionsäljare" and "Account Manager – Project Sales" carry none. The churn
+    filter takes over that job for them."""
     headline   = hit.get("headline") or ""
     employer   = (hit.get("employer") or {}).get("name") or ""
     occupation = (hit.get("occupation") or {}).get("label") or ""
     if _HEADLINE_EXCLUDE.search(headline) or _EMPLOYER_EXCLUDE.search(employer):
         return False
+    if from_group:
+        return not _SALES_CHURN.search(headline)
     return bool(_ROLE_INCLUDE.search(headline) or _ROLE_INCLUDE.search(occupation))
 
 
@@ -222,8 +281,8 @@ def as_candidate(hit):
 
 
 def fetch_candidates(known_urls=(), max_candidates=MAX_CANDIDATES, location_ok=None):
-    """Newest first, capped. Runs each role query over the commutable
-    municipalities and again with the remote filter.
+    """Newest first, capped. Runs each role query and each occupation group
+    over the commutable municipalities, and again with the remote filter.
 
     `location_ok(location, page_text) -> (bool, reason)` is search.py's location
     gate, injected to avoid an import cycle. It runs before the cap: the remote
@@ -235,19 +294,24 @@ def fetch_candidates(known_urls=(), max_candidates=MAX_CANDIDATES, location_ok=N
     found = []
     rejected = 0
     expired = 0
-    for query in ROLE_QUERIES:
+    churn = 0
+    sweeps = [(q, _search, False) for q in ROLE_QUERIES]
+    sweeps += [(cid, _search_group, True) for cid in OCCUPATION_GROUPS.values()]
+
+    for target, fetch, from_group in sweeps:
         for remote in (False, True):
             try:
-                hits = _search(query, remote=remote)
+                hits = fetch(target, remote=remote)
             except Exception as e:
-                logging.error(f"jobtech search failed ({query}, remote={remote}): {e}")
+                logging.error(f"jobtech search failed ({target}, remote={remote}): {e}")
                 continue
             for hit in hits:
                 # Cheapest gate first: an expired ad is not worth judging.
                 if not is_open(hit):
                     expired += 1
                     continue
-                if not is_relevant(hit):
+                if not is_relevant(hit, from_group=from_group):
+                    churn += 1 if from_group else 0
                     continue
                 candidate = as_candidate(hit)
                 if not candidate or candidate["url"] in seen:
@@ -267,6 +331,8 @@ def fetch_candidates(known_urls=(), max_candidates=MAX_CANDIDATES, location_ok=N
 
     if expired:
         print(f"  JobTech: {expired} hit(s) skipped — withdrawn or past deadline")
+    if churn:
+        print(f"  JobTech: {churn} group hit(s) skipped — churn sales or excluded")
     if rejected:
         print(f"  JobTech: {rejected} candidate(s) rejected on location")
     found.sort(key=lambda c: c.get("_posted", ""), reverse=True)
