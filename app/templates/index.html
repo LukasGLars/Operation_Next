@@ -124,7 +124,7 @@
           <td><div class="company">{{ job.get('Företag','') }}</div></td>
           <td class="role">{{ job.get('Roll/Typ','') }}</td>
           <td class="datum">{{ job.get('Plats','') }}</td>
-          <td class="fit {% set f = job.get('Fit','') %}{% if f and f|int >= 80 %}hi{% elif f and f|int >= 60 %}mid{% else %}lo{% endif %}">{{ f or '—' }}</td>
+          <td class="fit {% set f = job.get('Fit','') %}{% if f and f|int >= 80 %}hi{% elif f and f|int >= 60 %}mid{% else %}lo{% endif %}" title="{{ job.get('Fit-forklaring','') }}">{{ f or '—' }}</td>
           <td>
             {% set st = job.get('Status','') | lower %}
             {% if 'identifierad' in st %}

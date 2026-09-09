@@ -66,7 +66,7 @@ _GENERIC_TERMINALS = {
 # ── Markdown table parser / writer ─────────────────────────
 
 HEADERS_WITHOUT_DATUM = ["#", "Företag", "Roll/Typ", "Plats", "CV-bas", "Status", "URL"]
-HEADERS_WITH_DATUM    = ["#", "Företag", "Roll/Typ", "Plats", "CV-bas", "Fit", "Status", "Datum",
+HEADERS_WITH_DATUM    = ["#", "Företag", "Roll/Typ", "Plats", "CV-bas", "Fit", "Fit-delar", "Status", "Datum",
                          "Deadline", "Annons", "URL"]
 
 
@@ -311,6 +311,7 @@ def write_table(rows):
             row.get("Plats", "—"),
             row.get("CV-bas", ""),
             row.get("Fit", ""),
+            row.get("Fit-delar", ""),
             row.get("Status", ""),
             row.get("Datum", TODAY),
             row.get("Deadline", ""),
@@ -415,6 +416,7 @@ def update_joblist():
             # JobTech judge, and a 0 would read as "scored badly" rather than
             # "not scored" and sort them under genuinely poor roles.
             "Fit":      str(job["fit"]) if job.get("fit") is not None else "",
+            "Fit-delar": job.get("fit_axes", ""),
             "Status":   "Identifierad",
             "Datum":    TODAY,
             "Deadline": job.get("deadline", ""),

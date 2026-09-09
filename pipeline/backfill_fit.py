@@ -26,7 +26,10 @@ def main():
     start = next(i for i, l in enumerate(lines) if l.strip().startswith("|"))
     preamble, (rows, _) = lines[:start], updater.parse_table(lines[start:])
 
-    todo = [r for r in rows if not (r.get("Fit") or "").strip()]
+    force = "--force" in sys.argv
+    todo = [r for r in rows
+            if force or not (r.get("Fit") or "").strip()
+            or not (r.get("Fit-delar") or "").strip()]
     if not todo:
         print("Every row already has a score.")
         return 0
@@ -56,6 +59,7 @@ def main():
             if n not in verdicts:
                 continue            # leave it blank; an unscored row is not a 0
             c["_row"]["Fit"] = str(fitscore.from_verdict(verdicts[n]))
+            c["_row"]["Fit-delar"] = fitscore.axes_string(verdicts[n])
             scored += 1
 
     if not scored:

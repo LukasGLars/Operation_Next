@@ -83,3 +83,30 @@ def from_verdict(verdict):
     if isinstance(axes, dict):
         return clamp(sum(clamp(axes.get(name, 0)) for name in AXES))
     return 0
+
+
+# Order matters: the stored string is positional, so reading "35/25/18/12" back
+# depends on AXES keeping this order. Python dicts preserve insertion order.
+AXIS_ORDER = list(AXES)
+
+
+def axes_string(verdict):
+    """The per-axis breakdown as "35/25/18/12", or "" when the model did not
+    supply one. Stored next to the total because a score you cannot take apart
+    is a score you cannot argue with — and the weights are a judgement call that
+    should stay contestable."""
+    if not isinstance(verdict, dict):
+        return ""
+    axes = verdict.get("axes")
+    if not isinstance(axes, dict):
+        return ""
+    return "/".join(str(clamp(axes.get(name, 0))) for name in AXIS_ORDER)
+
+
+def explain(axes_str):
+    """Turn a stored "35/25/18/12" back into "category 35, technical 25, ..."
+    for a tooltip. Returns "" on anything malformed rather than guessing."""
+    parts = (axes_str or "").split("/")
+    if len(parts) != len(AXIS_ORDER):
+        return ""
+    return ", ".join(f"{name} {value}" for name, value in zip(AXIS_ORDER, parts))

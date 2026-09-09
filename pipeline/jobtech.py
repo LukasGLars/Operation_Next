@@ -418,6 +418,7 @@ def judge_fit(candidates, skill_content, errors=None):
             # An unjudged candidate scores 0 and sorts last, but is still kept —
             # a failed chunk must cost position, never presence.
             candidate["fit"] = fitscore.from_verdict(verdict)
+            candidate["fit_axes"] = fitscore.axes_string(verdict)
             kept.append(candidate)
 
     kept.sort(key=lambda c: c.get("fit", 0), reverse=True)
