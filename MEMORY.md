@@ -530,6 +530,54 @@ require all four `Intervju` rows in the top quartile. A rubric over-fitted to
 technical sales pushes Wioniq (affärsutvecklare) out, which is the point — the
 test catches it before it touches a live run.
 
+## Fit score (2026-09-09, v0.7.0)
+
+Replaces publication date as what the candidate cap sorts on. `pipeline/fitscore.py`
+holds the rubric; the score is produced by the judge call that already reads every
+ad, so the added cost is output tokens only.
+
+Axes: category 35 / technical content 25 / requirement gap 25 / evidence 15.
+
+### The things that actually matter
+- **Anchors are the whole trick.** Asked for a bare 0-100 an LLM clusters
+  everything at 70-85 and the ranking is noise. `fitscore.ANCHORS` names five real
+  rows from this joblist with their scores; live spread is 34-91.
+- **The score orders, it never filters.** `judge_fit` still decides in/out. An
+  unjudged candidate scores 0 and sorts last rather than vanishing — same
+  reasoning as the relevance gate's false-positive lesson.
+- **Unscored is blank, not 0.** Web-search candidates never reach the JobTech
+  judge; a 0 would read as "scored badly" instead of "not scored".
+- **`MAX_CANDIDATES` 60 → 250.** It was never a cost control: judging ~180
+  candidates costs about $0.28. Measure before capping.
+
+### Validation — `python pipeline/validate_fit.py`
+Scores the live rows and requires all four `Intervju` rows in the top quartile.
+Currently 4/4 at ranks 2, 3, 7, 10 of 45. **Re-run it after any change to the
+rubric or the weights.**
+
+### Gotcha: the first version of this check was a false PASS
+Every judge call had failed on a missing API key, every score was 0, and with all
+scores equal Python's stable sort preserved joblist order — where the interview
+rows happen to sit early. It printed `4/4 ... RESULT: PASS` having measured
+nothing. The script now aborts when fewer than 90% of rows come back scored.
+**A validation that can pass without measuring anything is worse than none.**
+
+Second gotcha, same session: two `str.replace` edits to the judge prompt silently
+did not match and were not asserted, so the rubric was never in the prompt and
+the model kept returning the old verdict shape. Assert every programmatic edit.
+
+### Known weakness
+The requirement axis rewards ads that state no requirements, so commission-churn
+ads collect most of those 25 points — Exaltera scores 28 where its anchor says 5.
+Category and technical dominate enough to sort correctly, but the bottom of the
+range is compressed. Fix by making requirement a penalty from full marks only
+when a gate is present, if it ever matters.
+
+### Also worth knowing
+`fetch_candidates(known_urls=...)` already skips URLs in the joblist, so scored
+rows are never re-judged. A persisted score cache was considered and dropped —
+it needs a committed file plus a workflow change to save pennies.
+
 ## Pending / known issues
 - ~~Duplicate row: the Experis/Alingsås Energi posting under two aplitrak
   tracking ids~~ — deleted 2026-08-31 via the app; the `Ansökt` row was kept and
