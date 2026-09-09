@@ -79,15 +79,28 @@ def _hard_matches(text, pattern):
     return [s for s in _sentences(text) if pattern.search(s) and not _SOFT_WISH.search(s)]
 
 
-def is_dead_ad(page_text):
-    """Return (dead, reason). A page too short to be an ad counts as dead —
-    a pulled posting often redirects to a stub or a cookie notice."""
+def is_dead_ad(page_text, deadline_ahead=False):
+    """Return (dead, reason). A pulled posting often redirects to a stub or a
+    cookie notice, so a page too short to be an ad is usually dead.
+
+    Usually, not always: a JS-rendered careers page returns the same near-empty
+    body while the ad is perfectly live. FlexIQ's returns 241 characters, and
+    that closed a live row. `deadline_ahead` is the caller saying something else
+    still claims the ad is open — absence of readable text is then not evidence
+    of expiry, the same principle `is_open()` applies to a missing deadline.
+    The row is not left to linger either way: `close_expired` closes it on the
+    deadline, so the worst case is a dead ad sitting until a date it has.
+
+    Positive evidence is checked first, so a stub that *says* it is filled is
+    reported as withdrawn rather than as unreadable."""
     text = (page_text or "").strip()
-    if len(text) < 300:
-        return True, f"page too short to be an ad ({len(text)} chars)"
     match = _DEAD_AD.search(text)
     if match:
         return True, f"ad withdrawn ({match.group(0).strip()})"
+    if len(text) < 300:
+        if deadline_ahead:
+            return False, ""
+        return True, f"page too short to be an ad ({len(text)} chars)"
     return False, ""
 
 

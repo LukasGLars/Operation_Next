@@ -49,3 +49,37 @@ def test_fetch_failure_is_not_evidence_of_death():
     rows = [row("1", "Identifierad", "a")]
     assert recheck_dead_ads(rows, boom) == 0
     assert rows[0]["Status"] == "Identifierad"
+
+
+STUB = "Cookies"          # what a JS-rendered careers page returns
+
+
+def test_unreadable_page_with_a_future_deadline_is_left_alone():
+    """The row is not left to linger: close_expired closes it on the deadline."""
+    r = row("1", "Identifierad", "a")
+    r["Deadline"] = "2026-09-30"
+    rows = [r]
+    assert recheck_dead_ads(rows, fetch_map({"a": STUB}), today="2026-09-09") == 0
+    assert rows[0]["Status"] == "Identifierad"
+
+
+def test_unreadable_page_with_a_passed_deadline_is_closed():
+    r = row("1", "Identifierad", "a")
+    r["Deadline"] = "2026-08-01"
+    rows = [r]
+    assert recheck_dead_ads(rows, fetch_map({"a": STUB}), today="2026-09-09") == 1
+    assert rows[0]["Status"] == "Stängd"
+
+
+def test_unreadable_page_with_no_deadline_is_closed():
+    rows = [row("1", "Identifierad", "a")]
+    assert recheck_dead_ads(rows, fetch_map({"a": STUB}), today="2026-09-09") == 1
+    assert rows[0]["Status"] == "Stängd"
+
+
+def test_a_withdrawn_ad_closes_even_with_a_future_deadline():
+    r = row("1", "Identifierad", "a")
+    r["Deadline"] = "2026-09-30"
+    rows = [r]
+    assert recheck_dead_ads(rows, fetch_map({"a": DEAD}), today="2026-09-09") == 1
+    assert rows[0]["Status"] == "Stängd"

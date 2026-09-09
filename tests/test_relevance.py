@@ -39,6 +39,25 @@ def test_short_page_counts_as_dead():
     assert dead and "too short" in reason
 
 
+def test_unreadable_page_is_not_dead_while_a_deadline_says_otherwise():
+    """A JS-rendered careers page returns the same near-empty body as a pulled
+    one — FlexIQ's is 241 chars — and closing on that killed a live row."""
+    dead, reason = is_dead_ad("Cookies", deadline_ahead=True)
+    assert not dead and reason == ""
+
+
+def test_unreadable_page_is_still_dead_with_nothing_claiming_it_is_live():
+    dead, reason = is_dead_ad("Cookies", deadline_ahead=False)
+    assert dead and "too short" in reason
+
+
+def test_a_withdrawn_stub_reports_withdrawal_not_shortness():
+    """Positive evidence outranks absence of it, and a deadline cannot rescue
+    a page that says outright that the job is filled."""
+    dead, reason = is_dead_ad("Jobbet tillsatt", deadline_ahead=True)
+    assert dead and "withdrawn" in reason
+
+
 def test_live_ad_is_not_dead():
     dead, _ = is_dead_ad(PAD + "Vi ser fram emot din ansökan!")
     assert not dead

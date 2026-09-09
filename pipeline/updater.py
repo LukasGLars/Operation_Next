@@ -282,8 +282,10 @@ def recheck_dead_ads(rows, fetch, today=None):
         url = row.get("URL", "").strip()
         if not url:
             continue
+        due = (row.get("Deadline") or "").strip()
         try:
-            dead, reason = relevance.is_dead_ad(fetch(url))
+            dead, reason = relevance.is_dead_ad(fetch(url),
+                                                deadline_ahead=bool(due) and due >= today)
         except Exception as e:                       # a fetch failure is not evidence
             logging.error(f"recheck_dead_ads fetch failed for {url}: {e}")
             continue
