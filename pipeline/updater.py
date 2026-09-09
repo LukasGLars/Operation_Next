@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import sys
 import logging
 from datetime import datetime, date, timedelta
 from pathlib import Path
@@ -10,6 +11,16 @@ try:                                  # run as a script from pipeline/
     import relevance
 except ImportError:                   # imported as pipeline.updater (tests, CI)
     from pipeline import relevance
+
+# Windows consoles default to cp1252, where printing "→" raises
+# UnicodeEncodeError and kills the run — in update_joblist that lands after every
+# row is built but before the table is written, so the whole pass is lost. The
+# scheduled run is ubuntu-latest and unaffected; a hand-run on Windows is not.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):             # already utf-8, or redirected
+        pass
 
 ROOT          = Path(__file__).parent.parent
 JOBLIST_PATH  = ROOT / "jobsearch" / "joblist.md"
@@ -271,8 +282,10 @@ def recheck_dead_ads(rows, fetch, today=None):
         url = row.get("URL", "").strip()
         if not url:
             continue
+        due = (row.get("Deadline") or "").strip()
         try:
-            dead, reason = relevance.is_dead_ad(fetch(url))
+            dead, reason = relevance.is_dead_ad(fetch(url),
+                                                deadline_ahead=bool(due) and due >= today)
         except Exception as e:                       # a fetch failure is not evidence
             logging.error(f"recheck_dead_ads fetch failed for {url}: {e}")
             continue

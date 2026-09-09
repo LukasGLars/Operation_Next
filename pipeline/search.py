@@ -3,6 +3,7 @@ import requests
 import json
 import os
 import re
+import sys
 import logging
 import time
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeout
@@ -16,6 +17,14 @@ try:                                  # run as a script from pipeline/
 except ImportError:                   # imported as pipeline.search (tests, CI)
     from pipeline import jobtech, relevance
     from pipeline.llm_json import TruncatedResponse, parse_json_array
+
+# Same reason as updater.py: a cp1252 console turns a print into a crash, and
+# this module prints company names and arrows throughout a long, expensive run.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
 
 ROOT               = Path(__file__).parent.parent
 JOBLIST_PATH       = ROOT / "jobsearch" / "joblist.md"
