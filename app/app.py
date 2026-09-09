@@ -361,7 +361,8 @@ def fetch_job_posting(url: str) -> str:
         return f"Could not fetch job posting: {e}"
 
 
-def _build_doc_content(cv_base: str, job_url: str, job_posting_text: str) -> list:
+def _build_doc_content(cv_base: str, job_url: str, job_posting_text: str,
+                       examples: str = "") -> list:
     skill_content      = SKILL_PATH.read_text(encoding="utf-8") if SKILL_PATH.exists() else ""
     master_cv_text     = MASTER_CV.read_text(encoding="utf-8") if MASTER_CV.exists() else ""
     sales_phil_text    = SALES_PHILOSOPHY.read_text(encoding="utf-8") if SALES_PHILOSOPHY.exists() else ""
@@ -377,13 +378,17 @@ def _build_doc_content(cv_base: str, job_url: str, job_posting_text: str) -> lis
         "\n\nCover letter tone reference (match this tone and length):\n" + cover_letter_text
     )
     dynamic_text = (
-        # Sits in the dynamic half deliberately: cv_base varies per job, so
-        # putting it in the cached static block would invalidate the cache on
-        # every call. Until now it was accepted as a parameter and dropped —
-        # Claude got the whole Framing Angle table and had to infer which row
-        # applied from the posting alone.
-        "\n\nFraming angle for this role: " + (cv_base or "CV") +
-        ". Apply the matching row of the Framing Angle table above.\n" +
+        # Both sit in the dynamic half deliberately: they vary per job, so
+        # caching them would invalidate the CV and skill blocks on every call.
+        #
+        # The framing angle is a fallback, not a default. Where a real edited
+        # application exists for this kind of role it is better evidence than a
+        # one-line generic prior — for technical sales there are four of them,
+        # against seven words in the table. The prior only earns its place when
+        # nothing matched, which is the case for construction and kalkyl work.
+        (examples + "\n\n" if examples else
+           "\n\nFraming angle for this role: " + (cv_base or "CV") +
+           ". Apply the matching row of the Framing Angle table above.\n") +
         "\nJob posting URL: " + job_url +
         "\nJob posting content:\n" + job_posting_text +
         '\n\nGenerate a full tailored CV and cover letter for this role, in the SAME LANGUAGE\n'
@@ -398,11 +403,33 @@ def _build_doc_content(cv_base: str, job_url: str, job_posting_text: str) -> lis
     ]
 
 
+def _outcome_by_folder() -> dict:
+    """Folder name -> the status that application reached, from the joblist.
+
+    Reaching an interview is evidence the application worked, so it is worth
+    preferring — but only as a tiebreak. An interview reflects the whole package
+    (role fit, market, the agency), not just the document, and a well-performing
+    example of the wrong shape teaches worse than a rejected one of the right
+    shape. Similarity stays the primary key; see _match_similar_role."""
+    outcomes = {}
+    try:
+        for row in parse_joblist():
+            company, role = row.get("Företag", ""), row.get("Roll/Typ", "")
+            if company and role:
+                outcomes[_app_folder(company, role).name] = row.get("Status", "").strip()
+    except Exception as e:                       # never block generation on this
+        logging.error(f"Outcome lookup failed: {e}")
+    return outcomes
+
+
 def _match_similar_role(client, role: str, company: str, candidates: list[str]) -> int | None:
     """One Claude call: which past role (by list position) is closest to the
     new one in function, seniority and register. Split out from
     _matched_edited_examples so tests can stub the judgement without an API
-    call, same pattern as _validate_chunk / _judge_chunk in pipeline/."""
+    call, same pattern as _validate_chunk / _judge_chunk in pipeline/.
+
+    Candidate titles may carry an outcome marker; the instruction below keeps it
+    subordinate to similarity on purpose."""
     listing = "\n".join(f"{i}. {title}" for i, title in enumerate(candidates, 1))
     prompt = (
         f"New role: {role} at {company}\n\n"
@@ -410,6 +437,9 @@ def _match_similar_role(client, role: str, company: str, candidates: list[str]) 
         "Which past role is closest to the new role in function, seniority and register? "
         "Roles in different fields (e.g. technical field sales vs. digital business "
         "development) are NOT close even if both are commercial. "
+        "Some entries are marked [reached interview]. Prefer such an entry ONLY when "
+        "it is as close a match as the alternative — a closer match without the marker "
+        "beats a more distant one with it. "
         "Reply with only the number, or NONE if nothing is a reasonable match."
     )
     response = client.messages.create(
@@ -461,6 +491,7 @@ def _matched_edited_examples(client, company: str, role: str) -> str:
     if not role:
         return ""
     current_folder = _app_folder(company, role) if company else None
+    outcomes = _outcome_by_folder()
     candidates = []
     for folder in sorted(p for p in APPLICATIONS.glob("*") if p.is_dir()):
         if folder == current_folder:
@@ -473,6 +504,8 @@ def _matched_edited_examples(client, company: str, role: str) -> str:
             title = f"{meta.get('role', '')} at {meta.get('company', '')}".strip()
         else:
             title = folder.name.replace("_", " ")
+        if "intervju" in outcomes.get(folder.name, "").casefold():
+            title = f"{title} [reached interview]"
         candidates.append((folder, title))
     if not candidates:
         return ""
@@ -605,11 +638,22 @@ def generate():
     try:
         job_posting_text = fetch_job_posting(job_url)
 
+        # Matched once, used twice. The draft is written from the example rather
+        # than written generically and then corrected toward it, which is what
+        # happened while this only ran before the review pass. Matching failures
+        # return "" and the draft falls back to the framing angle.
+        try:
+            recent_examples = _matched_edited_examples(client, company, role)
+        except Exception as e:
+            logging.error(f"Example matching failed, drafting from the framing angle: {e}")
+            recent_examples = ""
+
         response = client.messages.create(
             model="claude-sonnet-4-6",
             max_tokens=4096,
             system="You are Lukas Larsson's job application assistant. Generate a tailored CV and cover letter using the provided reference documents and instructions. Output only valid JSON.",
-            messages=[{"role": "user", "content": _build_doc_content(cv_base, job_url, job_posting_text)}],
+            messages=[{"role": "user", "content": _build_doc_content(
+                cv_base, job_url, job_posting_text, recent_examples)}],
         )
         result = _parse_claude_json(response.content[0].text)
 
@@ -619,7 +663,6 @@ def generate():
         # any failure rather than breaking generation entirely.
         if result.get("cv") and result.get("cover_letter"):
             try:
-                recent_examples = _matched_edited_examples(client, company, role)
                 review_response = client.messages.create(
                     model="claude-sonnet-4-6",
                     max_tokens=4096,
