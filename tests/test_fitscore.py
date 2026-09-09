@@ -91,3 +91,52 @@ def test_the_breakdown_survives_a_table_round_trip():
     rows, _ = updater.parse_table(updater.write_table([row]).splitlines())
     assert rows[0]["Fit-delar"] == "35/25/18/12"
     assert rows[0]["URL"] == "https://a"
+
+
+# ── Evidence-first drafting ────────────────────────────────
+
+def test_a_matched_example_replaces_the_framing_angle():
+    """Four real technical sales applications beat seven generic words, so the
+    framing prior is a fallback and not a default."""
+    from app.app import _build_doc_content
+    with_example = _build_doc_content("CV_Zeppelin", "u", "ad", examples="REAL EXAMPLE")[1]["text"]
+    assert "REAL EXAMPLE" in with_example
+    assert "Framing angle" not in with_example
+
+
+def test_the_framing_angle_is_used_when_nothing_matched():
+    """Construction and kalkyl have one example between them; the prior is all
+    the draft has there."""
+    from app.app import _build_doc_content
+    text = _build_doc_content("CV_BYGG", "u", "ad")[1]["text"]
+    assert "Framing angle for this role: CV_BYGG" in text
+
+
+def test_examples_stay_out_of_the_cached_block():
+    """They vary per job — caching them would invalidate the CV, skill and tone
+    reference on every single generation."""
+    from app.app import _build_doc_content
+    blocks = _build_doc_content("CV_Zeppelin", "u", "ad", examples="REAL EXAMPLE")
+    assert "cache_control" in blocks[0]
+    assert "REAL EXAMPLE" not in blocks[0]["text"]
+    assert "cache_control" not in blocks[1]
+
+
+def test_interview_outcomes_mark_their_folder(monkeypatch):
+    import app.app as appmod
+    monkeypatch.setattr(appmod, "parse_joblist", lambda: [
+        {"Företag": "Oddwork Sweden AB", "Roll/Typ": "Teknisk säljare", "Status": "Intervju"},
+        {"Företag": "Thomas Betong AB", "Roll/Typ": "Teknisk säljare", "Status": "Ansökt"},
+    ])
+    outcomes = appmod._outcome_by_folder()
+    assert "Intervju" in outcomes[appmod._app_folder("Oddwork Sweden AB", "Teknisk säljare").name]
+    assert "Ansökt" in outcomes[appmod._app_folder("Thomas Betong AB", "Teknisk säljare").name]
+
+
+def test_a_broken_joblist_does_not_block_generation(monkeypatch):
+    """Outcome is a tiebreak. Losing it must never cost a draft."""
+    import app.app as appmod
+    def boom():
+        raise OSError("joblist unreadable")
+    monkeypatch.setattr(appmod, "parse_joblist", boom)
+    assert appmod._outcome_by_folder() == {}
