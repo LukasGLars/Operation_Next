@@ -104,6 +104,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Fit | Fit-delar | Status | Datum | Deadline | Annons | URL |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | 82 | 32/20/18/12 | Intervju | 2026-08-07 |  |  | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -140,7 +141,7 @@
 | 32 | OIO Väst AB | Account Manager inom HR-tech till snabbväxande SaaS-bolag | Göteborg | CV_Einride | 56 | 22/8/18/8 | Identifierad | 2026-09-09 | 2026-10-31 | https://arbetsformedlingen.se/platsbanken/annonser/31448247 | https://pnty-apply.ponty-system.se/oio?id=1216&pnty_src=platsbanken |
 | 33 | WRKFRC Bemanning & Rekrytering AB | Senior B2B-säljare – SaaS | Mölndal | CV_Einride | 52 | 22/10/12/8 | Identifierad | 2026-09-09 | 2026-12-15 | https://arbetsformedlingen.se/platsbanken/annonser/31192247 | https://careers.wrkfrc.se/jobs/7934506-senior-b2b-saljare-saas/applications/new?promotion=2059040-arbetsformedlingen |
 | 34 | Bravura Sverige AB | Key Account Manager to Cellectricon | Göteborg | CV_Zeppelin | 50 | 20/16/8/6 | Identifierad | 2026-09-09 | 2027-02-21 | https://arbetsformedlingen.se/platsbanken/annonser/31393077 | https://ledigajobb.bravura.se/en/jobs/8223108-key-account-manager-to-cellectricon/applications/new?promotion=2160615-arbetsformedlingen |
-| 35 | Bravura Sverige AB | Teknisk säljare till Heidelberg Materials | Göteborg | CV_Zeppelin | 84 | 32/20/19/13 | Genererat | 2026-09-10 | 2027-03-07 | https://arbetsformedlingen.se/platsbanken/annonser/31449631 | https://ledigajobb.bravura.se/jobs/8315377-teknisk-saljare-till-heidelberg-materials/applications/new?promotion=2184233-arbetsformedlingen |
+| 35 | Bravura Sverige AB | Teknisk säljare till Heidelberg Materials | Göteborg | CV_Zeppelin | 84 | 32/20/19/13 | Ansökt | 2026-09-10 | 2027-03-07 | https://arbetsformedlingen.se/platsbanken/annonser/31449631 | https://ledigajobb.bravura.se/jobs/8315377-teknisk-saljare-till-heidelberg-materials/applications/new?promotion=2184233-arbetsformedlingen |
 | 36 | Bustos Konsulttjänster AB | Kalkylator bygg | Göteborg | CV_BYGG | 52 | 12/14/16/10 | Identifierad | 2026-09-09 | 2026-09-11 | https://arbetsformedlingen.se/platsbanken/annonser/31361276 | https://bustoskonsulttjanster-1746019372.teamtailor.com/jobs/8230157-kalkylator-bygg |
 | 37 | NCC Aktiebolag | Anbudsingenjör Betong | Göteborg | CV_BYGG | 52 | 12/15/15/10 | Identifierad | 2026-09-09 | 2026-09-20 | https://arbetsformedlingen.se/platsbanken/annonser/31390378 | https://www.ncc.se/dispatcher/jobposts/1a79691d-6464-49b3-9248-132a5a1809ac |
 | 38 | Sibe Construction AB | Projektledare inom VA/Industri med placering i Göteborg! | Göteborg | CV_BYGG | 54 | 14/13/16/11 | Identifierad | 2026-09-09 | 2026-09-21 | https://arbetsformedlingen.se/platsbanken/annonser/31449726 | https://apply.recman.page/job_post.php?id=482030&apply_only&sub_id=955&path=ams |
