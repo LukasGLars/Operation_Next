@@ -24,7 +24,7 @@ from bs4 import BeautifulSoup
 from docx import Document
 from dotenv import load_dotenv
 
-from pipeline import fitscore
+from pipeline import adrequirements, fitscore
 from flask import Flask, jsonify, render_template, request
 
 load_dotenv(Path(__file__).parent.parent / ".env")
@@ -147,7 +147,7 @@ def _update_job_row(url: str, updates: dict):
     _push_joblist()
 
 
-def _append_rejected(company: str, role: str, url: str):
+def _append_rejected(company: str, role: str, url: str, reason: str = ""):
     is_new = not REJECTED_PATH.exists()
     with open(REJECTED_PATH, "a", encoding="utf-8") as f:
         if is_new:
@@ -155,14 +155,17 @@ def _append_rejected(company: str, role: str, url: str):
             f.write("Rows removed via the app's delete button (or manually, during cleanup). "
                      "The pipeline checks this list by URL and will not re-add a posting that's "
                      "here, even if it resurfaces in a later search/JobTech pass.\n\n")
-            f.write("| Företag | Roll/Typ | Datum | URL |\n")
-            f.write("|---|---|---|---|\n")
-        cells = [company, role, date.today().isoformat(), url]
+            f.write("| Företag | Roll/Typ | Datum | URL | Anledning |\n")
+            f.write("|---|---|---|---|---|\n")
+        # Anledning goes LAST on purpose: updater._rejected_rows reads the URL at
+        # index 3, so appending a column keeps every four-column row already on
+        # file parseable and needs no migration.
+        cells = [company, role, date.today().isoformat(), url, reason or ""]
         cells = [str(c).replace("|", "/") for c in cells]
         f.write("| " + " | ".join(cells) + " |\n")
 
 
-def _delete_job_rows(urls: list):
+def _delete_job_rows(urls: list, reason: str = ""):
     """Delete one or more rows in a single rewrite. Marking several rows and
     clearing them in one click is one joblist write and one push, not one per
     row -- each push is a commit, and a row-at-a-time loop raced the app's own
@@ -178,7 +181,7 @@ def _delete_job_rows(urls: list):
     _write_joblist_raw(preamble, rows)
     for row in deleted:
         _append_rejected(row.get("Företag", ""), row.get("Roll/Typ", ""),
-                         row.get("URL", "").strip())
+                         row.get("URL", "").strip(), reason)
     _push_joblist()
     return len(deleted)
 
@@ -198,8 +201,14 @@ def _push_joblist():
 
 def parse_joblist():
     _, rows = _parse_joblist_raw()
+    reqs = adrequirements.load()
     for row in rows:
         row["Fit-forklaring"] = fitscore.explain(row.get("Fit-delar", ""))
+        # Keyed on canonical_url so a promotion tag added to a later sighting of
+        # the same ad still finds its bullets.
+        bullets = reqs.get(canonical_url(row.get("URL", "")), [])
+        row["Krav"] = bullets
+        row["Krav-text"] = "\n".join("• " + b for b in bullets)
     return rows
 
 
@@ -749,10 +758,11 @@ def delete_job():
     data = request.get_json()
     urls = data.get("urls") or ([data["url"]] if data.get("url") else [])
     urls = [u.strip() for u in urls if u and u.strip()]
+    reason = " ".join((data.get("reason") or "").split())[:200]
     if not urls:
         return jsonify({"error": "url required"}), 400
     try:
-        deleted = _delete_job_rows(urls)
+        deleted = _delete_job_rows(urls, reason)
         return jsonify({"ok": True, "deleted": deleted})
     except Exception as e:
         logging.error(f"Delete failed: {e}")

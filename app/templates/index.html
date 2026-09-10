@@ -74,6 +74,7 @@
                  font-size: 13px; cursor: pointer; text-decoration: underline; }
     .pick { width: 34px; text-align: center; }
     .pick input { cursor: pointer; }
+    td.role.has-krav { border-bottom: 1px dotted #9ca3af; cursor: help; }
     td.fit { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
     td.fit.hi  { color: #15803d; }
     td.fit.mid { color: #a16207; }
@@ -122,7 +123,8 @@
           </td>
           <td class="datum">{{ job.get('#','') }}</td>
           <td><div class="company">{{ job.get('Företag','') }}</div></td>
-          <td class="role">{{ job.get('Roll/Typ','') }}</td>
+          <td class="role{% if job.get('Krav') %} has-krav{% endif %}"
+              title="{{ job.get('Krav-text','') }}">{{ job.get('Roll/Typ','') }}</td>
           <td class="datum">{{ job.get('Plats','') }}</td>
           <td class="fit {% set f = job.get('Fit','') %}{% if f and f|int >= 80 %}hi{% elif f and f|int >= 60 %}mid{% else %}lo{% endif %}" title="{{ job.get('Fit-forklaring','') }}">{{ f or '—' }}</td>
           <td>
@@ -263,14 +265,14 @@
     var boxes = pickedBoxes();
     if (!boxes.length) return;
     var urls = boxes.map(function(b) { return b.value; });
-    if (!confirm("Ta bort " + urls.length +
-                 (urls.length === 1 ? " jobb" : " jobb") + " från listan?")) return;
+    var reason = prompt("Ta bort " + urls.length + " jobb — varför? (valfritt)", "");
+    if (reason === null) return;
     var btn = document.getElementById("btn-bulk");
     btn.disabled = true;
     fetch("/delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ urls: urls }),
+      body: JSON.stringify({ urls: urls, reason: reason }),
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {
@@ -316,12 +318,16 @@
     if (btn.disabled) return;  // already deleting this row -- ignore a second click
     var company = btn.dataset.company;
     var url     = btn.dataset.url;
-    if (!confirm("Ta bort " + company + " från listan?")) return;
+    // prompt, not confirm: the reason is what makes the rejection generalise to
+    // roles like this one instead of just blocking this URL. Cancel aborts;
+    // an empty reason still deletes, so it never blocks getting rid of a row.
+    var reason = prompt("Ta bort " + company + " — varför? (valfritt)", "");
+    if (reason === null) return;
     btn.disabled = true;
     fetch("/delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url: url }),
+      body: JSON.stringify({ url: url, reason: reason }),
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {

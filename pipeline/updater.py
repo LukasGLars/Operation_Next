@@ -9,8 +9,9 @@ from urllib.parse import urlparse
 
 try:                                  # run as a script from pipeline/
     import relevance
+    import adrequirements
 except ImportError:                   # imported as pipeline.updater (tests, CI)
-    from pipeline import relevance
+    from pipeline import relevance, adrequirements
 
 # Windows consoles default to cp1252, where printing "→" raises
 # UnicodeEncodeError and kills the run — in update_joblist that lands after every
@@ -194,6 +195,27 @@ def load_rejected_role_keys() -> set:
     adid. Blocks a genuine re-advert of the same title by the same company,
     which is the same trade-off known_role_keys already makes for live rows."""
     return {_role_key(company, role) for company, role, _ in _rejected_rows()}
+
+
+def load_rejection_reasons(limit=25) -> list:
+    """(role, reason) for rejections that carry a stated reason, newest last.
+
+    The URL and company+role checks above hold out the *same* posting. A reason
+    generalises: "not interested in ljud/bild/nätverk" should also keep the next
+    proAV role off the list, and no static exclude rule in search_skill.md was
+    ever going to be written for it.
+
+    Capped because these are appended to every judge prompt. Newest kept, since
+    the most recent rejections describe what the candidate is turning down now."""
+    out = []
+    for line in REJECTED_PATH.read_text(encoding="utf-8").splitlines() if REJECTED_PATH.exists() else []:
+        stripped = line.strip()
+        if not stripped.startswith("|") or stripped.startswith("|---") or stripped.startswith("| Företag"):
+            continue
+        cells = [c.strip() for c in stripped.strip("|").split("|")]
+        if len(cells) >= 5 and cells[4]:
+            out.append((cells[1], cells[4]))
+    return out[-limit:]
 
 
 def _role_key(company, role):
@@ -384,6 +406,7 @@ def update_joblist():
 
     known_urls = {canonical_url(row["URL"]) for row in rows}
     known_roles = known_role_keys(rows)
+    new_requirements = {}
     rejected_urls = load_rejected_urls()
     rejected_roles = load_rejected_role_keys()
     for job in new_jobs:
@@ -424,6 +447,10 @@ def update_joblist():
             "URL":      url,
         }
         rows.append(new_row)
+        # Keyed on the canonical URL, the same key the joblist and rejected.md
+        # match on, so a promotion tag on a later sighting cannot orphan it.
+        if job.get("requirements"):
+            new_requirements[canon] = job["requirements"]
         known_urls.add(canon)
         known_roles.add(role_key)
         print(f"  ADDED: {new_row['Företag']} — {new_row['Roll/Typ']}")
@@ -471,6 +498,16 @@ def update_joblist():
     except OSError as e:
         logging.error(f"Failed to write joblist.md: {e}")
         raise
+
+    # After the joblist is safely on disk. The sidecar is a convenience — losing
+    # it costs a tooltip, so it must never be the reason a good run fails.
+    try:
+        saved = adrequirements.save(new_requirements)
+        dropped = adrequirements.prune(canonical_url(r["URL"]) for r in rows)
+        if saved or dropped:
+            print(f"  requirements.json — {saved} added, {dropped} pruned")
+    except Exception as e:
+        logging.error(f"requirements store update failed: {e}")
 
     print(f"[{datetime.now().isoformat()}] updater.py done")
 
