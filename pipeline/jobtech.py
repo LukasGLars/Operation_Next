@@ -347,6 +347,37 @@ def fetch_candidates(known_urls=(), max_candidates=MAX_CANDIDATES, location_ok=N
     return found
 
 
+def _rejection_block() -> str:
+    """The candidate's own rejections, as extra exclude rules.
+
+    search_skill.md's exclude list is static and was never going to contain
+    "not interested in ljud, bild och nätverk" — that came out of reading one
+    proAV ad. The rubric scores whether a role is winnable, not whether it is
+    wanted, which is why that role scored 88. This is the only channel through
+    which preference reaches the judge.
+
+    Read failures return "" so a damaged rejected.md costs the extra rules, not
+    the run."""
+    try:
+        try:
+            from updater import load_rejection_reasons
+        except ImportError:
+            from pipeline.updater import load_rejection_reasons
+        reasons = load_rejection_reasons()
+    except Exception as e:
+        logging.error(f"could not load rejection reasons: {e}")
+        return ""
+    if not reasons:
+        return ""
+    lines = "\n".join(f"- {role}: {reason}" for role, reason in reasons)
+    return (
+        "The candidate has rejected these roles, with their stated reason. "
+        "Treat each reason as an additional exclude rule and apply it to roles "
+        "of the same kind, not only to the exact posting. Mark such a role "
+        "unfit.\n" + lines + "\n\n"
+    )
+
+
 def _judge_chunk(candidates, skill_content, errors=None):
     """One judging call over a chunk. Returns {1-based index: verdict}, empty on
     failure so the caller passes the chunk through rather than dropping it."""
@@ -361,6 +392,7 @@ def _judge_chunk(candidates, skill_content, errors=None):
         "filters. A role fits only if it matches an include keyword and breaks no "
         "exclude rule. Prefer precision over recall. Keep each reason under 12 "
         "words.\n\n"
+        f"{_rejection_block()}"
         f"{fitscore.RUBRIC}\n\n"
         "Score every role, including ones you judge unfit — `fit` decides what is "
         "on the list, `score` decides where on it.\n\n"

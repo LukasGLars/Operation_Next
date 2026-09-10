@@ -265,14 +265,14 @@
     var boxes = pickedBoxes();
     if (!boxes.length) return;
     var urls = boxes.map(function(b) { return b.value; });
-    if (!confirm("Ta bort " + urls.length +
-                 (urls.length === 1 ? " jobb" : " jobb") + " från listan?")) return;
+    var reason = prompt("Ta bort " + urls.length + " jobb — varför? (valfritt)", "");
+    if (reason === null) return;
     var btn = document.getElementById("btn-bulk");
     btn.disabled = true;
     fetch("/delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ urls: urls }),
+      body: JSON.stringify({ urls: urls, reason: reason }),
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {
@@ -318,12 +318,16 @@
     if (btn.disabled) return;  // already deleting this row -- ignore a second click
     var company = btn.dataset.company;
     var url     = btn.dataset.url;
-    if (!confirm("Ta bort " + company + " från listan?")) return;
+    // prompt, not confirm: the reason is what makes the rejection generalise to
+    // roles like this one instead of just blocking this URL. Cancel aborts;
+    // an empty reason still deletes, so it never blocks getting rid of a row.
+    var reason = prompt("Ta bort " + company + " — varför? (valfritt)", "");
+    if (reason === null) return;
     btn.disabled = true;
     fetch("/delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url: url }),
+      body: JSON.stringify({ url: url, reason: reason }),
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {
