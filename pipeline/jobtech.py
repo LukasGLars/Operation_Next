@@ -34,9 +34,10 @@ import requests
 try:                                  # run as a script from pipeline/
     from llm_json import TruncatedResponse, parse_json_array
     import fitscore
+    import adrequirements
 except ImportError:                   # imported as pipeline.jobtech (tests, CI)
     from pipeline.llm_json import TruncatedResponse, parse_json_array
-    from pipeline import fitscore
+    from pipeline import fitscore, adrequirements
 
 SEARCH_API = "https://jobsearch.api.jobtechdev.se/search"
 MODEL = "claude-sonnet-4-6"
@@ -363,12 +364,21 @@ def _judge_chunk(candidates, skill_content, errors=None):
         f"{fitscore.RUBRIC}\n\n"
         "Score every role, including ones you judge unfit — `fit` decides what is "
         "on the list, `score` decides where on it.\n\n"
+        # Triage, not analysis. These are read on hover in the joblist to decide
+        # whether the ad is worth opening at all, so they must be the ad's own
+        # stated requirements, quoted closely — a paraphrase like "technical
+        # interest required" hides the very detail that settles it, which for one
+        # proAV role was "stort intresse för ... ljud, bild och nätverk".
+        "Also list what the ad actually asks for: up to 6 short bullets, in the "
+        "ad's own language and close to its own words, taken from its "
+        "qualifications or requirements section. Skip generic filler.\n\n"
         f"{items}\n\n"
         "Return a JSON array with one object per role in the same order. Every "
-        "object must carry axes and score:\n"
+        "object must carry axes, score and requirements:\n"
         '[{"index": 1, "fit": true, "cv_base": "CV_Einride", "reason": "...", '
         '"axes": {"category": 35, "technical": 25, "requirement": 18, '
-        '"evidence": 12}, "score": 90}]'
+        '"evidence": 12}, "score": 90, '
+        '"requirements": ["Erfarenhet av teknisk försäljning", "B-körkort"]}]'
     )
 
     try:
@@ -419,6 +429,8 @@ def judge_fit(candidates, skill_content, errors=None):
             # a failed chunk must cost position, never presence.
             candidate["fit"] = fitscore.from_verdict(verdict)
             candidate["fit_axes"] = fitscore.axes_string(verdict)
+            candidate["requirements"] = adrequirements.clean(
+                (verdict or {}).get("requirements"))
             kept.append(candidate)
 
     kept.sort(key=lambda c: c.get("fit", 0), reverse=True)

@@ -24,7 +24,7 @@ from bs4 import BeautifulSoup
 from docx import Document
 from dotenv import load_dotenv
 
-from pipeline import fitscore
+from pipeline import adrequirements, fitscore
 from flask import Flask, jsonify, render_template, request
 
 load_dotenv(Path(__file__).parent.parent / ".env")
@@ -198,8 +198,14 @@ def _push_joblist():
 
 def parse_joblist():
     _, rows = _parse_joblist_raw()
+    reqs = adrequirements.load()
     for row in rows:
         row["Fit-forklaring"] = fitscore.explain(row.get("Fit-delar", ""))
+        # Keyed on canonical_url so a promotion tag added to a later sighting of
+        # the same ad still finds its bullets.
+        bullets = reqs.get(canonical_url(row.get("URL", "")), [])
+        row["Krav"] = bullets
+        row["Krav-text"] = "\n".join("• " + b for b in bullets)
     return rows
 
 

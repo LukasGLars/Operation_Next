@@ -74,6 +74,7 @@
                  font-size: 13px; cursor: pointer; text-decoration: underline; }
     .pick { width: 34px; text-align: center; }
     .pick input { cursor: pointer; }
+    td.role.has-krav { border-bottom: 1px dotted #9ca3af; cursor: help; }
     td.fit { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
     td.fit.hi  { color: #15803d; }
     td.fit.mid { color: #a16207; }
@@ -122,7 +123,8 @@
           </td>
           <td class="datum">{{ job.get('#','') }}</td>
           <td><div class="company">{{ job.get('Företag','') }}</div></td>
-          <td class="role">{{ job.get('Roll/Typ','') }}</td>
+          <td class="role{% if job.get('Krav') %} has-krav{% endif %}"
+              title="{{ job.get('Krav-text','') }}">{{ job.get('Roll/Typ','') }}</td>
           <td class="datum">{{ job.get('Plats','') }}</td>
           <td class="fit {% set f = job.get('Fit','') %}{% if f and f|int >= 80 %}hi{% elif f and f|int >= 60 %}mid{% else %}lo{% endif %}" title="{{ job.get('Fit-forklaring','') }}">{{ f or '—' }}</td>
           <td>
