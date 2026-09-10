@@ -24,7 +24,7 @@ The cv_base field on the job indicates which angle to emphasise. Use it to weigh
 | CV_Einride | Analytical depth, data systems, AI integration, scalable solutions. Lead with data model and Python pipeline. Analytical work is the headline. |
 | CV_Zeppelin | Full sales cycle, B2B relationships, technical product knowledge |
 | CV_Plymovent | HVAC/ventilation domain, partner and channel sales |
-| CV_BYGG | Construction process, project management, cost estimation, site experience |
+| CV_BYGG | Construction process, project management, cost estimation, site experience. **Selected Projects must draw on construction work — the internships (Mark- och Energibyggarna road/bridge, ANLAB VA-sanering) and Hercules site work — not the software projects.** Every entry under Selected Projects in master_cv.md is software, so left alone the draft leads a concrete-sales role with an AI platform. |
 | CV | Business development and commercial ownership. Lead with BHG rollout (100+ installer network, Finland expansion, e-commerce integration) and MedTech co-founder. Treat the analytical/automation work as a differentiator — "BD candidate who can also build the systems that make decisions data-driven" — not the headline. Valeryd commercial work (full-cycle B2B, procurement, Nordic distributors) is the body. |
 
 ## Key Results Library

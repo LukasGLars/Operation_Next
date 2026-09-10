@@ -69,7 +69,8 @@ Engineer with a strong analytical and commercial profile. I work best when I get
 ### Mark- och Energibyggarna Infra — Internship, Road & Bridge Construction
 *2021*
 
-- Skilled labourer on road and bridge construction projects during engineering studies.
+- Skilled labourer on Trafikverket road and bridge projects in Vårgårda during engineering studies — motorway, interchanges and bridges.
+- Dewatering (länshållning), compaction (vältning), utility trenching (ledningsförläggning) and kerb laying (kantstensanläggning).
 
 ---
 
