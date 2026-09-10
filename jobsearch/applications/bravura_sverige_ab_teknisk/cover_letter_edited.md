@@ -1,6 +1,6 @@
 Hej Heidelberg Materials,
 
-Jag har tagit arbetet på Valeryd så långt jag kan och söker nu nästa steg. Rollen som teknisk säljare hos Heidelberg Materials Precast Contiga kände jag igen mig i direkt – det är precis den typen av affär jag vill arbeta med.
+Jag har tagit arbetet på Valeryd så långt jag kan och söker nu nästa steg. Rollen som teknisk säljare hos Heidelberg Materials Precast Contiga kände jag igen mig i direkt – en byggingenjör med säljvana och erfarenhet från anläggning och betong är precis det ni beskriver.
 
 Jag har en byggingenjörsexamen med kurser i betongteknik, entreprenadjuridik, konstruktion och KMA, har jobbat som yrkesarbetare och KMA-ansvarig inom anläggning, och som arbetsledare på Hercules Grundläggning med ansvar för produktion, underentreprenörer och beställarkontakt. Jag vet vilka frågor en platschef eller konstruktör ställer tidigt i ett projekt och kan föra den dialogen på ett sätt som bygger förtroende innan offerten ens är skriven.
 
