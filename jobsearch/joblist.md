@@ -105,6 +105,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Fit | Fit-delar | Status | Datum | Deadline | Annons | URL |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | 82 | 32/20/18/12 | Intervju | 2026-08-07 |  |  | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -137,7 +138,7 @@
 | 28 | Needo Recruitment Sthlm AB | Driven Key Account Manager till  Contac Solutions | Bollebygd | CV_Zeppelin | 88 | 34/22/20/12 | Ansökt | 2026-09-10 | 2026-09-30 | https://arbetsformedlingen.se/platsbanken/annonser/31391705 | https://needo.se/lediga-jobb/3264-driven-key-account-manager-till-contac-solutions/?pnty_src=platsbanken |
 | 29 | FlexIQ Sweden AB | Key Account Manager  Export & Internationella marknader | Göteborg | CV_Zeppelin | 64 | 28/16/10/10 | Stängd | 2026-09-09 | 2026-09-30 | https://arbetsformedlingen.se/platsbanken/annonser/31306902 | https://www.flexiq.se/lediga-jobb/key-account-manager-export-internationella-marknader |
 | 30 | Omnisys Instruments Aktiebolag | Teknisk säljare inom rymdindustrin | Göteborg | CV_Zeppelin | 75 | 33/24/8/10 | Identifierad | 2026-09-09 | 2026-10-04 | https://arbetsformedlingen.se/platsbanken/annonser/31440240 | https://hr.clarityloop.com/recruitment/recruitment-details/aac-clyde-space/157/ |
-| 31 | Svensk Autorekrytering AB | Key Account Manager Parts & Accesories | Göteborg | CV_Zeppelin | 64 | 28/14/14/8 | Identifierad | 2026-09-09 | 2026-10-07 | https://arbetsformedlingen.se/platsbanken/annonser/31452521 | https://karriar.autorekrytering.se/jobb/10607/ansokningsformular |
+| 31 | Svensk Autorekrytering AB | Key Account Manager Parts & Accesories | Göteborg | CV_Zeppelin | 64 | 28/14/14/8 | Genererat | 2026-09-10 | 2026-10-07 | https://arbetsformedlingen.se/platsbanken/annonser/31452521 | https://karriar.autorekrytering.se/jobb/10607/ansokningsformular |
 | 32 | OIO Väst AB | Account Manager inom HR-tech till snabbväxande SaaS-bolag | Göteborg | CV_Einride | 56 | 22/8/18/8 | Identifierad | 2026-09-09 | 2026-10-31 | https://arbetsformedlingen.se/platsbanken/annonser/31448247 | https://pnty-apply.ponty-system.se/oio?id=1216&pnty_src=platsbanken |
 | 33 | WRKFRC Bemanning & Rekrytering AB | Senior B2B-säljare – SaaS | Mölndal | CV_Einride | 52 | 22/10/12/8 | Identifierad | 2026-09-09 | 2026-12-15 | https://arbetsformedlingen.se/platsbanken/annonser/31192247 | https://careers.wrkfrc.se/jobs/7934506-senior-b2b-saljare-saas/applications/new?promotion=2059040-arbetsformedlingen |
 | 34 | Bravura Sverige AB | Key Account Manager to Cellectricon | Göteborg | CV_Zeppelin | 50 | 20/16/8/6 | Identifierad | 2026-09-09 | 2027-02-21 | https://arbetsformedlingen.se/platsbanken/annonser/31393077 | https://ledigajobb.bravura.se/en/jobs/8223108-key-account-manager-to-cellectricon/applications/new?promotion=2160615-arbetsformedlingen |
