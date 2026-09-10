@@ -621,6 +621,51 @@ row on the JS-rendered-page bug that had just been fixed, and added five rows
 under the old code. If you fix pipeline behaviour mid-day, check what the
 morning run did before trusting the list.
 
+## Requirements on hover + rejection reasons (2026-09-10, v0.9.0)
+
+### Why
+Karisma's proAV role scored **88** and the user did not want it — "stort intresse
+för tekniska lösningar inom ljud, bild och nätverk". The score was right: the
+rubric measures whether a role can be **won**, not whether it is **wanted**.
+Nothing in the pipeline modelled preference, and 2 of 41 open rows had been
+applied to because finding out a role was wrong cost opening the ad.
+
+### What was built
+1. **`jobsearch/requirements.json`** (`pipeline/adrequirements.py`) — up to 6
+   requirement bullets per row, returned by the judge call that already reads the
+   whole ad, shown as a tooltip on Roll/Typ. Keyed by canonical URL because the
+   joblist is a markdown table and cannot hold a multi-line cell.
+2. **`Anledning` column in `rejected.md`** — the delete button asks why, and
+   `updater.load_rejection_reasons()` feeds those into the judge prompt via
+   `jobtech._rejection_block()` as exclude rules for roles *of the same kind*.
+
+### Decisions worth keeping
+- **Bullets are asked for in the ad's own words.** A paraphrase ("technical
+  interest required") hides the exact line that settles the decision.
+- **`Anledning` is appended as column 5, never inserted.** `_rejected_rows`
+  reads the URL positionally at index 3; appending keeps every four-column row
+  already on file parseable with no migration.
+- **An empty reason still deletes.** Cancel aborts; blank proceeds. Removing a
+  row must not depend on explaining why.
+- **An empty extraction never overwrites stored bullets** — a bad run would
+  otherwise silently empty the tooltips.
+- **The reason changes `fit`, barely the score.** Measured on a fresh AV role:
+  true/87 without the rejection recorded, false/70 with it. The axes still do not
+  model preference, so `fit: false` is the whole mechanism.
+
+### Gotcha: a new sidecar let the tests eat real data
+`update_joblist()` prunes `requirements.json` to the rows it was given. Tests
+that exercise it redirect `JOBLIST_PATH` but had no reason to know about a store
+added later, so the first suite run pruned the real file down to its two fixture
+rows. **`tests/conftest.py` now redirects the store for every test** — do the
+same for the next sidecar.
+
+### Still open
+- Web-search candidates never reach the JobTech judge, so they get no
+  requirements and no fit score (blank, not 0 — see v0.7.0).
+- `pipeline/backfill_fit.py --force` re-scores everything; it also picks up rows
+  that have a Fit but no requirements.
+
 ## Pending / known issues
 - ~~Duplicate row: the Experis/Alingsås Energi posting under two aplitrak
   tracking ids~~ — deleted 2026-08-31 via the app; the `Ansökt` row was kept and
