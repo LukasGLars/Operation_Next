@@ -32,9 +32,15 @@ jobs:
         run: |
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
-          git add jobsearch/joblist.md
+          # Stage the whole directory, not just joblist.md. The pipeline also
+          # writes jobsearch/requirements.json, and leaving it unstaged made
+          # `git pull --rebase` refuse ("You have unstaged changes") after the
+          # commit had already succeeded, so a run that found 12 new roles threw
+          # all of them away. Matches what the app itself stages.
+          git add jobsearch/
           git diff --staged --quiet || git commit -m "Auto-update joblist $(date +%Y-%m-%d)"
-          git pull --rebase
+          # --autostash so the next file someone adds cannot break this again.
+          git pull --rebase --autostash
           git push
     env:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
