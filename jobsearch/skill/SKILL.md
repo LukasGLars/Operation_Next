@@ -132,7 +132,7 @@ Always choose 2–3 results that best fit the role.
 - Aftermarket data model: SE +155%, NO +203% match rate over 12 months.
 - Python/AI pipeline: 4,100 products × 7 languages in hours vs 28,000 manual edits.
 - AI email engine: Claude API + Graph API + Power Automate.
-- BHG rollout: nationwide installer network, expansion to Finland.
+- BHG rollout: nationwide installer network.
 - Reactor Core: Sharpe 1.85, GitHub Actions, Claude API, scipy.
 - Spirax Sarco: reached offer stage for Sales Engineer role.
 - VVS Invoice App: full-stack web app for plumbing contractors, including ROT deduction, PDF generation, Claude Vision OCR, automatic benchmark price lookup, and self-hosted deployment.

@@ -78,7 +78,7 @@ Engineer with a strong analytical and commercial profile. I work best when I get
 *2017 – 2021*
 
 - Led the development and nationwide rollout of installation services across HVAC, plumbing, electrical, and solar. Covered market research, partner network building, contract negotiation, and IT system alignment.
-- Built and managed a network of 100+ certified installers with contracts and quality tracking, enabling expansion into Finland.
+- Built and managed a network of 100+ certified installers with contracts and quality tracking.
 - Integrated services into e-commerce flows for a seamless purchase-to-installation customer journey.
 
 ---

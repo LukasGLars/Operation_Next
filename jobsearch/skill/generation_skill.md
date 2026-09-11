@@ -35,10 +35,9 @@ Always choose 2–3 results that best fit the role.
 - Python/AI pipeline: 4,100 products × 7 languages in hours vs 28,000 manual edits.
 - AI email engine: Claude API + Graph API + Power Automate, handles inbound emails, generates contextual replies in sender's language within seconds.
 - BHG rollout: nationwide installer network of 100+ certified partners, integrated into e-commerce flows.
-  (Do not lead with the Finland expansion. It is true and it stays in master_cv.md,
-   but it was deleted by hand from 9 of 15 CV drafts and from the ABB, Oddwork and
-   Arctic Trucks letters. Include it only where the role actually turns on Nordic
-   market expansion.)
+  (Never claim the Finland expansion. The candidate had left BHG by the time it
+   happened and cannot speak to it in an interview, which is why it was deleted by
+   hand from 9 of 15 CV drafts. The installer network itself is his and stands.)
 - Reactor Core: Sharpe 1.85, GitHub Actions, Claude API, scipy, automated daily portfolio monitoring.
 - Spirax Sarco: reached offer stage for Sales Engineer role.
 - VVS Invoice App: full-stack web app for plumbing contractors: ROT deduction, PDF generation, Claude Vision OCR, automatic price benchmarking, self-hosted.
@@ -201,7 +200,7 @@ Coordinated suppliers, subcontractors, and client stakeholders, translating tech
 Svensk Installationspartner / BHG Group – Product Manager & Business Developer
 2017 – 2021
 Led the development and rollout of nationwide installation services across HVAC, plumbing, electrical, and solar. The work covered market research, partner network building, and IT system alignment.
-Built and negotiated a nationwide installer network with contracts and quality tracking, which enabled expansion into Finland.
+Built and negotiated a nationwide installer network with contracts and quality tracking.
 Integrated services into e-commerce flows for a seamless purchase-to-installation customer journey.
 
 Polarpumpen – Technical Sales
