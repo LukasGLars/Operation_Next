@@ -17,15 +17,15 @@ Generate a tailored CV and cover letter for a specific job posting, using the ca
 - Write like someone who knows what they did.
 
 ## Framing Angle
-The cv_base field on the job indicates which angle to emphasise. Use it to weight what you select and how you frame it — do not let it limit what you include.
+The cv_base field on the job indicates which angle to emphasise. Use it to weight what you select and how you frame it. Do not let it limit what you include.
 
 | cv_base | Emphasise |
 |---|---|
 | CV_Einride | Analytical depth, data systems, AI integration, scalable solutions. Lead with data model and Python pipeline. Analytical work is the headline. |
 | CV_Zeppelin | Full sales cycle, B2B relationships, technical product knowledge |
 | CV_Plymovent | HVAC/ventilation domain, partner and channel sales |
-| CV_BYGG | Construction process, project management, cost estimation, site experience. **Selected Projects must draw on construction work — the internships (Mark- och Energibyggarna road/bridge, ANLAB VA-sanering) and Hercules site work — not the software projects.** Every entry under Selected Projects in master_cv.md is software, so left alone the draft leads a concrete-sales role with an AI platform. |
-| CV | Business development and commercial ownership. Lead with BHG rollout (100+ installer network, Finland expansion, e-commerce integration) and MedTech co-founder. Treat the analytical/automation work as a differentiator — "BD candidate who can also build the systems that make decisions data-driven" — not the headline. Valeryd commercial work (full-cycle B2B, procurement, Nordic distributors) is the body. |
+| CV_BYGG | Construction process, project management, cost estimation, site experience. **Selected Projects must draw on construction work: the internships (Mark- och Energibyggarna road/bridge, ANLAB VA-sanering) and Hercules site work, not the software projects.** Every entry under Selected Projects in master_cv.md is software, so left alone the draft leads a concrete-sales role with an AI platform. |
+| CV | Business development and commercial ownership. Lead with BHG rollout (100+ installer network, e-commerce integration) and MedTech co-founder. Treat the analytical/automation work as a differentiator, "BD candidate who can also build the systems that make decisions data-driven", not the headline. Valeryd commercial work (full-cycle B2B, procurement, Nordic distributors) is the body. |
 
 ## Key Results Library
 Always choose 2–3 results that best fit the role.
@@ -33,14 +33,18 @@ Always choose 2–3 results that best fit the role.
 ### Available results
 - Aftermarket data model: SE +155%, NO +203% match rate over 12 months.
 - Python/AI pipeline: 4,100 products × 7 languages in hours vs 28,000 manual edits.
-- AI email engine: Claude API + Graph API + Power Automate — handles inbound emails, generates contextual replies in sender's language within seconds.
-- BHG rollout: nationwide installer network of 100+ certified partners, expansion to Finland, integrated into e-commerce flows.
-- Reactor Core: Sharpe 1.85, GitHub Actions, Claude API, scipy — automated daily portfolio monitoring.
+- AI email engine: Claude API + Graph API + Power Automate, handles inbound emails, generates contextual replies in sender's language within seconds.
+- BHG rollout: nationwide installer network of 100+ certified partners, integrated into e-commerce flows.
+  (Do not lead with the Finland expansion. It is true and it stays in master_cv.md,
+   but it was deleted by hand from 9 of 15 CV drafts and from the ABB, Oddwork and
+   Arctic Trucks letters. Include it only where the role actually turns on Nordic
+   market expansion.)
+- Reactor Core: Sharpe 1.85, GitHub Actions, Claude API, scipy, automated daily portfolio monitoring.
 - Spirax Sarco: reached offer stage for Sales Engineer role.
-- VVS Invoice App: full-stack web app for plumbing contractors — ROT deduction, PDF generation, Claude Vision OCR, automatic price benchmarking, self-hosted.
+- VVS Invoice App: full-stack web app for plumbing contractors: ROT deduction, PDF generation, Claude Vision OCR, automatic price benchmarking, self-hosted.
 - Valeryd technical sales: full-cycle B2B account management across Nordic distributors and e-commerce partners in automotive aftermarket.
 - Valeryd procurement: supplier sourcing across Europe and Asia, aligned with pricing strategy and product positioning.
-- Valeryd Toolkit: internal Flask app used daily by 5 people — PDF order extraction via Claude Vision (3–10 min → under 1 min), axle matching distributing specialist knowledge to the full team, semantic KB search over ~7,500 entries from resolved customer cases (TF-IDF + Haiku rerank + Sonnet synthesis).
+- Valeryd Toolkit: internal Flask app used daily by 5 people: PDF order extraction via Claude Vision (3–10 min → under 1 min), axle matching distributing specialist knowledge to the full team, semantic KB search over ~7,500 entries from resolved customer cases (TF-IDF + Haiku rerank + Sonnet synthesis).
 
 ### Selection logic
 - BA / analyst roles: use the data model and Python pipeline.
@@ -58,24 +62,24 @@ Always choose 2–3 results that best fit the role.
 - Favour concrete achievements and role-relevant keywords.
 - Avoid generic phrasing.
 - Job titles must reflect what is accurate and role-relevant, not what sounds impressive.
-- Do not include profile.png or any image references — output is markdown only.
+- Do not include profile.png or any image references. Output is markdown only.
 
-### Corrections made by hand every time — get these right in the draft
+### Corrections made by hand every time. Get these right in the draft
 Each rule below is a change the candidate has actually made to a generated CV.
 
 - **Use the real job title, never an upgraded one.** Hercules is *Arbetsledare*, not
   Platschef or Site Manager. Valeryd is *Affärsutvecklare & Automation*, not Business
   Developer & Ingenjör. When unsure, pick the more modest of two readings.
-- **Use the brand the company is known by** — Valeryd.se, Bygghemma.se, Polarpumpen.se —
+- **Use the brand the company is known by:** Valeryd.se, Bygghemma.se, Polarpumpen.se,
   not the legal or internal entity name (Svensk Installationspartner / BHG Group).
 - **The headline mirrors the ad's job title.** An ad for "Digital affärsutvecklare" gets
   a CV headed *Digital Affärsutvecklare & Dataanalytiker*, not a generic three-role stack.
-- **Core competencies: maximum 4, written as stances, not tools.** Not "Power BI —
+- **Core competencies: maximum 4, written as stances, not tools.** Not "Power BI,
   dashboards, rapporter", not "Python (pandas, scikit-learn, Flask)". Instead:
   *Dataanalys för beslut, inte presentation*. *Skalbara modeller*.
   *AI-integration i processer*. Name a tool only if the ad names it first.
 - **Maximum 3 bullets per role.** Cut the weakest rather than compressing all of them.
-- **No internal tech names in CV bullets** — not TF-IDF, Claude Vision, Haiku rerank,
+- **No internal tech names in CV bullets.** Not TF-IDF, Claude Vision, Haiku rerank,
   Flask, scikit-learn. Describe what colleagues or customers get instead: "Hjälper
   kollegorna handlägga orders snabbare och utan fel (3–10 min → under 1 min)". A real
   question a user asks the tool is worth more than the architecture behind it.
@@ -90,7 +94,7 @@ Each rule below is a change the candidate has actually made to a generated CV.
 - Write in the same language as the job posting. English posting → English CV and cover letter. Swedish posting → Swedish CV and cover letter.
 - When writing in Swedish: avoid directly translated verbs that sound unnatural, such as "förflyttar", "transformerar", or "förändrar hur X fungerar". Describe what the company concretely does instead of using abstract impact language.
 - Never use corporate-jargon words that don't appear in plain spoken Swedish, even if
-  grammatically correct — e.g. "tvärfunktionell". If a plain-Swedish phrase would sound
+  grammatically correct, e.g. "tvärfunktionell". If a plain-Swedish phrase would sound
   more natural, use that instead, even if less "professional"-sounding.
 - When writing in English: match the voice and directness of the approved Einride cover letter reference below.
 
@@ -106,19 +110,19 @@ Each rule below is a change the candidate has actually made to a generated CV.
 - No filler.
 - Match the tone and length of the approved reference cover letter below.
 - Never use these phrases: leverage, synergies, passionate, driven, dynamic, results-oriented, team player.
-- Never use the same rhetorical device more than once in one document — most commonly a
+- Never use the same rhetorical device more than once in one document. Most commonly a
   contrastive "not X, but Y" / "inte X, utan Y" framing, or a "show, don't just tell"
   construction. One use can read as a natural turn of phrase; two or more in one letter
   reads as a template. If you notice yourself reaching for this pattern a second time,
   rewrite that sentence in a completely different structure instead.
 
 ### Opening line
-Write a FRESH opening for every application — never reuse the same sentence across
+Write a FRESH opening for every application. Never reuse the same sentence across
 different companies, even as a "safe default." A repeated opening line is one of the
 clearest tells that a letter is templated, not written for this employer.
 
 The opening must do two things specific to THIS role: (1) a brief, natural reason
-you're looking now, and (2) something concrete about this company or role — not
+you're looking now, and (2) something concrete about this company or role, not
 generic praise. Vary the sentence structure and the specific detail referenced each
 time; do not settle into a new fixed template phrase either.
 
@@ -134,19 +138,21 @@ at Valeryd as far as I can...", or any structurally identical variant of either.
 
 ### Paragraph order
 1. Opening: why now + why this company specifically. Reference what they actually do, not abstract praise.
-2. Most relevant key result for the role — concrete, specific, with numbers where possible.
+2. Most relevant key result for the role: concrete, specific, with numbers where possible.
 3. Second relevant result or broader context. For technical sales roles, include a paragraph reflecting the sales philosophy: SPIN methodology, ROI focus, systematic approach to pipeline.
 4. Closing: one sentence inviting conversation.
 
-### Corrections made by hand every time — get these right in the draft
+### Corrections made by hand every time. Get these right in the draft
 - **Include one paragraph on what is genuinely different about this candidate**, stated
   plainly and tied to the role. The approved Rekryteringsgruppen letter added: already
   working at the boundary of data and AI, with Valeryd Toolkit as a working AI agent
   answering questions inside the workflow. This paragraph was added by hand because the
   draft did not have one.
 - **No header block.** Do not emit name, contact details, "Ansökan:" or the company line
-  at the top — the PDF template adds those. Start at the greeting.
-- **Commas, not em-dashes, mid-sentence** — same rule as the CV.
+  at the top. The PDF template adds those. Start at the greeting.
+- **Commas, not em-dashes, mid-sentence.** Same rule as the CV. This file follows it too:
+  the model imitates the examples it is shown more reliably than the rules it is told,
+  and while this file still contained 24 em-dashes the drafts came back with 25.
 - **Cut intensifiers**: "särskilt", "verkligen", "väldigt". "Det som tilltalar mig med er
   roll", not "Det som tilltalar mig särskilt med er roll".
 - **Name the commercial outcome, not only the technical one.** "med ökad försäljning och
@@ -162,10 +168,10 @@ at Valeryd as far as I can...", or any structurally identical variant of either.
 - Concrete results over vague claims.
 - CV adaptation: select based on what the recipient cares about, not what is technically interesting.
 
-## Reference examples — approved output
+## Reference examples: approved output
 These are real approved outputs after human review. Match this quality, structure, and tone exactly.
 
-### Approved CV (Einride BA) — use as structure and quality benchmark. Match this structure, level of detail, and voice exactly:
+### Approved CV (Einride BA), use as structure and quality benchmark. Match this structure, level of detail, and voice exactly:
 Lukas Larsson
 Engineer, Business Analyst, Automation & Data
 Alingsås, Sweden · 073-740 97 88 · lukasglarsson88@gmail.com · linkedin.com/in/lukas-larsson-062163169
@@ -226,7 +232,7 @@ Swedish (Native), English (Fluent), Danish (Working Proficiency)
 
 ---
 
-### Approved cover letter (Einride BA) — use as English-language tone benchmark:
+### Approved cover letter (Einride BA), use as English-language tone benchmark:
 Lukas Larsson
 Alingsås, Sweden · 073-740 97 88 · lukasglarsson88@gmail.com
 
@@ -249,4 +255,4 @@ Lukas Larsson
 ---
 
 ### Swedish cover letters
-Follow the exact same structure, voice, and directness as the Einride cover letter above. Translate the approach — not the words. Same paragraph order, same result-specificity, same closing tone. Write "Hej [Company]," as the greeting.
+Follow the exact same structure, voice, and directness as the Einride cover letter above. Translate the approach, not the words. Same paragraph order, same result-specificity, same closing tone. Write "Hej [Company]," as the greeting.
