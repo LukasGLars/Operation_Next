@@ -7,3 +7,4 @@ pipeline/error.log
 pipeline/results.json
 **/__pycache__/
 *.pyc
+pipeline/applied.json

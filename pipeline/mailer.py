@@ -8,6 +8,10 @@ from email.mime.multipart import MIMEMultipart
 from pathlib import Path
 
 RESULTS_PATH = Path(__file__).parent / "results.json"
+# Written by updater.py and preferred over results.json: results.json is what
+# search.py approved, before the joblist and rejected.md dedup ran, so the
+# digest kept announcing roles that were already on the list (KUKA, Profcon).
+APPLIED_PATH = Path(__file__).parent / "applied.json"
 ERROR_LOG    = Path(__file__).parent / "error.log"
 
 logging.basicConfig(
@@ -69,17 +73,15 @@ def build_body(new_jobs, closed_jobs, stats=None, errors=None):
     if new_jobs:
         lines.append(f"\n{len(new_jobs)} NYA ROLLER\n")
         for job in new_jobs:
-            lines.append(f"{job.get('company', '—')} — {job.get('role', '—')}")
-            lines.append(f"Typ: {job.get('role_type', '—')}")
-            lines.append(f"CV-bas: {job.get('cv_base', 'CV')}")
-            lines.append(f"URL: {job.get('url', '—')}")
+            lines.append(job.get("role", "—"))
+            lines.append(job.get("url", "—"))
             lines.append("")
 
     if closed_jobs:
         lines.append(f"\n{len(closed_jobs)} STÄNGDA ANNONSER\n")
         for job in closed_jobs:
-            lines.append(f"{job.get('company', '—')} — {job.get('role', '—')}")
-            lines.append(f"URL: {job.get('url', '—')}")
+            lines.append(job.get("role", "—"))
+            lines.append(job.get("url", "—"))
             lines.append("")
 
     if stats:
@@ -113,8 +115,23 @@ def send_digest():
             print(f"  ERROR: {e}")
             errors.append(f"results.json kunde inte läsas: {str(e)[:120]}")
 
-    new_jobs    = results.get("new_jobs", [])
-    closed_jobs = results.get("closed_jobs", [])
+    # What actually reached the joblist, when the updater got that far. Falling
+    # back to results.json matters: if the updater crashed, the digest should
+    # still report what search.py found rather than going silent.
+    applied = {}
+    if APPLIED_PATH.exists():
+        try:
+            with open(APPLIED_PATH, encoding="utf-8") as f:
+                applied = json.load(f)
+        except (json.JSONDecodeError, OSError) as e:
+            logging.error(f"Failed to read applied.json: {e}")
+
+    if applied:
+        new_jobs    = applied.get("added", [])
+        closed_jobs = applied.get("closed", [])
+    else:
+        new_jobs    = results.get("new_jobs", [])
+        closed_jobs = results.get("closed_jobs", [])
     stats       = results.get("stats", {})
     errors     += results.get("errors", [])
 

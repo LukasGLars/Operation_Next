@@ -28,6 +28,10 @@ JOBLIST_PATH  = ROOT / "jobsearch" / "joblist.md"
 REJECTED_PATH = ROOT / "jobsearch" / "rejected.md"
 SKILL_PATH    = ROOT / "jobsearch" / "skill" / "SKILL.md"
 RESULTS_PATH  = Path(__file__).parent / "results.json"
+# What the updater actually put on the list, as opposed to what search.py
+# approved. The two differ by every duplicate and every rejected row, which is
+# why the digest kept announcing roles that were already in the joblist.
+APPLIED_PATH  = Path(__file__).parent / "applied.json"
 ERROR_LOG     = Path(__file__).parent / "error.log"
 
 logging.basicConfig(
@@ -407,6 +411,7 @@ def update_joblist():
     known_urls = {canonical_url(row["URL"]) for row in rows}
     known_roles = known_role_keys(rows)
     new_requirements = {}
+    applied = []
     rejected_urls = load_rejected_urls()
     rejected_roles = load_rejected_role_keys()
     for job in new_jobs:
@@ -447,6 +452,8 @@ def update_joblist():
             "URL":      url,
         }
         rows.append(new_row)
+        applied.append({"company": new_row["Företag"], "role": new_row["Roll/Typ"],
+                        "url": new_row["URL"], "fit": new_row.get("Fit", "")})
         # Keyed on the canonical URL, the same key the joblist and rejected.md
         # match on, so a promotion tag on a later sighting cannot orphan it.
         if job.get("requirements"):
@@ -498,6 +505,14 @@ def update_joblist():
     except OSError as e:
         logging.error(f"Failed to write joblist.md: {e}")
         raise
+
+    try:
+        APPLIED_PATH.write_text(
+            json.dumps({"timestamp": datetime.now().isoformat(), "added": applied,
+                        "closed": closed_jobs}, ensure_ascii=False, indent=2),
+            encoding="utf-8")
+    except OSError as e:
+        logging.error(f"Failed to write applied.json: {e}")
 
     # After the joblist is safely on disk. The sidecar is a convenience — losing
     # it costs a tooltip, so it must never be the reason a good run fails.
