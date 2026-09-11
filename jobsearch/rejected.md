@@ -50,3 +50,4 @@ even if it resurfaces in a later search/JobTech pass.
 | Avaron AB | Kravanalytiker / Business Analyst | 2026-09-07 | https://jobs.avaron.se/jobs/8308943-kravanalytiker-business-analyst/applications/new?promotion=2175074-arbetsformedlingen |
 | Karisma Rekrytering AB | Teknisk säljare, proAV | 2026-09-10 | https://jobb.karisma.se/jobs/7597765-teknisk-saljare-proav | Ej intresserad av AV lösningar eller AV teknik. |
 | Platsa AB | Teknisk Säljare UK Portservice AB | 2026-09-11 | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |  |
+| Svensk Autorekrytering AB | Key Account Manager Parts & Accesories | 2026-09-11 | https://karriar.autorekrytering.se/jobb/10607/ansokningsformular | linjerar lite med Valeryd, men är ingen bransch jag vill jobba inom, bil-påbyggnad. |
