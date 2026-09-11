@@ -12,11 +12,9 @@ Ingenjör med kommersiell bakgrund och vana att sälja tekniska produkter med he
 
 ## Kärnkompetenser
 
-- Teknisk försäljning med hela säljcykeln
-- Konsultativ behovsanalys och ROI-argumentation
-- B2B-relationer mot distributörer och slutkunder
-- Strukturerade processer bakom pipeline och uppföljning
-
+- Teknisk försäljning i hela säljcykeln
+- Behovsanalys och ROI-argumentation
+- Processutveckling och automation
 ---
 
 ## Erfarenhet
@@ -25,7 +23,7 @@ Ingenjör med kommersiell bakgrund och vana att sälja tekniska produkter med he
 *2023 – nu*
 
 - Kontoansvar mot nordiska distributörer och e-handelspartners inom fordonseftermarknad, med teknisk rådgivning och affärsstöd.
-- Byggde ett AI-drivet verktyg som hanterar inkommande kundmail och genererar kontextuella svar på avsändarens språk inom sekunder, med ökad svarstakt och färre felhanteringar som följd.
+- Byggde AI-drivna processer som automatiserar inkommande kundkommunikation och orderhantering, med kortare svarstider och färre fel som följd.
 - Designade en datamodell för reservdelssortimentet som ökade sökmatchningen med 155 % i Sverige och 203 % i Norge, och minskade felbeställningar.
 
 ### Bygghemma.se — Produktchef & Affärsutvecklare
