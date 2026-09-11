@@ -33,7 +33,7 @@ Jag har arbetat med hela säljcykeln; från prospektering och behovsanalys till 
 *2017 – 2021*
 
 - Ledde rikstäckande lansering av installationstjänster inom HVAC, VVS, el och sol. Arbetet täckte marknadsanalys, partnernätverksuppbyggnad, avtalsförhandling och IT-systemintegration.
-- Byggde ett nätverk av 100+ certifierade installatörer med avtal och kvalitetsuppföljning, vilket lade grunden för expansion till Finland.
+- Byggde ett nätverk av 100+ certifierade installatörer med avtal och kvalitetsuppföljning.
 - Integrerade tjänsterna i e-handelsflöden för en sömlös resa från köp till installation.
 
 ### Polarpumpen — Teknisk Säljare
@@ -48,7 +48,7 @@ Jag har arbetat med hela säljcykeln; från prospektering och behovsanalys till 
 - Ledde projektteam och maskintung drift med fokus på säkerhet, regelefterlevnad och lönsamhet.
 - Koordinerade leverantörer, underentreprenörer och kundkontakter med tydlig statusrapportering.
 
-### Försvarsmakten — Spaningssoldat, Korpral
+### Försvarsmakten — Spaningssoldat
 *2012 – 2014*
 
 - Strategisk spaning, underrättelseinhämtning och amfibieoperationer vid 4. amfibieregementet. Byggde ledarskap och förmåga att agera strukturerat under osäkerhet.
