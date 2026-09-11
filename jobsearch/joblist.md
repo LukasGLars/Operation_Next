@@ -112,6 +112,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Fit | Fit-delar | Status | Datum | Deadline | Annons | URL |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | 82 | 32/20/18/12 | Avslag | 2026-09-11 |  |  | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -157,7 +158,7 @@
 | 41 | Bustos Konsulttjänster AB | Kalkylator anläggning | Göteborg | CV_BYGG | 47 | 10/12/15/10 | Identifierad | 2026-09-09 | 2027-02-13 | https://arbetsformedlingen.se/platsbanken/annonser/31361208 | https://bustoskonsulttjanster-1746019372.teamtailor.com/jobs/8230140-kalkylator-anlaggning |
 | 42 | Bravura Sverige AB | Projektledare till Heidelberg Materials | Göteborg | CV_BYGG | 42 | 12/14/8/8 | Identifierad | 2026-09-09 | 2027-02-22 | https://arbetsformedlingen.se/platsbanken/annonser/31397941 | https://ledigajobb.bravura.se/jobs/8260064-projektledare-till-heidelberg-materials/applications/new?promotion=2162447-arbetsformedlingen |
 | 43 | Bravura Sverige AB | Junior projektledare till Heidelberg Materials | Göteborg | CV_BYGG | 42 | 12/12/10/8 | Identifierad | 2026-09-09 | 2027-02-22 | https://arbetsformedlingen.se/platsbanken/annonser/31397913 | https://ledigajobb.bravura.se/jobs/8260039-junior-projektledare-till-heidelberg-materials/applications/new?promotion=2162415-arbetsformedlingen |
-| 44 | Volvo Personvagnar Aktiebolag | Test Data Analyst - Function Integration team Volvo Cars | Göteborg | CV_Einride | 64 | 18/18/18/10 | Identifierad | 2026-09-09 | 2026-09-20 | https://arbetsformedlingen.se/platsbanken/annonser/31443951 | https://jobs.volvocars.com/job/Gothenburg-Test-Data-Analyst-Function-Integration-team-Volvo-Cars-40531/1405455733/?utm_campaign=Arbetformedlingen&utm_source=Arbetformedlingen&applySourceOverride=Arbetsformedlingen |
+| 44 | Volvo Personvagnar Aktiebolag | Test Data Analyst - Function Integration team Volvo Cars | Göteborg | CV_Einride | 64 | 18/18/18/10 | Ej kvalificerad | 2026-09-11 | 2026-09-20 | https://arbetsformedlingen.se/platsbanken/annonser/31443951 | https://jobs.volvocars.com/job/Gothenburg-Test-Data-Analyst-Function-Integration-team-Volvo-Cars-40531/1405455733/?utm_campaign=Arbetformedlingen&utm_source=Arbetformedlingen&applySourceOverride=Arbetsformedlingen |
 | 45 | Trafikverket | Teknisk specialist inom byggnadsverk | Göteborg | CV_BYGG | 38 | 8/14/8/8 | Identifierad | 2026-09-09 | 2026-09-28 | https://arbetsformedlingen.se/platsbanken/annonser/31443398 | https://trv.heroma.se/prod/trvpp01/externwebbv2/LedigaJobb/EW2PageJobPostingAdvert.aspx?jobpostingid=8402617835933366935 |
 | 46 | GÖTEBORGS KOMMUN | Projektledare till Citybussprojektet | Göteborg | CV_BYGG | 52 | 12/14/16/10 | Identifierad | 2026-09-09 | 2026-09-27 | https://arbetsformedlingen.se/platsbanken/annonser/31443411 | https://goteborgsstad.varbi.com/se/what:job/jobID:966427/type:job/where:125/apply:1 |
 | 47 | Kraftsam Rekrytering & Bemanning AB | Teknisk Utesäljare i Göteborg | Göteborg | CV_Zeppelin | 70 | 28/18/12/12 | Identifierad | 2026-09-09 | 2026-10-04 | https://arbetsformedlingen.se/platsbanken/annonser/31439859 | https://pnty-apply.ponty-system.se/kraftsam?id=2543&pnty_src=platsbanken |
