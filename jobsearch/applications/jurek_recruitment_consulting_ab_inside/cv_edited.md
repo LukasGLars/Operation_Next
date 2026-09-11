@@ -24,9 +24,9 @@ Ingenjör med kommersiell bakgrund och vana att sälja tekniska produkter med he
 ### Valeryd.se — Affärsutvecklare & Automation
 *2023 – nu*
 
-- Fullt kontoansvar mot nordiska distributörer och e-handelspartners inom fordonseftermarknad, med teknisk rådgivning och affärsstöd.
+- Kontoansvar mot nordiska distributörer och e-handelspartners inom fordonseftermarknad, med teknisk rådgivning och affärsstöd.
 - Byggde ett AI-drivet verktyg som hanterar inkommande kundmail och genererar kontextuella svar på avsändarens språk inom sekunder, med ökad svarstakt och färre felhanteringar som följd.
-- Designade en datamodell för reservdelssortimentet som ökade sökmatchningen med 155 % i Sverige och 203 % i Norge på tolv månader, med minskning av felbeställningar som direkt resultat.
+- Designade en datamodell för reservdelssortimentet som ökade sökmatchningen med 155 % i Sverige och 203 % i Norge, och minskade felbeställningar.
 
 ### Bygghemma.se — Produktchef & Affärsutvecklare
 *2017 – 2021*
@@ -46,7 +46,7 @@ Ingenjör med kommersiell bakgrund och vana att sälja tekniska produkter med he
 - Ledde yrkesarbetare och maskin inom grundläggning, med ansvar för säkerhet, planering och ekonomi.
 - Koordinerade leverantörer, underentreprenörer och kunder, och omvandlade teknisk komplexitet till tydlig rapportering och beslut.
 
-### Försvarsmakten — Spaningssoldat.
+### Försvarsmakten — Spaningssoldat
 *2012 – 2014*
 
 - Amfibieregementet, 4. amfibieregementet. Spaning, underrättelseinhämtning och amfibieoperationer. Ledarskap och förmåga att agera strukturerat under press.
