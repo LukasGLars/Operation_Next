@@ -117,6 +117,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Fit | Fit-delar | Status | Datum | Deadline | Annons | URL |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | 82 | 32/20/18/12 | Avslag | 2026-09-11 |  |  | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -171,7 +172,7 @@
 | 50 | AB Effektiv Väst | Account Manager till Silvent i Borås | Borås | CV_Zeppelin | 89 | 33/22/22/12 | Identifierad | 2026-09-11 | 2026-09-21 | https://arbetsformedlingen.se/platsbanken/annonser/31405545 | https://effektiv.se/jobb/forsaljning/boras/account-manager-till-silvent-i-boras-8278413 |
 | 51 | Poolia AB | Area Sales Manager hos Blickle, region Väst | Göteborg | CV_Zeppelin | 85 | 33/22/18/12 | Identifierad | 2026-09-11 | 2026-09-16 | https://arbetsformedlingen.se/platsbanken/annonser/31415555 | https://karriar.poolia.se/jobs/8135633-area-sales-manager-hos-blickle-region-vast |
 | 52 | SOTI Ireland Ltd, Filial Sverige | Account Manager, Norden | Göteborg | CV_Zeppelin | 82 | 30/20/20/12 | Identifierad | 2026-09-11 | 2026-10-31 | https://arbetsformedlingen.se/platsbanken/annonser/31441254 | https://soti.wd3.myworkdayjobs.com/Careers/job/Gothenburg-Sweden/Account-Manager--Nordics_R10457-1 |
-| 53 | Bravura Sverige AB | Säljare till MANN+HUMMEL | Göteborg | CV_Zeppelin | 82 | 30/20/20/12 | Genererat | 2026-09-14 | 2027-02-14 | https://arbetsformedlingen.se/platsbanken/annonser/31362892 | https://ledigajobb.bravura.se/jobs/8217090-saljare-till-mann-hummel |
+| 53 | Bravura Sverige AB | Säljare till MANN+HUMMEL | Göteborg | CV_Zeppelin | 82 | 30/20/20/12 | Ansökt | 2026-09-14 | 2027-02-14 | https://arbetsformedlingen.se/platsbanken/annonser/31362892 | https://ledigajobb.bravura.se/jobs/8217090-saljare-till-mann-hummel |
 | 54 | Volvo Business Services Aktiebolag | Data Analyst | Göteborg | CV_Einride | 65 | 17/18/19/11 | Identifierad | 2026-09-11 | 2026-09-23 | https://arbetsformedlingen.se/platsbanken/annonser/31463419 | https://career55.sapsf.eu/sfcareer/jobreqcareerpvt?jobId=34456&company=volvoinfor&st=16F6D2C5D816DF75DF01BD8CB8D3482C9247C3F5 |
 | 55 | Fastighets AB Balder | Business Analyst - Digital Solutions | Göteborg | CV_Einride | 65 | 18/16/20/11 | Identifierad | 2026-09-11 | 2027-03-08 | https://arbetsformedlingen.se/platsbanken/annonser/31458604 | https://karriar.balder.se/jobs/8354622-business-analyst-digital-solutions |
 | 56 | SJR in Sweden AB | Projekt- och Verksamhetskoordinator till GVAB | Göteborg | CV_BYGG | 53 | 10/13/20/10 | Identifierad | 2026-09-11 | 2026-09-27 | https://arbetsformedlingen.se/platsbanken/annonser/31457677 | https://karriar.sjr.se/jobb/2272/ansokan |
