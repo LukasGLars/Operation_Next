@@ -29,12 +29,13 @@ Jag har arbetat med hela säljcykeln; från prospektering och teknisk behovsanal
 - Designade en strukturerad datamodell för trailerdelsortimentet. Ökade träffsäkerheten i produktsökning med 155 % i Sverige och 203 % i Norge på 12 månader, med tydlig minskning av felbeställningar som följd.
 - Byggde interna verktyg som hjälper kollegorna handlägga orders snabbare och svara korrekt på tekniska kundförfrågningar, utan att behöva eskalera till specialist varje gång.
 
-### Bygghemma.se / BHG Group — Affärsutvecklare & Produktansvarig
+### Bygghemma.se / BHG Group — Affärsutvecklare & Kvalitetsansvarig
 *2017 – 2021*
 
-- Ledde rikstäckande lansering av installationstjänster inom HVAC, VVS, el och sol. Arbetet täckte marknadsanalys, partnernätverksuppbyggnad, avtalsförhandling och IT-systemintegration.
+- Utvecklade kommersiellt attraktiva installationstjänster för konsument.
 - Byggde ett nätverk av 100+ certifierade installatörer med avtal och kvalitetsuppföljning.
-- Integrerade tjänsterna i e-handelsflöden för en sömlös resa från köp till installation.
+- Sålde in vår egenutvecklade SaaS-plattform Isberget för att förenkla livet för installatörerna.
+- Utvecklade ett kvalitetssystem för att bättre kunna leda kvalitetsarbetet.  
 
 ### Polarpumpen — Teknisk Säljare
 *2014 – 2017*
@@ -45,8 +46,7 @@ Jag har arbetat med hela säljcykeln; från prospektering och teknisk behovsanal
 ### Försvarsmakten — Spaningssoldat
 *2012 – 2014*
 
-- Strategisk spaning, underrättelseinhämtning och amfibieoperationer vid 4. amfibieregementet. Byggde ledarskap och förmåga att agera strukturerat under osäkerhet.
-
+- Strategisk spaning, underrättelseinhämtning och amfibieoperationer vid 4. amfibieregementet.
 ---
 
 ## Utvalda Projekt
@@ -54,8 +54,11 @@ Jag har arbetat med hela säljcykeln; från prospektering och teknisk behovsanal
 **MedTech Compliance Platform (Medgrundare, 2025–Nu)**
 Samutvecklar en SaaS-plattform för regulatorisk efterlevnad inom MedTech (MDR/IVDR). Kommersiellt ansvar för tidig kundvalidering och positionering mot nordiska MedTech-bolag via GoCo Health Innovation City.
 
-**VVS Fakturaapp (Personligt projekt)**
+*VVS Fakturaapp (Personligt projekt)**
 Mobilvänlig webbapp för hantverkare med kundbas, jobbhantering, fakturering, ROT-avdrag, PDF-generering och automatisk prisbenchmarking. Självhostad.
+
+*Asset Universe* – Signalbaserat investeringssystem (Personligt projekt)
+Bygger och kör ett eget kvantitativt system som tar makroekonomiska signaler och omvandlar dem till konkreta portföljbeslut. Systemet körs automatiskt två gånger dagligen via GitHub Actions och skickar larm när marknadsläget förändras. 346 automatiserade tester.
 
 ---
 
@@ -63,8 +66,6 @@ Mobilvänlig webbapp för hantverkare med kundbas, jobbhantering, fakturering, R
 
 **Högskoleingenjör — Yrgo, Göteborg**
 *2020 – 2022*
-
-**Certifikat:** Säkra Lyft · Ställningsarbeten · Brandfarliga arbeten
 
 ---
 
