@@ -54,10 +54,10 @@ Jag har arbetat med hela säljcykeln; från prospektering och teknisk behovsanal
 **MedTech Compliance Platform (Medgrundare, 2025–Nu)**
 Samutvecklar en SaaS-plattform för regulatorisk efterlevnad inom MedTech (MDR/IVDR). Kommersiellt ansvar för tidig kundvalidering och positionering mot nordiska MedTech-bolag via GoCo Health Innovation City.
 
-*VVS Fakturaapp (Personligt projekt)**
+**VVS Fakturaapp (Personligt projekt)**
 Mobilvänlig webbapp för hantverkare med kundbas, jobbhantering, fakturering, ROT-avdrag, PDF-generering och automatisk prisbenchmarking. Självhostad.
 
-*Asset Universe* – Signalbaserat investeringssystem (Personligt projekt)
+**Asset Universe** – Signalbaserat investeringssystem (Personligt projekt)
 Bygger och kör ett eget kvantitativt system som tar makroekonomiska signaler och omvandlar dem till konkreta portföljbeslut. Systemet körs automatiskt två gånger dagligen via GitHub Actions och skickar larm när marknadsläget förändras. 346 automatiserade tester.
 
 ---
