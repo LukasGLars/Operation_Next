@@ -7,8 +7,7 @@ Alingsås, Sverige · 073-740 97 88 · lukasglarsson88@gmail.com · linkedin.com
 
 ## Profil
 
-Ingenjör med kommersiell profil och vana vid komplex B2B-försäljning mot nordiska kunder och partners.
-Jag har arbetat med hela säljcykeln; från prospektering och teknisk behovsanalys till offert, avslut och löpande relationsarbete. Jag trivs i roller med hög kundkontakt och är van vid att resa regelbundet för att träffa kunder på plats. Jag har erfarenhet av att driva tillväxt i befintliga kundportföljer och att öppna nya affärer i Sverige och Norge.
+Hårt arbetande och analytisk ingenjör som drivs av att förstå vad som gör ont och hur man mäter det. Är övertygad om att en bra lösning är skalbar och skapar tydligt värde.
 
 ---
 
