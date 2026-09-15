@@ -120,6 +120,7 @@
 
 
 
+
 | # | Företag | Roll/Typ | Plats | CV-bas | Fit | Fit-delar | Status | Datum | Deadline | Annons | URL |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | Platsa AB | Teknisk Säljare UK Portservice AB | Göteborg | CV_Zeppelin | 82 | 32/20/18/12 | Avslag | 2026-09-11 |  |  | https://platsa.teamtailor.com/jobs/7535443-teknisk-saljare-uk-portservice-ab |
@@ -171,7 +172,7 @@
 | 47 | Kraftsam Rekrytering & Bemanning AB | Teknisk Utesäljare i Göteborg | Göteborg | CV_Zeppelin | 70 | 28/18/12/12 | Identifierad | 2026-09-09 | 2026-10-04 | https://arbetsformedlingen.se/platsbanken/annonser/31439859 | https://pnty-apply.ponty-system.se/kraftsam?id=2543&pnty_src=platsbanken |
 | 48 | Sodajo Consulting AB | Affärsmässig projektledare till GEO-Gruppen! | Göteborg | CV_BYGG | 62 | 18/14/19/11 | Ansökt | 2026-09-11 | 2026-10-01 | https://arbetsformedlingen.se/platsbanken/annonser/31426134 | https://jobb.sodajo.se/jobs/8010790-affarsmassig-projektledare-till-geo-gruppen |
 | 49 | Stena Metall (Stena Recycling Group) | Technical Business Developer | Göteborg | CV |  |  | Identifierad | 2026-09-11 |  | https://www.stenametall.com/sv/jobba-hos-oss/lediga-tjanster/ledig-tjanst/technical-business-developer-se-3362/ | https://www.stenametall.com/sv/jobba-hos-oss/lediga-tjanster/ledig-tjanst/technical-business-developer-se-3362/ |
-| 50 | Poolia AB | Area Sales Manager hos Blickle, region Väst | Göteborg | CV_Zeppelin | 85 | 33/22/18/12 | Identifierad | 2026-09-11 | 2026-09-16 | https://arbetsformedlingen.se/platsbanken/annonser/31415555 | https://karriar.poolia.se/jobs/8135633-area-sales-manager-hos-blickle-region-vast |
+| 50 | Poolia AB | Area Sales Manager hos Blickle, region Väst | Göteborg | CV_Zeppelin | 85 | 33/22/18/12 | Genererat | 2026-09-15 | 2026-09-16 | https://arbetsformedlingen.se/platsbanken/annonser/31415555 | https://karriar.poolia.se/jobs/8135633-area-sales-manager-hos-blickle-region-vast |
 | 51 | SOTI Ireland Ltd, Filial Sverige | Account Manager, Norden | Göteborg | CV_Zeppelin | 82 | 30/20/20/12 | Genererat | 2026-09-15 | 2026-10-31 | https://arbetsformedlingen.se/platsbanken/annonser/31441254 | https://soti.wd3.myworkdayjobs.com/Careers/job/Gothenburg-Sweden/Account-Manager--Nordics_R10457-1 |
 | 52 | Bravura Sverige AB | Säljare till MANN+HUMMEL | Göteborg | CV_Zeppelin | 82 | 30/20/20/12 | Ansökt | 2026-09-14 | 2027-02-14 | https://arbetsformedlingen.se/platsbanken/annonser/31362892 | https://ledigajobb.bravura.se/jobs/8217090-saljare-till-mann-hummel |
 | 53 | Volvo Business Services Aktiebolag | Data Analyst | Göteborg | CV_Einride | 65 | 17/18/19/11 | Identifierad | 2026-09-11 | 2026-09-23 | https://arbetsformedlingen.se/platsbanken/annonser/31463419 | https://career55.sapsf.eu/sfcareer/jobreqcareerpvt?jobId=34456&company=volvoinfor&st=16F6D2C5D816DF75DF01BD8CB8D3482C9247C3F5 |
